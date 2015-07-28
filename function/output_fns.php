@@ -68,4 +68,10 @@
     <br /><a href="<?php echo $url; ?>"><?php echo $name; ?></a><br />
 <?php
     }
+
+    function display_main() {
+?>
+    <h1>test</h1>
+<?php        
+    }
 ?>
