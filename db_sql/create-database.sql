@@ -46,7 +46,7 @@ CREATE TABLE users
 (
   user_id int unsigned NOT NULL auto_increment PRIMARY KEY,
   user_name CHAR (32) NOT NULL ,
-  user_passwd CHAR (32) not NULL ,
+  user_passwd CHAR (40) not NULL ,
   role_id int unsigned NOT NULL REFERENCES roles(role_id),
   user_mail CHAR (100) not null
 )  TYPE = InnoDB;

@@ -52,7 +52,15 @@
     //------------------------------------------------
     // get all the roles in the DB
     function get_roles () {
-        
+        $conn = db_connect();
+        $query = "select * from roles";
+
+        $result = $conn->query($query);
+        if (!$result) return false;
+        if ($result->num_rows == 0) return false;
+
+        $result = db_result_to_array($result);
+        return $result;
     }
 
      //get the users with the conditions
