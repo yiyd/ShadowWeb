@@ -6,7 +6,6 @@
  * Time: 16:08
  */
 
-
     function new_one_item($item_name, $item_follower, $item_description, $item_type_id, $item_state, $item_follow_mark) {
         $conn = db_connect();
 		//starting one by turning off the autocomit
@@ -55,6 +54,11 @@
 
     }
 
+    //search the items in the db with the input conditions
+    function get_items($condition) {
+
+    }
+
     //get the item_type
     function get_item_type($item_type_id) {
         $conn = db_connect();
@@ -75,20 +79,6 @@
             return false;
         }
         if($result->num_rows == 0) return false;
-        $result = db_result_to_array($result);
-        return $result;
-    }
-
-    //get all the valid users
-    function get_users(){
-        $conn = db_connect();
-        $result = $conn->query("select user_id, user_name from users");
-        if (!$result) {
-            return false;
-        }
-        if ($result->num_rows == 0) {
-            return false;
-        }
         $result = db_result_to_array($result);
         return $result;
     }

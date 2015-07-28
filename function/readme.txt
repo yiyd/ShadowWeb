@@ -31,3 +31,8 @@ $_session['current_user'] = $user_name;
 
 6、设置提醒
 function set_notify ($date, $auto_type, $user_id)
+
+7、新建修改日志
+function log_update($change_field)
+$change_field为数组，保存更改项的 name, old_value, new_value 
+即 $change_field['name'], ...

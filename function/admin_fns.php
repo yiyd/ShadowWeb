@@ -47,4 +47,78 @@
         }
     }
 
+    // those funcitons below are releated to the ROLES management
+    // GET/NEW/UPDATE/DELETE/
+    //------------------------------------------------
+    // get all the roles in the DB
+    function get_roles () {
+        $conn = db_connect();
+        $query = "select * from roles";
+
+        $result = $conn->query($query);
+        if (!$result) return false;
+        if ($result->num_rows == 0) return false;
+
+        $result = db_result_to_array($result);
+        return $result;
+    }
+
+     //get the users with the conditions
+    function get_users ($conditions) {
+
+    }
+
+    function new_role () {
+
+    }
+
+    function update_role () {
+
+    }
+
+    function delete_role () {
+
+    }
+
+    // those funcitons below are releated to the USERS management
+    // GET/NEW/UPDATE/DELETE/
+    //------------------------------------------------
+    //get all the valid users
+    function get_users () {
+        $conn = db_connect();
+        $result = $conn->query("select user_id, user_name from users");
+        if (!$result) {
+            return false;
+        }
+        if ($result->num_rows == 0) {
+            return false;
+        }
+        $result = db_result_to_array($result);
+        return $result;
+    }
+
+    //get the users with the conditions
+    function get_users ($conditions) {
+
+    }
+
+    function new_user () {
+
+    }
+
+    function update_user () {
+
+    }
+
+    function delete_user () {
+
+    }
+
+    function reset_user_passwd() {
+
+    }
+
+
+
+
 ?>

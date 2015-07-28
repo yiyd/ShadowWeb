@@ -10,7 +10,10 @@
         $result = $conn->query("select * from users where user_name = '".$username."'
                 and user_passwd = sha1('".$passwd."')");
         if (!$result) {
-            throw new Exception('No such user!');
+            throw new Exception('Could not connect!');
+        }
+        if ($result->num_rows == 0) {
+            throw new  Exception("No such user."); 
         }
         if ($result->num_rows > 0) return true;
         else {
