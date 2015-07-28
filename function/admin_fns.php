@@ -64,7 +64,7 @@
     }
 
      //get the users with the conditions
-    function get_users ($conditions) {
+    function get_roles_1 ($conditions) {
 
     }
 
@@ -98,7 +98,7 @@
     }
 
     //get the users with the conditions
-    function get_users ($conditions) {
+    function get_users_1 ($conditions) {
 
     }
 
