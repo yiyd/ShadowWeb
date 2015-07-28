@@ -27,4 +27,7 @@
 	do_html_header();
 	check_valid_user();
 
+	display_main();
+
+	do_html_footer();
 ?>
