@@ -44,11 +44,7 @@
 
     function check_valid_user() {
         if (isset($_SESSION['current_user'])) {
-<<<<<<< HEAD
-               echo "Logged in as ".$_SESSION['current_user'].".";
-           }   
-=======
-               echo "Logged in as ".$_SESSION['current_user'].".<br />";
+            echo "Logged in as ".$_SESSION['current_user'].".<br />";
         } else {
             do_html_heading();
             do_html_url('login,php', 'Login');
@@ -56,7 +52,7 @@
             exit;
         }
 
->>>>>>> c40529665fb31edc7e373e6f22c59b07854bff65
+
     }
 
 ?>
