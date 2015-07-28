@@ -7,7 +7,7 @@
  * log all the changes
  */
     //新建关闭日志
-    function log () {
+    function log_new() {
         $conn = db_connect();
         $conn->autocommit(false);
 

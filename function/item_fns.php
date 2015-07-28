@@ -25,7 +25,7 @@
         $conn->commit();
 
         //get the new item_id
-        $query = "select last_insert_id()"
+        $query = "select last_insert_id()";
         $result = $conn->query($query);
         if ($result && ($result->num_rows > 0)) {
             $row = $result->fetch_object();
@@ -100,7 +100,7 @@
 		$conn = db_connect();
         $conn->autocommit(false);
 
-        if (!(isset($item_follower)) {
+        if (!(isset($item_follower))) {
             $item_follower = $items['item_follower'];
         }
 
