@@ -68,9 +68,25 @@
 
     }
 
-    function new_role () {
+    //new one role with the input $new_role
+    function new_role ($new_role) {
+        if (!is_array($new_role)) return false;
 
-    }
+        $conn = db_connect();
+        $conn->autocommit(flase);
+
+        $query = "insert into roles values ('', '".$new_role['role_name']."', '".$new_role['c_priv']."', 
+                '".$new_role['u_priv']."', '".$new_role['d_priv']."', '".$new_role['s_priv']."', 
+                '".$new_role['f_priv']."', '".$new_role['v_priv']."')";
+        $result = $conn->query($query);
+        if (!$result) {
+            return false;
+        } else {
+            $conn->commit();
+            $conn->autocommit(true);
+            return true;
+        }
+    }   
 
     function update_role () {
 
@@ -102,8 +118,22 @@
 
     }
 
-    function new_user () {
+    function new_user ($new_user) {
+        if (!is_array($new_user)) return false;
 
+        $conn = db_connect();
+        $conn->autocommit(flase);
+
+        $query = "insert into roles values ('', '".$new_user['user_name']."', '".$new_user['user_passwd']."', 
+                '".$new_user['role_id']."', '".$new_user['user_mail']."')";
+        $result = $conn->query($query);
+        if (!$result) {
+            return false;
+        } else {
+            $conn->commit();
+            $conn->autocommit(true);
+            return true;
+        }
     }
 
     function update_user () {
