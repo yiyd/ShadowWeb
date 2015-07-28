@@ -8,15 +8,19 @@
  */
     //新建关闭日志
     function log_new() {
+        $current_time = date("Y-m-d H:i:s");
         $conn = db_connect();
         $conn->autocommit(false);
 
         //insert the new_log into DB
-        $query = "insert into logs VALUES ('', '".$item_id."', '".$log_changer."', '".$current_time."')";
+        $query = "insert into logs VALUES ('', '".$_SESSION['current_item_id']."', '".$_SESSION['current_user']."',
+                 '".$current_time."')";
         $result = $conn->query($query);
         if (!$result) {
             return false;
         } else {
+            $conn->commit();
+            $conn->autocommit(true);
             return true;
         }
     }
