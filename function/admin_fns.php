@@ -10,7 +10,7 @@
         if (isset($_SESSION['admin_user'])) {
             return true;
         } else {
-            return false;
+            throw new Exception("You are not logged in as admin_user!");    
         }
     }
 
@@ -26,24 +26,25 @@
             throw new Exception('Could not log you in.');
         }
     }
+
     //change administrator`s password
     function change_admin_passwd($username, $old_passwd, $new_passwd) {
         if (login_admin($username, $old_passwd)) {
 
             if (!($conn = db_connect())) {
-                return false;
+                throw new Exception("Could not connect to the db!");
             }
 
             $result = $conn->query("update admin
                             set admin_passwd = sha1('".$new_passwd."')
                             where admin_name = '".$username."'");
             if (!$result) {
-                return false;  // not changed
+                throw new Exception("The admin_passwd is not changed."); // not changed
             } else {
-                return true;  // changed successfully
+                return true;// changed successfully
             }
         } else {
-            return false; // old password was wrong
+            throw new Exception("Your old passwd is wrong!"); // old password was wrong
         }
     }
 
@@ -57,8 +58,12 @@
         $query = "select * from roles";
 
         $result = $conn->query($query);
-        if (!$result) return false;
-        if ($result->num_rows == 0) return false;
+        if (!$result) {
+            throw new Exception("Could not connect to the db!");
+        }
+        if ($result->num_rows == 0) {
+            throw new Exception("No records in roles table!");
+        }
 
         $result = db_result_to_array($result);
         return $result;
@@ -68,13 +73,21 @@
     function get_roles_1 ($conditions) {
         if (!check_admin()) return false;
 
+
+
+
+
+
+
     }
 
     //new one role with the input $new_role
     // $new_role is an array including all the informations 
     function new_role ($new_role) {
         if (!check_admin()) return false;
-        if (!is_array($new_role)) return false;
+        if (!is_array($new_role)) {
+            throw new Exception("input is not an array!");
+        }
 
         $conn = db_connect();
         $conn->autocommit(flase);
@@ -84,7 +97,7 @@
                 '".$new_role['f_priv']."', '".$new_role['v_priv']."')";
         $result = $conn->query($query);
         if (!$result) {
-            return false;
+            throw new Exception("Could not connect to the db!");
         } else {
             $conn->commit();
             $conn->autocommit(true);
@@ -93,20 +106,32 @@
     }   
 
     //update the role values when admin change someplace
-    // $change_role
-    function update_role ($change_role) {
+    // $change_role is an array
+    // $change_role['name'] $change_role['old_value'] $change_role['new_value'];
+    function update_role ($change_role, $role_id) {
         if (!check_admin()) return false;
-        if (!is_array($change_role)) return false;
+        if (!is_array($change_role)) {
+            throw new Exception("input is not an array!");
+        }
 
         $conn = db_connect();
         $conn->autocommit(flase);
 
-        $query = "insert into roles values ('".$change_role['role_id']."', '".$change_role['role_name']."', '".$change_role['c_priv']."', 
-                '".$change_role['u_priv']."', '".$change_role['d_priv']."', '".$change_role['s_priv']."', 
-                '".$change_role['f_priv']."', '".$change_role['v_priv']."')";
+        // $query = "insert into roles values ('".$change_role['role_id']."', '".$change_role['role_name']."', '".$change_role['c_priv']."', 
+        //         '".$change_role['u_priv']."', '".$change_role['d_priv']."', '".$change_role['s_priv']."', 
+        //         '".$change_role['f_priv']."', '".$change_role['v_priv']."')";
+
+        $query = "update roles set ";
+        foreach ($change_role as $row) {
+            $temp = $row['name']." = ".$row['new_value'];
+            $query .= $temp;
+        }
+        $query .= "where role_id = '".$role_id."'";    
+
+
         $result = $conn->query($query);
         if (!$result) {
-            return false;
+             throw new Exception("Could not connect to the db!");
         } else {
             $conn->commit();
             $conn->autocommit(true);
@@ -122,7 +147,7 @@
         $query = "delete from roles where role_id = '".$role_id."'";
         $result = $conn->query($query);
         if (!$result) {
-            return false;
+             throw new Exception("Could not connect to the db!");
         } else {
             $conn->commit();
             $conn->autocommit(true);
@@ -139,10 +164,10 @@
         $conn = db_connect();
         $result = $conn->query("select user_id, user_name from users");
         if (!$result) {
-            return false;
+             throw new Exception("Could not connect to the db!");
         }
         if ($result->num_rows == 0) {
-            return false;
+            throw new Exception("No records in users table!");
         }
         $result = db_result_to_array($result);
         return $result;
@@ -152,11 +177,23 @@
     function get_users_1 ($conditions) {
         if (!check_admin()) return false;
 
+
+
+
+
+
+
+
     }
 
+    //new_user 
+    // $new_user is an array including:
+    // $new_user['user_name'], $new_user['user_passwd'], $new_user['role_id'], $new_user['user_mail']
     function new_user ($new_user) {
         if (!check_admin()) return false;
-        if (!is_array($new_user)) return false;
+        if (!is_array($new_user)) {
+            throw new Exception("input is not an array!");
+        }
 
         $conn = db_connect();
         $conn->autocommit(flase);
@@ -165,7 +202,7 @@
                 '".$new_user['role_id']."', '".$new_user['user_mail']."')";
         $result = $conn->query($query);
         if (!$result) {
-            return false;
+            throw new Exception("Could not connect to the db!");
         } else {
             $conn->commit();
             $conn->autocommit(true);
@@ -173,18 +210,80 @@
         }
     }
 
-    function update_user () {
-        if (!check_admin()) return false;
 
+    //update the user values when admin change someplace
+    // $change_user is an array
+    // $change_user['name'] $change_user['old_value'] $change_user['new_value'];
+    function update_user ($change_user, $user_id) {
+        if (!check_admin()) return false;
+        if (!is_array($change_user)) {
+            throw new Exception("input is not an array!");
+        }
+
+        $conn = db_connect();
+        $conn->autocommit(flase);
+
+        $query = "update users set ";
+        foreach ($change_user as $row) {
+            $temp = $row['name']." = ".$row['new_value'];
+            $query .= $temp;
+        }
+        $query .= "where user_id = '".$user_id."'";    
+
+
+        $result = $conn->query($query);
+        if (!$result) {
+            throw new Exception("Could not connect to the db!");
+        } else {
+            $conn->commit();
+            $conn->autocommit(true);
+            return true;
+        }
     }
 
-    function delete_user () {
+    function delete_user ($user_id) {
         if (!check_admin()) return false;
+        $conn = db_connect();
+        $conn->autocommit(flase);
 
+        $query = "delete from users where user_id = '".$user_id."'";
+        $result = $conn->query($query);
+        if (!$result) {
+            throw new Exception("Could not connect to the db!");
+        } else {
+            $conn->commit();
+            $conn->autocommit(true);
+            return true;
+        }
     }
 
-    function reset_user_passwd() {
+    function reset_user_passwd($user_id) {
         if (!check_admin()) return false;
+
+        //set the new password
+        $new_passwd = "newpasswod";
+                
+        if ($new_passwd  == false) {
+            throw new Exception ('Could not generate the new password.');
+        }
+        
+        //add numbers to the new passwd to increase the securtiy
+        $rand_number = rand(0, 999);
+        $new_passwd . $rand_number;
+    
+        //update the new passwd with db
+        $conn = db_connect();
+        $conn->autocommit(false);
+
+        $result = $conn->query("update users set user_passwd = sha1('".$new_passwd."') where user_id = '".$user_id."'");
+        if (!$result) {
+            throw new Exception ('Could not reset the password.');
+        }
+        else {
+            $conn->commit();
+            $conn->autocommit(true);
+            return true; 
+        }
 
     }
 

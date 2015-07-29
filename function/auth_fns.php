@@ -11,7 +11,7 @@
         $result = $conn->query("select user_id from users where user_name = '".$username."'
                 and user_passwd = sha1('".$passwd."')");
         if (!$result) {
-            throw new Exception('Could not connect!');
+            throw new Exception("Could not connect to the db!");
         }
         if ($result->num_rows == 0) {
             throw new  Exception("No such user."); 
@@ -31,19 +31,19 @@
         if (login($username, $old_passwd)) {
 
             if (!($conn = db_connect())) {
-                return false;
+                throw new Exception("Could not connect to the db!");
             }
 
             $result = $conn->query("update users
                                 set user_passwd = sha1('".$new_passwd."')
                                 where user_name = '".$username."'");
             if (!$result) {
-                return false;  // not changed
+                throw new Exception("The admin_passwd is not changed."); // not changed
             } else {
                 return true;  // changed successfully
             }
         } else {
-            return false; // old password was wrong
+            throw new Exception("Your old passwd is wrong!");// old password was wrong
         }
     }
 
@@ -60,4 +60,20 @@
 
     }
 
+    function get_user_name ($user_id) {
+        $conn = db_connect();
+        $query = "select user_name from users where user_id = '".$user_id."'";
+        $result = $conn->query($query);
+        if (!$result) {
+            throw new Exception("Could not connect to the db!");
+        }
+        else if ($result->num_rows == 0) {
+            throw new Exception("No such user!");
+        }
+        else {
+            $row = $result->fetch_object();
+            $result = $row->user_name;
+            return $result;
+        }
+    }
 ?>
