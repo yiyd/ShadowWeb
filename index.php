@@ -27,7 +27,9 @@
 	do_html_header();
 	check_valid_user();
 
-	display_main();
+	$users_array = get_users();
+	$item_types_array = get_item_types();
+	display_new_item_form($users_array, $item_types_array);
 
 	do_html_footer();
 ?>
