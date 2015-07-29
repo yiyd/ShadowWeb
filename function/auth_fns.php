@@ -8,7 +8,7 @@
     //login function 
     function login($username, $passwd) {
         $conn = db_connect();
-        $result = $conn->query("select * from users where user_name = '".$username."'
+        $result = $conn->query("select user_id from users where user_name = '".$username."'
                 and user_passwd = sha1('".$passwd."')");
         if (!$result) {
             throw new Exception('Could not connect!');
@@ -16,7 +16,11 @@
         if ($result->num_rows == 0) {
             throw new  Exception("No such user."); 
         }
-        if ($result->num_rows > 0) return true;
+        if ($result->num_rows > 0) {
+            $row = $result->fetch_object();
+            $_SESSION['current_user_id'] =  $row->user_id;
+            return true;
+        }
         else {
             throw new Exception('Could not log you in.');
         }
@@ -44,7 +48,7 @@
     }
 
     function check_valid_user() {
-        if (isset($_SESSION['current_user'])) {
+        if (isset($_SESSION['current_user_id'])) {
             // echo "Logged in as ".$_SESSION['current_user'].".<br />";
         } else {
             do_html_heading();
