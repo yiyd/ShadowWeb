@@ -63,7 +63,7 @@ create table logs
 (
   log_id int unsigned not null auto_increment primary key,
   item_id int unsigned not null REFERENCES items(item_id),
-  log_changer CHAR (32) not null,
+  log_changer_id int unsigned not null REFERENCES users(user_id),
   log_time DATE not null
 ) TYPE = InnoDB;
 

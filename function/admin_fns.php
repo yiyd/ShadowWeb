@@ -135,7 +135,7 @@
     //------------------------------------------------
     //get all the valid users
     function get_users () {
-        if (!check_admin()) return false;
+        
         $conn = db_connect();
         $result = $conn->query("select user_id, user_name from users");
         if (!$result) {
