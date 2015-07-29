@@ -5,8 +5,9 @@
  * Date: 2015/7/24
  * Time: 16:08
  */
-
-    function new_one_item($item_name, $item_follower_id, $item_description, $item_type_id, $item_state, $item_follow_mark) {
+    //insert one item into DB
+    // $items is an array including all the inputs
+    function new_one_item($items) {
         $conn = db_connect();
 		//starting one by turning off the autocomit
 		$conn->autocommit(False);
@@ -15,9 +16,10 @@
         $current_time = date("Y-m-d H:i:s");
 
         // insert the new item into the DB
-        $query = "insert into items VALUES ('', '".$item_name."', '".$_SESSION['current_user_id'].",
-                '".$item_follower_id."','".$current_time."', ".$item_description."', '".$item_type_id."',
-                '".$item_state."', '".$item_follow_mark."')";
+        $query = "insert into items VALUES ('', '".$items['item_name']."', '".$_SESSION['current_user_id'].",
+                '".$items['item_follower_id']."','".$current_time."', ".$items['item_description']."', 
+                '".$items['item_type_id']."',
+                '".$items['item_state']."', '".$items['item_follow_mark']."')";
 
         $result = $conn->query($query);
         //end transaction
@@ -83,28 +85,36 @@
         return $result;
     }
    
-    //update items(insert one rather than delete the original one)
-    //$items is an array include all the original information
-    function update_item($item_follower_id, $item_description, $item_type_id, $item_state,
-                        $item_follow_mark, $items) {
+    //update items
+    // $change_field include three keys
+    // $change_field['name'] $change_field['old_value'] $change_field['new_value'];
+    function update_item($change_field) {
 		$conn = db_connect();
         $conn->autocommit(false);
 
-        if (!(isset($item_follower_id))) {
-            $item_follower = $items['item_follower'];
-        }
+        // if (!(isset($item_follower_id))) {
+        //     $item_follower_id = $items['item_follower_id'];
+        // }
 
-        if (!(isset($item_type_id))) {
-            $item_type_id = $items['item_type_id'];
-        }
+        // if (!(isset($item_type_id))) {
+        //     $item_type_id = $items['item_type_id'];
+        // }
 
-        if (!(isset($item_state))) {
-            $item_state = $items['item_state'];
-        }
+        // if (!(isset($item_state))) {
+        //     $item_state = $items['item_state'];
+        // }
 
-        $query = "insert into items VALUES ('".$_SESSION['current_item_id']."', '".$items['item_name']."', 
-                    '".$_SESSION['current_user_id']."', '".$item_follower_id."', '".$items['item_create_time']."', 
-                    '".$item_description."', '".$item_type_id."', '".$item_state."', '".$item_follow_mark."')";
+        // $query = "insert into items VALUES ('".$_SESSION['current_item_id']."', '".$items['item_name']."', 
+        //             '".$_SESSION['current_user_id']."', '".$item_follower_id."', '".$items['item_create_time']."', 
+        //             '".$item_description."', '".$item_type_id."', '".$item_state."', '".$item_follow_mark."')";
+        
+        $query = "update items set ";
+        foreach ($change_field as $row) {
+            $temp = $row['name']." = ".$row['new_value'];
+            $query .= $temp;
+        }
+        $query .= "where item_id = '".$_SESSION['current_item_id']."'";    
+
         $result = $conn->query($query);
         
         //end transaction
