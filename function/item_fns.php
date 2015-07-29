@@ -6,7 +6,7 @@
  * Time: 16:08
  */
 
-    function new_one_item($item_name, $item_follower, $item_description, $item_type_id, $item_state, $item_follow_mark) {
+    function new_one_item($item_name, $item_follower_id, $item_description, $item_type_id, $item_state, $item_follow_mark) {
         $conn = db_connect();
 		//starting one by turning off the autocomit
 		$conn->autocommit(False);
@@ -15,8 +15,8 @@
         $current_time = date("Y-m-d H:i:s");
 
         // insert the new item into the DB
-        $query = "insert into items VALUES ('', '".$item_name."', '".$_SESSION['current_user'].",
-                '".$item_follower."','".$current_time."', ".$item_description."', '".$item_type_id."',
+        $query = "insert into items VALUES ('', '".$item_name."', '".$_SESSION['current_user_id'].",
+                '".$item_follower_id."','".$current_time."', ".$item_description."', '".$item_type_id."',
                 '".$item_state."', '".$item_follow_mark."')";
 
         $result = $conn->query($query);
@@ -42,7 +42,7 @@
     //simple display function for test
     function display_selected_item (){
         $conn = db_connect();
-        $query = "select * from items where item_creater = '".$_SESSION['curretn_user']."'";
+        $query = "select * from items where item_creater = '".$_SESSION['curretn_user_id']."'";
         $result = $conn->query($query);
         if (!$result) {
             throw new Exception("Could not display the item.");
@@ -85,12 +85,12 @@
    
     //update items(insert one rather than delete the original one)
     //$items is an array include all the original information
-    function update_item($item_follower, $item_description, $item_type_id, $item_state,
+    function update_item($item_follower_id, $item_description, $item_type_id, $item_state,
                         $item_follow_mark, $items) {
 		$conn = db_connect();
         $conn->autocommit(false);
 
-        if (!(isset($item_follower))) {
+        if (!(isset($item_follower_id))) {
             $item_follower = $items['item_follower'];
         }
 
@@ -103,7 +103,7 @@
         }
 
         $query = "insert into items VALUES ('".$_SESSION['current_item_id']."', '".$items['item_name']."', 
-                    '".$_SESSION['current_user']."', '".$item_follower."', '".$items['item_create_time']."', 
+                    '".$_SESSION['current_user_id']."', '".$item_follower_id."', '".$items['item_create_time']."', 
                     '".$item_description."', '".$item_type_id."', '".$item_state."', '".$item_follow_mark."')";
         $result = $conn->query($query);
         

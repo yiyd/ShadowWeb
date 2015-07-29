@@ -52,6 +52,7 @@
     //------------------------------------------------
     // get all the roles in the DB
     function get_roles () {
+        if (!check_admin()) return false;
         $conn = db_connect();
         $query = "select * from roles";
 
@@ -65,11 +66,14 @@
 
      //get the users with the conditions
     function get_roles_1 ($conditions) {
+        if (!check_admin()) return false;
 
     }
 
     //new one role with the input $new_role
+    // $new_role is an array including all the informations 
     function new_role ($new_role) {
+        if (!check_admin()) return false;
         if (!is_array($new_role)) return false;
 
         $conn = db_connect();
@@ -88,12 +92,42 @@
         }
     }   
 
-    function update_role () {
+    //update the role values when admin change someplace
+    // $change_role
+    function update_role ($change_role) {
+        if (!check_admin()) return false;
+        if (!is_array($change_role)) return false;
 
+        $conn = db_connect();
+        $conn->autocommit(flase);
+
+        $query = "insert into roles values ('".$change_role['role_id']."', '".$change_role['role_name']."', '".$change_role['c_priv']."', 
+                '".$change_role['u_priv']."', '".$change_role['d_priv']."', '".$change_role['s_priv']."', 
+                '".$change_role['f_priv']."', '".$change_role['v_priv']."')";
+        $result = $conn->query($query);
+        if (!$result) {
+            return false;
+        } else {
+            $conn->commit();
+            $conn->autocommit(true);
+            return true;
+        }
     }
 
-    function delete_role () {
+    function delete_role ($role_id) {
+        if (!check_admin()) return false;
+        $conn = db_connect();
+        $conn->autocommit(flase);
 
+        $query = "delete from roles where role_id = '".$role_id."'";
+        $result = $conn->query($query);
+        if (!$result) {
+            return false;
+        } else {
+            $conn->commit();
+            $conn->autocommit(true);
+            return true;
+        }
     }
 
     // those funcitons below are releated to the USERS management
@@ -101,6 +135,7 @@
     //------------------------------------------------
     //get all the valid users
     function get_users () {
+        if (!check_admin()) return false;
         $conn = db_connect();
         $result = $conn->query("select user_id, user_name from users");
         if (!$result) {
@@ -115,10 +150,12 @@
 
     //get the users with the conditions
     function get_users_1 ($conditions) {
+        if (!check_admin()) return false;
 
     }
 
     function new_user ($new_user) {
+        if (!check_admin()) return false;
         if (!is_array($new_user)) return false;
 
         $conn = db_connect();
@@ -137,14 +174,17 @@
     }
 
     function update_user () {
+        if (!check_admin()) return false;
 
     }
 
     function delete_user () {
+        if (!check_admin()) return false;
 
     }
 
     function reset_user_passwd() {
+        if (!check_admin()) return false;
 
     }
 

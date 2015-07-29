@@ -5,6 +5,7 @@
  * Date: 2015/7/24
  * Time: 11:02
  */
+    //login function 
     function login($username, $passwd) {
         $conn = db_connect();
         $result = $conn->query("select * from users where user_name = '".$username."'

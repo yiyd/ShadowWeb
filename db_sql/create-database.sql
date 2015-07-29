@@ -21,8 +21,8 @@ create table items
 (
   item_id int unsigned not null auto_increment primary key,
   item_name char(32) not null,
-  item_creator char(32) not null,
-  item_follower char(32) not null,
+  item_creator_id int unsigned not null REFERENCES users(user_id),
+  item_follower_id int unsigned not null REFERENCES users(user_id),
   item_create_time date not null,
   item_description varchar(255),
   item_type_id int unsigned not null REFERENCES para_values(para_value_id),
