@@ -62,11 +62,30 @@
     // $condition is an array
     // $condition['name'], $condition['value']
     function get_items($condition) {
+        $flag = false;//
+
         $conn = db_connect();
         $query = "select * from items where ";
         foreach ($condition as $row) {
+            //if the item_name is the search condition
             if ($row['name'] == "item_name") {
-                $query .= "item_name = '".."'";
+                if ($flag) $query .= " and ";
+                $query .= "item_name = '".$row['value']."'";
+                $flag =true;
+            }
+
+            //if the item_creator_id is the search condition
+            if ($row['name'] == "item_creator_id") {
+                if ($flag) $query .= " and ";
+                $query .= "item_creator_id = '".$row['value']."'";
+                $flag =true;
+            }
+
+            //if the item_creator_id is the search condition
+            if ($row['name'] == "item_creator_id") {
+                if ($flag) $query .= " and ";
+                $query .= "item_creator_id = '".$row['value']."'";
+                $flag =true;
             }
         }
     }
