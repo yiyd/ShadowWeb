@@ -44,11 +44,13 @@
 
 	try {
 		$item = display_selected_item();
-		$notify = get_notify();
+
+		$notify_array = get_notify();
+		$notify= $notify_array[0];
+		
 		$users_array = get_users();
 		$item_types_array = get_item_types();
 		$item['item_creator_name'] = get_user_name($item['item_creator_id']);
-		$notify['auto_user_name'] = get_user_name($notify['user_id']);
 	}
 	catch(Exception $e) {
 			do_html_header();

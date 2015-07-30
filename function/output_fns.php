@@ -55,8 +55,8 @@
                 <td colspan="2" align="center"><input type="submit" value="登陆"/></td>
             </tr>
             <tr>
-                <td align="right"><a href="no_account.php">没有账号?</a></td>
-                <td align="right"><a href="forgot_password.php">忘记密码?</a></td>          
+                <td align="right"><a href="contact_admin.php">没有账号?</a></td>
+                <td align="right"><a href="contact_admin.php">忘记密码?</a></td>          
             </tr>
         </table>
     </form>
@@ -126,13 +126,13 @@
                 display_item_form_item_id($item['item_id']);
                 display_item_form_item_creator_name($item['item_creator_name']);
                 display_item_form_item_create_time($item['item_create_time']);
-                display_item_form_item_state($item['item_create_time']);
-                display_item_form_item_name($item['item_state']);
+                display_item_form_item_state($item['item_state']);
+                display_item_form_item_name($item['item_name']);
                 display_item_form_item_follower($users_array, $item['item_follower_id']);
                 display_item_form_item_description($item['item_description']);
                 display_item_form_item_type($item_types_array, $item['item_type_id']);
-                display_item_form_auto_notify_type($notify('auto_type'));
-                display_item_form_auto_notify_user($users_array, $notify['auto_user_name']);
+                display_item_form_auto_notify_type($notify['auto_type']);
+                display_item_form_auto_notify_user($users_array, $notify['user_id']);
                 display_item_form_auto_notify_date($notify['auto_date']);
                 display_item_form_item_follow_mark($item['item_follow_mark']);
 
@@ -162,14 +162,13 @@
         echo "<tr>";
         echo "<td align=\"right\">跟踪人:</td>";
         echo "<td>";
-        echo "<select name=\"item_follower\"";
-        if ($item_follower_id == '') {
-            echo " >\"";
-        }else {
-            echo " value=\"".$item_follower_id.">\"";
-        }
+        echo "<select name=\"item_follower\" >";
         foreach ($users_array as $user) {
-            echo "<option value=\"".$user['user_id']."\">".$user['user_name']."</option>";
+            echo "<option value=\"".$user['user_id']."\"";
+            if ($item_follower_id == $user['user_id']) {
+                echo "selected=\"selected\"";
+            }
+            echo ">".$user['user_name']."</option>";
         }
         echo "</select>";
         echo "</td>";
@@ -180,7 +179,7 @@
     {
         echo "<tr>";
         echo "<td align=\"right\">事项描述:</td>";
-        echo "<td><textarea name=\"item_description\" rows=\"8\" cols=\"32\" wrap=\"virtual\" value=\"".$item_description."\"></textarea></td>";
+        echo "<td><textarea name=\"item_description\" rows=\"8\" cols=\"32\" wrap=\"virtual\" >".$item_description."</textarea></td>";
         echo "</tr>";    
     }
 
@@ -189,14 +188,14 @@
         echo "<tr>";
         echo "<td align=\"right\">事项类型:</td>";
         echo "<td>";
-        echo "<select name=\"item_type\"";
-        if ($item_type_id == '') {
-            echo " >\"";
-        }else {
-            echo " value=\"".$item_type_id.">\"";
-        }
+        echo "<select name=\"item_type\" >";
+        
         foreach ($item_types_array as $type) {
-            echo "<option value=\"".$type['para_value_id']."\">".$type['para_value_name']."</option>";
+            echo "<option value=\"".$type['para_value_id']."\"";
+            if ($item_type_id == $type['para_value_id']) {
+                echo "selected=\"selected\"";
+            }
+            echo ">".$type['para_value_name']."</option>";
         }
         echo "</select>";
         echo "</td>";
@@ -208,18 +207,17 @@
         echo "<tr>";
         echo "<td align=\"right\">自动提醒类型:</td>";
         echo "<td>";
-        echo "<select name=\"auto_notify_type\"";
-        if ($auto_notify_type == '') {
-            echo " >\"";
-        }else {
-            echo " value=\"".$auto_notify_type.">\"";
+
+        echo "<select name=\"auto_notify_type\" >";
+        $auto_notify_type_array = array("ONCE"=>"单次提醒", "DAILY"=>"每日提醒","WEEKLY"=>"每周提醒","MONTHLY"=>"每月提醒","QUARTERLY"=>"每季度提醒","YEARLY"=>"每年提醒");
+        foreach ($auto_notify_type_array as $key => $value) {
+            echo "<option value=\"".$key."\"";
+            if ($auto_notify_type == $key) {
+                echo "selected=\"selected\"";
+            }
+            echo ">".$value."</option>";
         }
-        echo "<option value=\"ONCE\">单次提醒</option>";
-        echo "<option value=\"DAILY\">每日提醒</option>";
-        echo "<option value=\"WEEKLY\">每周提醒</option>";
-        echo "<option value=\"MONTHLY\">每月提醒</option>";
-        echo "<option value=\"QUARTERLY\">每季度提醒</option>";
-        echo "<option value=\"YEARLY\">每年提醒</option>";
+        
         echo "</select>";
         echo "</td>";
         echo "</tr>";
@@ -230,14 +228,14 @@
         echo "<tr>";
         echo "<td align=\"right\">自动提醒人员:</td>";
         echo "<td>";
-        echo "<select name=\"auto_notify_user\"";
-        if ($auto_notify_user == '') {
-            echo " >\"";
-        }else {
-            echo " value=\"".$auto_notify_user.">\"";
-        }
+        echo "<select name=\"auto_notify_user\" >";
+        
         foreach ($users_array as $user) {
-            echo "<option value=\"".$user['user_id']."\">".$user['user_name']."</option>";
+            echo "<option value=\"".$user['user_id']."\"";
+            if ($auto_notify_user == $user['user_id']) {
+                echo "selected=\"selected\"";
+            }
+            echo ">".$user['user_name']."</option>";
         }
         echo "</select>";
         echo "</td>";
@@ -259,7 +257,7 @@
     {
         echo "<tr>";
         echo "<td align=\"right\">跟踪备注:</td>";
-        echo "<td><textarea name=\"item_follow_mark\" rows=\"8\" cols=\"32\" wrap=\"virtual\" value=\"".$item_follow_mark."\"></textarea></td>";
+        echo "<td><textarea name=\"item_follow_mark\" rows=\"8\" cols=\"32\" wrap=\"virtual\" >".$item_follow_mark."</textarea></td>";
         echo "</tr>";    
     }
 
