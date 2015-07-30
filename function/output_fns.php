@@ -162,4 +162,100 @@
     </form>
 <?php
     }        
+    function display_item_form($item) {
+?>
+
+    
+        <table bgcolor="#cccccc">
+            <tr>
+                <th colspan="2" align="center">已成功新建事项：</th>
+            </tr>
+            <tr>
+                <td align="right">事项编号:</td>
+                <td align="left"><?php echo $item['item_id'] ?></td>
+            </tr>
+            <tr>
+                <td align="right">创建人:</td>
+                <td align="left">
+                    <?php 
+                        echo $item[''] 
+                    ?>
+                </td>
+            </tr>    
+            <tr>
+                <td align="right">事项名称:</td>
+                <td><input type="text" name="item_name" size="32" maxlength="32" value=""/></td>
+            </tr>
+            <tr>
+                <td align="right">跟踪人:</td>
+                <td>
+                    <select name="item_follower">
+                    <?php
+                        
+                        foreach ($users_array as $user) {
+                            echo "<option value=\"".$user['user_id']."\">".$user['user_name']."</option>";
+                        }
+                    ?>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td align="right">事项描述:</td>
+                <td><textarea name="item_description" rows="8" cols="32" wrap="virtual" ></textarea></td>
+            </tr>
+            <tr>
+                <td align="right">事项类型:</td>
+                <td>
+                    <select name="item_type">
+                    <?php
+                        
+                        foreach ($item_types_array as $type) {
+                            echo "<option value=\"".$type['para_value_id']."\">".$type['para_value_name']."</option>";
+                        }
+                    ?>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td align="right">自动提醒类型:</td>
+                <td>
+                    <select name="auto_notify_type">
+                        <option value="ONCE">单次提醒</option>
+                        <option value="DAILY">每日提醒</option>
+                        <option value="WEEKLY">每周提醒</option>
+                        <option value="MONTHLY">每月提醒</option>
+                        <option value="QUARTERLY">每季度提醒</option>
+                        <option value="YEARLY">每年提醒</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td align="right">自动提醒人员:</td>
+                <td>
+                    <select name="auto_notify_user">
+                    <?php
+                        
+                        foreach ($users_array as $user) {
+                            echo "<option value=\"".$user['user_id']."\">".$user['user_name']."</option>";
+                        }
+                    ?>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td align="right">自动提醒时间:</td>
+                <td><input type="text" name="auto_notify_date" value="<?php echo date("Y-m-d H:i:s"); ?>"/></td>
+            </tr>
+            <tr>
+                <td align="right">跟踪备注:</td>
+                <td><textarea name="item_follow_mark" rows="8" cols="32" wrap="virtual" ></textarea></td>
+            </tr>
+            <tr>
+                <td colspan="2" align="center"><input type="submit" value="提交"/></td>
+            </tr>
+            
+        </table>
+
+<?php
+    }        
 ?>

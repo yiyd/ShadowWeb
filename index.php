@@ -13,8 +13,6 @@
 	if ($username && $password) {
 		try {
 			login($username, $password);
-
-			$_SESSION['current_user'] = $username;
 		}
 		catch(Exception $e) {
 			do_html_header();
@@ -22,6 +20,12 @@
 			do_html_footer();
 			exit;
 		}
+	}else
+	{
+			do_html_header();
+			echo "请输入用户名和密码！！！";
+			do_html_footer();
+			exit;
 	}
 
 	do_html_header();
