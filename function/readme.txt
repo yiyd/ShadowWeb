@@ -36,3 +36,31 @@ function set_notify ($date, $auto_type, $user_id)
 function log_update($change_field)
 $change_field为数组，保存更改项的 name, old_value, new_value 
 即 $change_field['name'], ...
+
+
+8、查询条件设置
+
+	(1) 定义事项查询条件：$condition数组
+	包括$condition['name']   $condition['value']
+	查询事项时用到的关键字定义，就是name
+		事项名称 item_name （模糊查询）
+		事项创建人 item_creator_id
+		事项描述 item_description （模糊查询）
+		事项跟踪人 item_follower_id
+		事项类型 item_type_id 
+		事项状态 item_state
+		前后两个时间段 
+			起始时间： start_time 
+			终止时间： end_time
+		事项跟踪备注 item_follow_mark (模糊查询)
+
+
+	(2) 定义角色查询条件 $condition数组
+	包括$condition['name']   $condition['value']
+	查询角色时用到的关键字定义，就是name
+
+
+
+	(3) 定义用户查询条件 $condition数组
+	包括$condition['name']   $condition['value']
+	查询用户时用到的关键字定义，就是name

@@ -18,7 +18,7 @@
 
 
 
-	$items['item_state'] = "PROCESSING";
+	$items['item_state'] = "";
 
 	echo $items['item_name']."<br />";
 	echo $items['item_follower_id']."<br />";

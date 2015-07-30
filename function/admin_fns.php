@@ -53,7 +53,7 @@
     //------------------------------------------------
     // get all the roles in the DB
     function get_roles () {
-        if (!check_admin()) return false;
+        //if (!check_admin()) return false;
         $conn = db_connect();
         $query = "select * from roles";
 
@@ -71,7 +71,7 @@
 
      //get the users with the conditions
     function get_roles_1 ($conditions) {
-        if (!check_admin()) return false;
+        //if (!check_admin()) return false;
 
 
 
@@ -84,7 +84,7 @@
     //new one role with the input $new_role
     // $new_role is an array including all the informations 
     function new_role ($new_role) {
-        if (!check_admin()) return false;
+        //if (!check_admin()) return false;
         if (!is_array($new_role)) {
             throw new Exception("input is not an array!");
         }
@@ -109,7 +109,7 @@
     // $change_role is an array
     // $change_role['name'] $change_role['old_value'] $change_role['new_value'];
     function update_role ($change_role, $role_id) {
-        if (!check_admin()) return false;
+        //if (!check_admin()) return false;
         if (!is_array($change_role)) {
             throw new Exception("input is not an array!");
         }
@@ -140,7 +140,7 @@
     }
 
     function delete_role ($role_id) {
-        if (!check_admin()) return false;
+        //if (!check_admin()) return false;
         $conn = db_connect();
         $conn->autocommit(flase);
 
@@ -159,8 +159,7 @@
     // GET/NEW/UPDATE/DELETE/
     //------------------------------------------------
     //get all the valid users
-    function get_users () {
-        
+    function get_users () {        
         $conn = db_connect();
         $result = $conn->query("select user_id, user_name from users");
         if (!$result) {
@@ -175,7 +174,7 @@
 
     //get the users with the conditions
     function get_users_1 ($conditions) {
-        if (!check_admin()) return false;
+        //if (!check_admin()) return false;
 
 
 
@@ -215,7 +214,7 @@
     // $change_user is an array
     // $change_user['name'] $change_user['old_value'] $change_user['new_value'];
     function update_user ($change_user, $user_id) {
-        if (!check_admin()) return false;
+        //if (!check_admin()) return false;
         if (!is_array($change_user)) {
             throw new Exception("input is not an array!");
         }
@@ -242,7 +241,7 @@
     }
 
     function delete_user ($user_id) {
-        if (!check_admin()) return false;
+        //if (!check_admin()) return false;
         $conn = db_connect();
         $conn->autocommit(flase);
 
