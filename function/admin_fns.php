@@ -72,6 +72,7 @@
     //get the users with the condition
     // According to the design, the condition only includes the role_name
     // $condition['name'], $condition['value']
+    // 角色名称 role_name 模糊查询 （需求书暂时就这么写的）
     function get_roles_1 ($condition) {
         //if (!check_admin()) return false;
         $conn = db_connect();
@@ -188,6 +189,10 @@
     //get the users with the condition
     // According to the design, the condition only includes the 
     // $condition['name'], $condition['value']
+    // 查询用户时用到的关键字定义，就是name
+    //     用户名称 user_name 模糊查询
+    //     用户角色 role_id   直接选中输入
+    //     用户邮箱 user_mail 模糊查询 
     function get_users_1 ($condition) {
         //if (!check_admin()) return false;
         $flag = false;

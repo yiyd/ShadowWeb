@@ -58,9 +58,11 @@ $change_field为数组，保存更改项的 name, old_value, new_value
 	(2) 定义角色查询条件 $condition数组
 	包括$condition['name']   $condition['value']
 	查询角色时用到的关键字定义，就是name
-
-
+		角色名称 role_name 模糊查询 （需求书暂时就这么写的）
 
 	(3) 定义用户查询条件 $condition数组
 	包括$condition['name']   $condition['value']
 	查询用户时用到的关键字定义，就是name
+		用户名称 user_name 模糊查询
+  		用户角色 role_id   直接选中输入
+  		用户邮箱 user_mail 模糊查询			
