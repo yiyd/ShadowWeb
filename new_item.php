@@ -16,6 +16,17 @@
 	$items['item_type_id'] = $_POST['item_type'];
 	$items['item_follow_mark'] = $_POST['item_follow_mark'];
 
+
+
+	$items['item_state'] = "";
+
+	echo $items['item_name']."<br />";
+	echo $items['item_follower_id']."<br />";
+	echo $items['item_description']."<br />";
+	echo $items['item_type_id']."<br />";
+	echo $items['item_follow_mark']."<br />";
+	echo $items['item_state']."<br />";
+
 	$date = $_POST['auto_notify_date'];
 	$auto_type = $_POST['auto_notify_type'];
 	$user_id = $_POST['auto_notify_user'];
@@ -43,7 +54,10 @@
 	do_html_header();
 
 	$item = display_selected_item();
-	display_item_form($item);
+	$users_array = get_users();
+	$item_types_array = get_item_types();
+	$item['item_creator_name'] = get_user_name($item['item_creator_id']);
+	display_item_form($item, $users_array, $item_types_array);
 
 	do_html_footer();
 ?>
