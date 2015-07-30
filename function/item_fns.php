@@ -44,10 +44,11 @@
     //simple display function for test
     function display_selected_item (){
         $conn = db_connect();
-        $query = "select * from items where item_creator_id = '".$_SESSION['current_user_id']."'";
+        $query = "select * from items where item_creator_id = '".$_SESSION['current_user_id']."' 
+                    and item_id = '"$_SESSION['current_item_id']"'";
         $result = $conn->query($query);
         if (!$result) {
-            throw new Exception("Could not display the item.");
+            throw new Exception("Could not connect to DB.");
         }
         if ($result->num_rows == 0) {
             throw new Exception("NO items records!");
@@ -71,6 +72,13 @@
             if ($row['name'] == "item_name") {
                 if ($flag) $query .= " and ";
                 $query .= "item_name = '".$row['value']."'";
+                $flag =true;
+            }
+
+            //if the item_creator_id is the search condition
+            if ($row['name'] == "item_creator_id") {
+                if ($flag) $query .= " and ";
+                $query .= "item_creator_id = '".$row['value']."'";
                 $flag =true;
             }
 
