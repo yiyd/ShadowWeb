@@ -162,7 +162,15 @@
     </form>
 <?php
     }        
-    function display_item_form($item) {
+    function display_item_form($item, $users_array, $item_types_array) {
+        if (!is_array($users_array)) {
+            echo "<p>No users currently available</p>";
+            return;
+        }
+        if (!is_array($item_types_array)) {
+            echo "<p>No item types currently available</p>";
+            return;
+        }
 ?>
 
     
@@ -172,24 +180,32 @@
             </tr>
             <tr>
                 <td align="right">事项编号:</td>
-                <td align="left"><?php echo $item['item_id'] ?></td>
+                <td><?php echo $item['item_id'] ?></td>
             </tr>
             <tr>
                 <td align="right">创建人:</td>
-                <td align="left">
+                <td>
                     <?php 
-                        echo $item[''] 
+                        echo $item['item_creator_name']; 
                     ?>
                 </td>
-            </tr>    
+            </tr>
+            <tr>
+                <td align="right">创建时间:</td>
+                <td><?php echo $item['item_create_time'] ?></td>
+            </tr>
+            <tr>
+                <td align="right">事项状态:</td>
+                <td><?php echo $item['item_state'] ?></td>
+            </tr>        
             <tr>
                 <td align="right">事项名称:</td>
-                <td><input type="text" name="item_name" size="32" maxlength="32" value=""/></td>
+                <td><input type="text" name="item_name" size="32" maxlength="32" <?php echo "value=\"".$item['item_state']."\"" ?>/></td>
             </tr>
             <tr>
                 <td align="right">跟踪人:</td>
                 <td>
-                    <select name="item_follower">
+                    <select name="item_follower" <?php echo "value=\"".$item['item_follower_id']."\"" ?>>
                     <?php
                         
                         foreach ($users_array as $user) {
@@ -201,12 +217,12 @@
             </tr>
             <tr>
                 <td align="right">事项描述:</td>
-                <td><textarea name="item_description" rows="8" cols="32" wrap="virtual" ></textarea></td>
+                <td><textarea name="item_description" rows="8" cols="32" wrap="virtual" <?php echo "value=\"".$item['item_description']."\"" ?>></textarea></td>
             </tr>
             <tr>
                 <td align="right">事项类型:</td>
                 <td>
-                    <select name="item_type">
+                    <select name="item_type" <?php echo "value=\"".$item['item_type_id']."\"" ?>>
                     <?php
                         
                         foreach ($item_types_array as $type) {
@@ -219,7 +235,7 @@
             <tr>
                 <td align="right">自动提醒类型:</td>
                 <td>
-                    <select name="auto_notify_type">
+                    <select name="auto_notify_type" >
                         <option value="ONCE">单次提醒</option>
                         <option value="DAILY">每日提醒</option>
                         <option value="WEEKLY">每周提醒</option>
@@ -248,10 +264,7 @@
             </tr>
             <tr>
                 <td align="right">跟踪备注:</td>
-                <td><textarea name="item_follow_mark" rows="8" cols="32" wrap="virtual" ></textarea></td>
-            </tr>
-            <tr>
-                <td colspan="2" align="center"><input type="submit" value="提交"/></td>
+                <td><textarea name="item_follow_mark" rows="8" cols="32" wrap="virtual" <?php echo "value=\"".$item['item_follow_mark']."\"" ?>></textarea></td>
             </tr>
             
         </table>
