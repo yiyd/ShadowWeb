@@ -23,7 +23,7 @@ create table items
   item_name char(32) not null,
   item_creator_id int unsigned not null REFERENCES users(user_id),
   item_follower_id int unsigned not null REFERENCES users(user_id),
-  item_create_time date not null,
+  item_create_time datetime not null,
   item_description varchar(255),
   item_type_id int unsigned not null REFERENCES para_values(para_value_id),
   item_state enum('PROCESSING', 'FINISH') not null DEFAULT 'PROCESSING',
@@ -54,7 +54,7 @@ CREATE TABLE users
 CREATE TABLE auto_notify
 (
   item_id int unsigned not null REFERENCES items(item_id),
-  auto_date DATE not null,
+  auto_date datetime not null,
   auto_type enum ('ONCE', 'DAILY', 'WEEKLY', 'MONTHLY', 'QUARTERLY', 'YEARLY') NOT NULL DEFAULT 'ONCE',
   user_id int unsigned not null REFERENCES users(user_ic)
 ) TYPE = InnoDB;
@@ -64,7 +64,7 @@ create table logs
   log_id int unsigned not null auto_increment primary key,
   item_id int unsigned not null REFERENCES items(item_id),
   log_changer_id int unsigned not null REFERENCES users(user_id),
-  log_time DATE not null
+  log_time datetime not null
 ) TYPE = InnoDB;
 
 CREATE TABLE log_fields

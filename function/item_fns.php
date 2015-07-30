@@ -71,7 +71,7 @@
             //if the item_name is the search condition
             if ($row['name'] == "item_name") {
                 if ($flag) $query .= " and ";
-                $query .= "item_name = '".$row['value']."'";
+                $query .= "item_name like '%".$row['value']."%'";
                 $flag =true;
             }
 
@@ -85,7 +85,7 @@
             //if the item_description is the search condition
             if ($row['name'] == "item_description") {
                 if ($flag) $query .= " and ";
-                $query .= "item_description like '".$row['value']."'";
+                $query .= "item_description like '%".$row['value']."%'";
                 $flag =true;
             }
 
@@ -113,19 +113,41 @@
             //if the item_follow_mark is the search condition
             if ($row['name'] == "item_follow_mark") {
                 if ($flag) $query .= " and ";
-                $query .= "item_follow_mark like '".$row['value']."'";
+                $query .= "item_follow_mark like '%".$row['value']."%'";
                 $flag =true;
             }
 
+            /* NEED TO BE ADDED
 
             //if the time-duration is the search condition
-            //compare the time 
+            //compare the time with the start_time
             if ($row['name'] == "start_time") {
                 if ($flag) $query .= " and ";
                 $query .= "item_follow_mark like '".$row['value']."'";
                 $flag =true;
             }
-        }
+
+            //compare the time with the end_time
+            if ($row['name'] == "end_time") {
+                if ($flag) $query .= " and ";
+                $query .= "item_follow_mark like '".$row['value']."'";
+                $flag =true;
+            }
+
+            */
+
+            $result = $conn->query($query);
+
+            if (!$result) {
+                throw new Exception("Could not connect to DB.");
+            }
+            if ($result->num_rows == 0) {
+                throw new Exception("NO items records!");
+            }
+
+            $row = db_result_to_array($result);
+            return $row;
+            }
     }
 
     //get the item_type
