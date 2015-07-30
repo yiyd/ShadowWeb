@@ -44,6 +44,7 @@
 
 	try {
 		$item = display_selected_item();
+		echo $item['item_creator_id'];
 		$notify = get_notify();
 		$users_array = get_users();
 		$item_types_array = get_item_types();
