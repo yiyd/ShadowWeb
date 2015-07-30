@@ -13,7 +13,7 @@
         $conn->autocommit(false);
 
         //insert the new_log into DB
-        $query = "insert into logs VALUES ('', '".$_SESSION['current_item_id']."', '".$_SESSION['current_user']."',
+        $query = "insert into logs VALUES ('', '".$_SESSION['current_item_id']."', '".$_SESSION['current_user_id']."',
                  '".$current_time."')";
         $result = $conn->query($query);
         if (!$result) {

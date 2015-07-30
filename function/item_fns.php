@@ -22,8 +22,12 @@
                 '".$items['item_state']."', '".$items['item_follow_mark']."')";
 
         $result = $conn->query($query);
+        if (!$result) {
+            throw new Exception("Could not insert the new item into the DB");
+        }
         //end transaction
         $conn->commit();
+        $conn->autocommit(TRUE);
 
         //get the new item_id
         $query = "select last_insert_id()";
@@ -32,12 +36,8 @@
             $row = $result->fetch_object();
             $_SESSION['current_item_id'] = $row->item_id;
         }
-
-        $conn->autocommit(TRUE);
-        if (!$result) {
-            return false;
-        } else {
-            return true;
+        else {
+            throw new Exception("Could not get the new item_id!");  
         }
     }
 
