@@ -17,7 +17,7 @@
                  '".$current_time."')";
         $result = $conn->query($query);
         if (!$result) {
-            return false;
+            throw new Exception("Could not connect to the db!");
         } else {
             $conn->commit();
             $conn->autocommit(true);
@@ -46,7 +46,7 @@
                             '".$row['old_value']."', '".$row['new_value']."')";
                 $result = $conn->query($query);
                 if(!$result) {
-                    return false;
+                    throw new Exception("Could not connect to the db!");
                 }
             }
         }

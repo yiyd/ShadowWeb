@@ -49,7 +49,9 @@
         if (!$result) {
             throw new Exception("Could not display the item.");
         }
-        if ($result->num_rows == 0) return false;
+        if ($result->num_rows == 0) {
+            throw new Exception("NO items records!");
+        }
 
         $row = db_result_to_array($result);
         return $row;
@@ -65,7 +67,9 @@
     function get_item_type($item_type_id) {
         $conn = db_connect();
         $result = $conn->query("select para_value_name from para_values where para_value_id = '".$item_type_id."'");
-        if (!$result) return false;
+        if (!$result) {
+            throw new Exception("Could not connect to the db!");
+        }
         else {
             $temp = $result->fetch_object();
             $temp_para_value = $temp->para_value_name;
@@ -78,9 +82,11 @@
         $conn = db_connect();
         $result = $conn->query("select para_value_id, para_value_name from para_values where para_id = '1'");
         if (!$result) {  
-            return false;
+            throw new Exception("Could not connect to the db!");
         }
-        if($result->num_rows == 0) return false;
+        if($result->num_rows == 0) {
+            throw new Exception("No item_types records!");
+        }
         $result = db_result_to_array($result);
         return $result;
     }
@@ -115,13 +121,11 @@
         }
         $query .= "where item_id = '".$_SESSION['current_item_id']."'";    
 
-        $result = $conn->query($query);
-        
         //end transaction
         $conn->commit();
         $conn->autocommit(TRUE);
         if (!$result) {
-            return false;
+            throw new Exception("Could not connect to the db!");
         } else {
             return true;
         }

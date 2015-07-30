@@ -11,11 +11,13 @@
 				'".$auto_type."', '".$user_id."')";
 			
 			$result = $conn->query($query);
-			if (!$result) return false;	
+			if (!$result) {
+				throw new Exception("Could not connect to the db!");
+			}
 			$conn->commit();
 			$conn->autocommit(true);
 		} else {
-			return false;
+			throw new Exception("Input Error!");			
 		}
 
 	}
@@ -31,12 +33,28 @@
 					user_id = '".$user_id."' where item_id = '".$_SESSION['current_item_id']."'";
 
 			$result = $conn->query($query);
-			if (!$result) return false;	
+			if (!$result) {
+				throw new Exception("Could not connect to the db!");
+			}	
 			$conn->commit();
 			$conn->autocommit(true);
 		} else {
-			return false;
+			throw new Exception("Input Error!");
 		}
+	}
+
+	//get the auto_notify settings with $_session['item_id']
+	function get_notify () {
+		$conn = db_connect();
+        $result = $conn->query("select * from auto_notify where item_id = '".$_SESSION['current_item_id']."'");
+        if (!$result) {  
+            throw new Exception("Could not connect to the db!");
+        }
+        if($result->num_rows == 0) {
+        	throw new Exception("No notify settings with this item!");
+        }
+        $result = db_result_to_array($result);
+        return $result;
 	}
 
 ?>

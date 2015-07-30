@@ -3,7 +3,7 @@
 	  // test that each variable has a value
 	  foreach ($form_vars as $key => $value) {
 	     if ((!isset($key)) || ($value == '')) {
-	        return false;
+	        throw new Exception("Input Error! No input!");
 	     }
 	  }
 	  return true;
@@ -14,7 +14,7 @@
 	  if (ereg('^[a-zA-Z0-9_\.\-]+@[a-zA-Z0-9\-]+\.[a-zA-Z0-9\-\.]+$', $address)) {
 	    return true;
 	  } else {
-	    return false;
+	    throw new Exception("Wrong Email address!");
 	  }
 	}
 
