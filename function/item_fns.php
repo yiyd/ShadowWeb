@@ -45,7 +45,7 @@
     function display_selected_item (){
         $conn = db_connect();
         $query = "select * from items where item_creator_id = '".$_SESSION['current_user_id']."' 
-                    and item_id = '"$_SESSION['current_item_id']"'";
+                    and item_id = '".$_SESSION['current_item_id']."'";
         $result = $conn->query($query);
         if (!$result) {
             throw new Exception("Could not connect to DB.");
