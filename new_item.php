@@ -18,7 +18,7 @@
 
 
 
-	$items['item_state'] = "";
+	$items['item_state'] = "PROCESSING";
 
 	echo $items['item_name']."<br />";
 	echo $items['item_follower_id']."<br />";
@@ -35,7 +35,7 @@
 	if ($items['item_name']) {
 		try {
 			new_one_item($items);
-			set_notify($data, $auto_type, $user_id);
+			set_notify($date, $auto_type, $user_id);
 		}
 		catch(Exception $e) {
 			do_html_header();

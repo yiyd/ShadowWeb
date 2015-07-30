@@ -36,8 +36,8 @@
         $query = "select last_insert_id()";
         $result = $conn->query($query);
         if ($result && ($result->num_rows > 0)) {
-            $row = $result->fetch_object();
-            $current_log_id = $row->log_id;
+            $row = $result->fetch_row();
+            $current_log_id = $row[0];
         }
 
         if (is_array($change_field)) {

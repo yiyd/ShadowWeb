@@ -16,8 +16,8 @@
         $current_time = date("Y-m-d H:i:s");
 
         // insert the new item into the DB
-        $query = "insert into items VALUES ('', '".$items['item_name']."', '".$_SESSION['current_user_id'].",
-                '".$items['item_follower_id']."','".$current_time."', ".$items['item_description']."', 
+        $query = "insert into items VALUES ('', '".$items['item_name']."', '".$_SESSION['current_user_id']."',
+                '".$items['item_follower_id']."','".$current_time."', '".$items['item_description']."', 
                 '".$items['item_type_id']."',
                 '".$items['item_state']."', '".$items['item_follow_mark']."')";
 
@@ -33,8 +33,8 @@
         $query = "select last_insert_id()";
         $result = $conn->query($query);
         if ($result && ($result->num_rows > 0)) {
-            $row = $result->fetch_object();
-            $_SESSION['current_item_id'] = $row->item_id;
+            $row = $result->fetch_row();
+            $_SESSION['current_item_id'] = $row[0];
         }
         else {
             throw new Exception("Could not get the new item_id!");  
@@ -44,7 +44,7 @@
     //simple display function for test
     function display_selected_item (){
         $conn = db_connect();
-        $query = "select * from items where item_creater = '".$_SESSION['curretn_user_id']."'";
+        $query = "select * from items where item_creater = '".$_SESSION['current_user_id']."'";
         $result = $conn->query($query);
         if (!$result) {
             throw new Exception("Could not display the item.");
@@ -55,7 +55,6 @@
 
         $row = db_result_to_array($result);
         return $row;
-
     }
 
     //search the items in the db with the input conditions
