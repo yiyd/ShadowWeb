@@ -162,7 +162,12 @@
         echo "<tr>";
         echo "<td align=\"right\">跟踪人:</td>";
         echo "<td>";
-        echo "<select name=\"item_follower\" value=\"".$item_follower_id.">\"";
+        echo "<select name=\"item_follower\"";
+        if ($item_follower_id == '') {
+            echo " >\"";
+        }else {
+            echo " value=\"".$item_follower_id.">\"";
+        }
         foreach ($users_array as $user) {
             echo "<option value=\"".$user['user_id']."\">".$user['user_name']."</option>";
         }
@@ -184,7 +189,12 @@
         echo "<tr>";
         echo "<td align=\"right\">事项类型:</td>";
         echo "<td>";
-        echo "<select name=\"item_type\" value=\"".$item_type_id.">\"";
+        echo "<select name=\"item_type\"";
+        if ($item_type_id == '') {
+            echo " >\"";
+        }else {
+            echo " value=\"".$item_type_id.">\"";
+        }
         foreach ($item_types_array as $type) {
             echo "<option value=\"".$type['para_value_id']."\">".$type['para_value_name']."</option>";
         }
@@ -198,7 +208,12 @@
         echo "<tr>";
         echo "<td align=\"right\">自动提醒类型:</td>";
         echo "<td>";
-        echo "<select name=\"auto_notify_type\" value=\"".$auto_notify_type.">\"";
+        echo "<select name=\"auto_notify_type\"";
+        if ($auto_notify_type == '') {
+            echo " >\"";
+        }else {
+            echo " value=\"".$auto_notify_type.">\"";
+        }
         echo "<option value=\"ONCE\">单次提醒</option>";
         echo "<option value=\"DAILY\">每日提醒</option>";
         echo "<option value=\"WEEKLY\">每周提醒</option>";
@@ -215,7 +230,12 @@
         echo "<tr>";
         echo "<td align=\"right\">自动提醒人员:</td>";
         echo "<td>";
-        echo "<select name=\"auto_notify_user\" value=\"".$auto_notify_user.">\"";
+        echo "<select name=\"auto_notify_user\"";
+        if ($auto_notify_user == '') {
+            echo " >\"";
+        }else {
+            echo " value=\"".$auto_notify_user.">\"";
+        }
         foreach ($users_array as $user) {
             echo "<option value=\"".$user['user_id']."\">".$user['user_name']."</option>";
         }

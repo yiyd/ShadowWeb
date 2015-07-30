@@ -16,7 +16,7 @@
 	$items['item_type_id'] = $_POST['item_type'];
 	$items['item_follow_mark'] = $_POST['item_follow_mark'];
 
-	$items['item_state'] = "";
+	$items['item_state'] = "PROCESSING";
 
 	$date = $_POST['auto_notify_date'];
 	$auto_type = $_POST['auto_notify_type'];
@@ -44,7 +44,6 @@
 
 	try {
 		$item = display_selected_item();
-		echo $item['item_creator_id'];
 		$notify = get_notify();
 		$users_array = get_users();
 		$item_types_array = get_item_types();
