@@ -45,7 +45,7 @@
     function display_selected_item (){
         $conn = db_connect();
         $query = "select * from items where item_creator_id = '".$_SESSION['current_user_id']."' 
-                    and item_id = '"$_SESSION['current_item_id']"'";
+                    and item_id = '".$_SESSION['current_item_id']."'";
         $result = $conn->query($query);
         if (!$result) {
             throw new Exception("Could not connect to DB.");
@@ -54,7 +54,7 @@
             throw new Exception("NO items records!");
         }
 
-        $row = db_result_to_array($result);
+        $row = $result->fetch_assoc();
         return $row;
     }
 
@@ -82,17 +82,47 @@
                 $flag =true;
             }
 
-            //if the item_creator_id is the search condition
-            if ($row['name'] == "item_creator_id") {
+            //if the item_description is the search condition
+            if ($row['name'] == "item_description") {
                 if ($flag) $query .= " and ";
-                $query .= "item_creator_id = '".$row['value']."'";
+                $query .= "item_description like '".$row['value']."'";
                 $flag =true;
             }
 
-            //if the item_creator_id is the search condition
-            if ($row['name'] == "item_creator_id") {
+            //if the item_follower_id is the search condition
+            if ($row['name'] == "item_follower_id") {
                 if ($flag) $query .= " and ";
-                $query .= "item_creator_id = '".$row['value']."'";
+                $query .= "item_follower_id = '".$row['value']."'";
+                $flag =true;
+            }
+
+            //if the item_type_id is the search condition
+            if ($row['name'] == "item_type_id") {
+                if ($flag) $query .= " and ";
+                $query .= "item_type_id = '".$row['value']."'";
+                $flag =true;
+            }
+
+            //if the item_state is the search condition
+            if ($row['name'] == "item_state") {
+                if ($flag) $query .= " and ";
+                $query .= "item_state = '".$row['value']."'";
+                $flag =true;
+            }
+
+            //if the item_follow_mark is the search condition
+            if ($row['name'] == "item_follow_mark") {
+                if ($flag) $query .= " and ";
+                $query .= "item_follow_mark like '".$row['value']."'";
+                $flag =true;
+            }
+
+
+            //if the time-duration is the search condition
+            //compare the time 
+            if ($row['name'] == "start_time") {
+                if ($flag) $query .= " and ";
+                $query .= "item_follow_mark like '".$row['value']."'";
                 $flag =true;
             }
         }
