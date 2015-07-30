@@ -190,11 +190,32 @@
     // $condition['name'], $condition['value']
     function get_users_1 ($condition) {
         //if (!check_admin()) return false;
+        $flag = false;
+
         $conn = db_connect();
         $query = "select * from users where ";
 
         foreach ($condition as $row) {
-            
+            //if the user_name is the search condition
+            if ($row['name'] == "user_name") {
+                if ($flag) $query .= " and ";
+                $query .= "user_name like '%".$row['value']."%'";
+                $flag =true;
+            }
+
+            //if the role_id is the search condition
+            if ($row['name'] == "role_id") {
+                if ($flag) $query .= " and ";
+                $query .= "role_id = '".$row['value']."'";
+                $flag =true;
+            }
+
+            //if the user_mail is the search condition
+            if ($row['name'] == "user_mail") {
+                if ($flag) $query .= " and ";
+                $query .= "user_mail like '%".$row['value']."%'";
+                $flag =true;
+            }         
         }
 
         $result = $conn->query($query);
