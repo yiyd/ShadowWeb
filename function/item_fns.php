@@ -44,7 +44,7 @@
     //simple display function for test
     function display_selected_item (){
         $conn = db_connect();
-        $query = "select * from items where item_creater = '".$_SESSION['current_user_id']."'";
+        $query = "select * from items where item_creator_id = '".$_SESSION['current_user_id']."'";
         $result = $conn->query($query);
         if (!$result) {
             throw new Exception("Could not display the item.");
@@ -57,9 +57,18 @@
         return $row;
     }
 
+    //When user search all the items with confidtions
     //search the items in the db with the input conditions
+    // $condition is an array
+    // $condition['name'], $condition['value']
     function get_items($condition) {
-
+        $conn = db_connect();
+        $query = "select * from items where ";
+        foreach ($condition as $row) {
+            if ($row['name'] == "item_name") {
+                $query .= "item_name = '".."'";
+            }
+        }
     }
 
     //get the item_type
