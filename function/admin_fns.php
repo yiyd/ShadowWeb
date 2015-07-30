@@ -69,15 +69,28 @@
         return $result;
     }
 
-     //get the users with the conditions
-    function get_roles_1 ($conditions) {
+    //get the users with the condition
+    // According to the design, the condition only includes the role_name
+    // $condition['name'], $condition['value']
+    function get_roles_1 ($condition) {
         //if (!check_admin()) return false;
+        $conn = db_connect();
+        $query = "select * from roles where ";
 
+        foreach ($condition as $row) {
+            $query .= $row['name']." like ".$row['value'];
+        }
 
+        $result = $conn->query($query);
+        if (!$result) {
+            throw new Exception("Could not connect to the db!");
+        }
+        if ($result->num_rows == 0) {
+            throw new Exception("No records in roles table!");
+        }
 
-
-
-
+        $result = db_result_to_array($result);
+        return $result;
 
     }
 
@@ -172,17 +185,28 @@
         return $result;
     }
 
-    //get the users with the conditions
-    function get_users_1 ($conditions) {
+    //get the users with the condition
+    // According to the design, the condition only includes the 
+    // $condition['name'], $condition['value']
+    function get_users_1 ($condition) {
         //if (!check_admin()) return false;
+        $conn = db_connect();
+        $query = "select * from users where ";
 
+        foreach ($condition as $row) {
+            
+        }
 
+        $result = $conn->query($query);
+        if (!$result) {
+            throw new Exception("Could not connect to the db!");
+        }
+        if ($result->num_rows == 0) {
+            throw new Exception("No records in roles table!");
+        }
 
-
-
-
-
-
+        $result = db_result_to_array($result);
+        return $result;
     }
 
     //new_user 
