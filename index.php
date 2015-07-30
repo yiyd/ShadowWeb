@@ -22,17 +22,26 @@
 		}
 	}else
 	{
-			do_html_header();
-			echo "请输入用户名和密码！！！";
-			do_html_footer();
-			exit;
+		do_html_header();
+		echo "请输入用户名和密码！！！";
+		do_html_footer();
+		exit;
 	}
 
+	try {
+		$users_array = get_users();
+		$item_types_array = get_item_types();
+	}
+	catch(Exception $e) {
+		do_html_header();
+		echo $e->getMessage();
+		do_html_footer();
+		exit;
+	}
+	
 	do_html_header();
 	check_valid_user();
 
-	$users_array = get_users();
-	$item_types_array = get_item_types();
 	display_new_item_form($users_array, $item_types_array);
 
 	do_html_footer();
