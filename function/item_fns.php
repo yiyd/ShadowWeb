@@ -58,6 +58,7 @@
         return $row;
     }
 
+    // TESTED   SUCCESSFULLY
     //When user search all the items with confidtions
     //search the items in the db with the input conditions
     // $condition is an array
@@ -74,7 +75,9 @@
     //         终止时间： end_time
     //     事项跟踪备注 item_follow_mark (模糊查询)
     function get_items($condition) {
-        $flag = false;//
+        $flag = false;//用于打印 and
+        // $flag_start = false;//用于判断是否设定查询起始时间
+        // $flag_end = false;//用于判断是否设定查询结束时间
 
         $conn = db_connect();
         $query = "select * from items where ";
@@ -134,6 +137,7 @@
                 if ($flag) $query .= " and ";
                 $query .= "item_create_time > '".$row['value']."'";
                 $flag =true;
+                //$flag_start = true;
             }
 
             //compare the time with the end_time
@@ -141,9 +145,14 @@
                 if ($flag) $query .= " and ";
                 $query .= "item_create_time < '".$row['value']."'";
                 $flag =true;
+                //$flag_end =  true;
             }
         }
 
+        // //echo "Notice: ".$query."<br />";
+        // if ((flag_start) && (!flag_end) || ((!flag_start) && (flag_end))) {
+        //     throw new Exception("Time setting is not correct!");
+        // }
         $result = $conn->query($query);
         if (!$result) {
             throw new Exception("Could not connect to DB.");

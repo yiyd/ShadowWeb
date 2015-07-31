@@ -60,6 +60,7 @@
 
     }
 
+    // get the users` name through given id
     function get_user_name ($user_id) {
         $conn = db_connect();
         $query = "select user_name from users where user_id = '".$user_id."'";

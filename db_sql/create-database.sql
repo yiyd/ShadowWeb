@@ -20,26 +20,35 @@ CREATE TABLE para_values
 create table items
 (
   item_id int unsigned not null auto_increment primary key,
-  item_name char(32) not null,
+  item_name char(200) not null,
   item_creator_id int unsigned not null REFERENCES users(user_id),
   item_follower_id int unsigned not null REFERENCES users(user_id),
   item_create_time datetime not null,
   item_description varchar(255),
   item_type_id int unsigned not null REFERENCES para_values(para_value_id),
   item_state enum('PROCESSING', 'FINISH') not null DEFAULT 'PROCESSING',
-  item_follow_mark VARCHAR(255)
+) TYPE = InnoDB;
+
+CREATE TABLE item_follow_marks
+( 
+  item_follow_mark_id int unsigned not null auto_increment primary key
+  item_id int unsigned not null REFERENCES items(item_id),
+  item_follow_mark VARCHAR not null 
 ) TYPE = InnoDB;
 
 CREATE TABLE roles
 (
   role_id int unsigned not null auto_increment PRIMARY KEY ,
   role_name CHAR (32) NOT NULL ,
-  role_create_priv enum('YES', 'NO') NOT NULL DEFAULT 'NO',
-  role_update_priv enum('YES', 'NO') NOT NULL DEFAULT 'NO',
-  role_delete_priv enum('YES', 'NO') NOT NULL DEFAULT 'NO',
-  role_search_priv enum('YES', 'NO') NOT NULL DEFAULT 'NO',
-  role_finish_priv enum('YES', 'NO') NOT NULL DEFAULT 'NO',
-  role_viewlog_priv enum('YES', 'NO') NOT NULL DEFAULT 'NO'
+) TYPE = InnoDB;
+
+CREATE TABLE role_priv
+(
+  role_priv_id int unsigned not null auto_increment PRIMARY KEY,
+  role_id int unsigned NOT NULL REFERENCES roles(role_id),
+  role_priv_name char (32) not null,
+  role_priv_value enum('YES', 'NO') NOT NULL DEFAULT 'NO'
+
 ) TYPE = InnoDB;
 
 CREATE TABLE users
@@ -61,7 +70,7 @@ CREATE TABLE auto_notify
 
 create table logs
 (
-  log_id int unsigned not null auto_increment primary key,
+  log_id int unsigned not null auto_increment  primary key,
   item_id int unsigned not null REFERENCES items(item_id),
   log_changer_id int unsigned not null REFERENCES users(user_id),
   log_time datetime not null
@@ -75,11 +84,21 @@ CREATE TABLE log_fields
   log_field_new CHAR (32) NOT NULL
 ) TYPE = InnoDB;
 
-create table admin
+CREATE TABLE admin_logs
 (
-	admin_name char(16) not null primary key,
-	admin_passwd char(40) not null
-);
+  admin_log_id int unsigned not null auto_increment  primary key,
+  admin_log_time datetime not null,
+  admin_log_object char (32) not null,
+  admin_log_object_id int unsigned not null
+) TYPE = InnoDB;
+
+CREATE TABLE admin_log_fileds
+(
+  admin_log_id int unsigned not null REFERENCES admin_logs(admin_log_id),
+  admin_log_field_name CHAR (32) not NULL,
+  admin_log_field_old CHAR (32) NOT NULL,
+  admin_log_field_new CHAR (32) NOT NULL
+) TYPE = InnoDB;
 
 GRANT SELECT, INSERT, UPDATE, DELETE
 on shadow.*
