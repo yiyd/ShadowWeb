@@ -38,7 +38,7 @@
 
     function display_login_form() {
 ?>
-    <form method="post" action="index.php">
+    <form method="post" action="main.php">
         <table bgcolor="#cccccc">
             <tr>
                 <th colspan="2" align="center">事项跟踪工具登陆：</th>
