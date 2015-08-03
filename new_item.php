@@ -50,7 +50,7 @@
 		
 		$users_array = get_users();
 		$item_types_array = get_item_types();
-		$item['item_creator_name'] = get_user_name($item['item_creator_id']);
+		$item['item_creator_name'] = get_user_name($_SESSION['current_user_id']);
 	}
 	catch(Exception $e) {
 			do_html_header();

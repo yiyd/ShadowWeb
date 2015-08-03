@@ -7,7 +7,7 @@
 	}
 
 	$condition = array();
-
+	$change_field = array();
 
 
 	// array_push($condition, array(
@@ -34,6 +34,33 @@
 		'name' => 'end_time',
 		'value' => '2015-07-30 11:09:28'
 		));
+
+
+	array_push($change_field, array(
+		'name' => 'item_state',
+		'new_value' => 'PROCESSING'
+		));
+	array_push($change_field, array(
+		'name' => 'item_description',
+		'new_value' => 'PROCESSINGfasdfasdfasdfasd'
+		));
+
+	try {
+	update_item($change_field);
+
+	$result = display_selected_item();
+	foreach ($result as $key) {
+		echo "item_id: ".$key['item_id']."<br />";
+		echo "item_name: ".$key['item_name']."<br />";
+		echo "item_creator_id: ".$key['item_creator_id']."<br />";
+		echo "item_follower_id: ".$key['item_follower_id']."<br />";
+		echo "item_create_time: ".$key['item_create_time']."<br />";
+		echo "item_description: ".$key['item_description']."<br />";
+		echo "item_type_id: ".$key['item_type_id']."<br />";
+		echo "item_state: ".$key['item_state']."<br />";
+		echo "<hr />";
+	}
+
 	$result = get_items($condition);
 
 	foreach ($result as $key) {
@@ -45,15 +72,10 @@
 		echo "item_description: ".$key['item_description']."<br />";
 		echo "item_type_id: ".$key['item_type_id']."<br />";
 		echo "item_state: ".$key['item_state']."<br />";
-		echo "item_follow_mark: ".$key['item_follow_mark']."<br />";
 		echo "<hr />";
 	}
-
-
-
-	$change_field = array();
-
-
 	
-
+	} catch(Exception $e) {
+		echo $e->getMessage();
+	}
 ?>

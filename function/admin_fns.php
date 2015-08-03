@@ -289,6 +289,7 @@
             return true;
         }
     }
+    
 
     function delete_user ($user_id) {
         //if (!check_admin()) return false;

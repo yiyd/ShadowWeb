@@ -14,7 +14,13 @@
             throw new Exception("Could not connect to the db!");
         }
         if ($result->num_rows == 0) {
-            throw new  Exception("No such user."); 
+            $result1 = $conn->query("select user_id from users where user_name = 
+                '".$username."'");
+            if ($result1 && $result1->num_rows > 0) {
+                throw new Exception("Wrong Password!");
+            } else {
+                throw new  Exception("No such user."); 
+            }      
         }
         if ($result->num_rows > 0) {
             $row = $result->fetch_object();

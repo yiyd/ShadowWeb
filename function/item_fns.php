@@ -19,15 +19,16 @@
         $query = "insert into items VALUES ('', '".$items['item_name']."', '".$_SESSION['current_user_id']."',
                 '".$items['item_follower_id']."','".$current_time."', '".$items['item_description']."', 
                 '".$items['item_type_id']."',
-                '".$items['item_state']."', '".$items['item_follow_mark']."')";
-
+                '".$items['item_state']."')";
+        
+        //echo $query."<br />";
         $result = $conn->query($query);
         if (!$result) {
             throw new Exception("Could not insert the new item into the DB");
         }
         //end transaction
-        $conn->commit();
-        $conn->autocommit(TRUE);
+        // $conn->commit();
+        // $conn->autocommit(TRUE);
 
         //get the new item_id
         $query = "select last_insert_id()";
@@ -54,9 +55,28 @@
             throw new Exception("NO items records!");
         }
 
-        $row = $result->fetch_assoc();
+        //$row = $result->fetch_assoc();
+        $row = db_result_to_array($result);
         return $row;
     }
+
+    // GET the related items of current_user
+    function get_related_items () {
+        $conn = db_connect();
+        $query = "select * from items where item_creator_id = '".$_SESSION['current_user_id']."'
+                    or item_follower_id = '".$_SESSION['current_user_id']."'";
+        $result = $conn->query($query);
+        if (!$result) {
+            throw new Exception("Could not connect to DB.");
+        }
+        if ($result->num_rows == 0) {
+            throw new Exception("NO items records!");
+        }
+
+        $row = db_result_to_array($result);
+        return $row;
+    }
+
 
     // TESTED   SUCCESSFULLY
     //When user search all the items with confidtions
@@ -193,44 +213,38 @@
         return $result;
     }
    
+    // TESTED SUCCESSFULLY
     //update items
     // $change_field include three keys
     // $change_field['name'] $change_field['old_value'] $change_field['new_value'];
     function update_item($change_field) {
+        $flag = false;
+
 		$conn = db_connect();
-        $conn->autocommit(false);
+  //       $conn->autocommit(false);
 
-        // if (!(isset($item_follower_id))) {
-        //     $item_follower_id = $items['item_follower_id'];
-        // }
-
-        // if (!(isset($item_type_id))) {
-        //     $item_type_id = $items['item_type_id'];
-        // }
-
-        // if (!(isset($item_state))) {
-        //     $item_state = $items['item_state'];
-        // }
-
-        // $query = "insert into items VALUES ('".$_SESSION['current_item_id']."', '".$items['item_name']."', 
-        //             '".$_SESSION['current_user_id']."', '".$item_follower_id."', '".$items['item_create_time']."', 
-        //             '".$item_description."', '".$item_type_id."', '".$item_state."', '".$item_follow_mark."')";
-        
         $query = "update items set ";
         foreach ($change_field as $row) {
-            $temp = $row['name']." = ".$row['new_value'];
+            if ($flag) {
+                $query .= ", ";
+            }
+            $temp = $row['name']." = '".$row['new_value']."'";
             $query .= $temp;
+            $flag = true;
         }
-        $query .= "where item_id = '".$_SESSION['current_item_id']."'";    
+        $query .= " where item_id = '".$_SESSION['current_item_id']."'";    
+        echo $query."<br />";
 
-        //end transaction
-        $conn->commit();
-        $conn->autocommit(TRUE);
+        $result = $conn->query($query);
         if (!$result) {
             throw new Exception("Could not connect to the db!");
         } else {
             return true;
         }
+
+        //end transaction
+        $conn->commit();
+        $conn->autocommit(TRUE);
 
     }
 ?>
