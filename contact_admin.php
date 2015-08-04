@@ -6,7 +6,7 @@
  */
 	require_once('function/shadow_fns.php');
 
-	do_html_header();
+	do_html_header('');
 	echo "请联系管理员！";
 	do_html_footer();
 

@@ -7,7 +7,7 @@
 	require_once('function/shadow_fns.php');
 	session_start();
 
-	do_html_header();
+	do_html_header('login.css');
 	display_login_form();
 	do_html_footer();
 

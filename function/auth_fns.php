@@ -57,7 +57,7 @@
         if (isset($_SESSION['current_user_id'])) {
             // echo "Logged in as ".$_SESSION['current_user'].".<br />";
         } else {
-            do_html_header();
+            do_html_header('');
             do_html_url('login,php', 'Login');
             do_html_footer();
             exit;

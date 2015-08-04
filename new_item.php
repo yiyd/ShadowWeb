@@ -29,14 +29,14 @@
 			set_notify($date, $auto_type, $user_id);
 		}
 		catch(Exception $e) {
-			do_html_header();
+			do_html_header('');
 			echo $e->getMessage();
 			do_html_footer();
 			exit;
 		}
 	}else
 	{
-			do_html_header();
+			do_html_header('');
 			echo "请输入事项名称！";
 			do_html_footer();
 			exit;
@@ -53,13 +53,13 @@
 		$item['item_creator_name'] = get_user_name($_SESSION['current_user_id']);
 	}
 	catch(Exception $e) {
-			do_html_header();
+			do_html_header('');
 			echo $e->getMessage();
 			do_html_footer();
 			exit;
 	}
 
-	do_html_header();
+	do_html_header('');
 
 	display_item_form($notify, $item, $users_array, $item_types_array);
 
