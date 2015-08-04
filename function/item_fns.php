@@ -24,7 +24,7 @@
         //echo $query."<br />";
         $result = $conn->query($query);
         if (!$result) {
-            throw new Exception("Could not insert the new item into the DB");
+            throw new Exception("Could not insert the new item into the DB.");
         }
         //end transaction
         // $conn->commit();
@@ -40,6 +40,40 @@
         else {
             throw new Exception("Could not get the new item_id!");  
         }
+    }
+
+    //insert the follow mark into the DB
+    // $follow_mark is obtained from the testarea
+    function new_follow_mark($follow_mark) {
+        $current_time = date("Y-m-d H:i:s");
+
+        $conn = db_connect();
+        $query = "insert into item_follow_marks VALUES 
+                ('', '".$_SESSION['current_item_id']."', '".$follow_mark."', 
+                     '".$_SESSION['current_user_id']."', '".$current_time."')";
+        $result = $conn->query($query);
+        if (!$result) {
+            throw new Exception("Could not insert the mark into the DB.");
+        }
+        return true;
+    }
+
+    // get all the follow_marks
+    function get_follow_mark() {
+        $conn = db_connect();
+        $query = "select * from item_follow_marks where item_id = '".$_SESSION['current_item_id']."'
+                    order by item_follow_mark_id";
+
+        $result = $conn->query($query);
+        if (!$result) {
+            throw new Exception("Could not connect to DB.");
+        }
+        if ($result->num_rows == 0) {
+            throw new Exception("No follow mark records!");
+        }
+
+        $row = db_result_to_array($result);
+        return $row;
     }
 
     //simple display function for test
@@ -144,12 +178,12 @@
                 $flag =true;
             }
 
-            //if the item_follow_mark is the search condition
-            if ($row['name'] == "item_follow_mark") {
-                if ($flag) $query .= " and ";
-                $query .= "item_follow_mark like '%".$row['value']."%'";
-                $flag =true;
-            }
+            // //if the item_follow_mark is the search condition
+            // if ($row['name'] == "item_follow_mark") {
+            //     if ($flag) $query .= " and ";
+            //     $query .= "item_follow_mark like '%".$row['value']."%'";
+            //     $flag =true;
+            // }
 
             //if the time-duration is the search condition
             //compare the time with the start_time
