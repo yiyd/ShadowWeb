@@ -34,7 +34,8 @@ CREATE TABLE item_follow_marks
   item_follow_mark_id int unsigned not null auto_increment primary key,
   item_id int unsigned not null REFERENCES items(item_id),
   item_follow_mark VARCHAR(255) not null,
-  mark_create_time datetime not null 
+  mark_creator_id int unsigned not null REFERENCES users(user_id),
+  mark_create_time datetime not null
 ) ENGINE = InnoDB;
 
 CREATE TABLE roles
