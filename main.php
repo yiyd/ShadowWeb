@@ -7,6 +7,7 @@
 	require_once('function/shadow_fns.php');
 	session_start();
 
+	
 	$username = $_POST['username'];
 	$password = $_POST['password'];
 
@@ -39,10 +40,11 @@
 		exit;
 	}
 	
-	do_html_header('');
+	// do_html_header('');
 	check_valid_user();
 
-	display_new_item_form($users_array, $item_types_array);
+	display_main_page();
+	// display_new_item_form($users_array, $item_types_array);
 
-	do_html_footer();
+	// do_html_footer();
 ?>
