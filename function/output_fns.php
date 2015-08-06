@@ -17,7 +17,7 @@
         <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge"> -->
         <?php
             if($css_file_name) {
-                echo "<link rel=\"stylesheet\" type=\"type/css\" href=\"".$css_file_name."\" >\n";
+                echo "<link rel=\"stylesheet\" type=\"type/css\" href=\"css/".$css_file_name."\" >\n";
             }
         ?>
         <title>中银开放平台-事项跟踪工具</title>
@@ -100,40 +100,7 @@
     <br /><a href="<?php echo $url; ?>"><?php echo $name; ?></a><br />
 <?php
     }
-
-    function display_new_item_form($users_array, $item_types_array) {
-        if (!is_array($users_array)) {
-            echo "<p>No users currently available</p>";
-            return;
-        }
-        if (!is_array($item_types_array)) {
-            echo "<p>No item types currently available</p>";
-            return;
-        }
-?>
-
-    <form method="post" action="new_item.php">
-        <table bgcolor="#cccccc">
-            <?php
-                display_item_form_title("新建事项");
-                display_item_form_item_name();
-                display_item_form_item_follower($users_array);
-                display_item_form_item_description();
-                display_item_form_item_type($item_types_array);
-                display_item_form_auto_notify_type();
-                display_item_form_auto_notify_user($users_array);
-                display_item_form_auto_notify_date();
-                display_item_form_item_follow_mark();
-
-            ?>
-            <tr>
-                <td colspan="2" align="center"><input type="submit" value="提交"/></td>
-            </tr>
-            
-        </table>
-    </form>
-<?php
-    }        
+       
     function display_item_form($notify, $item, $users_array, $item_types_array) {
         if (!is_array($notify)) {
             echo "<p>No notify currently available</p>";

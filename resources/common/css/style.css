@@ -1,0 +1,43 @@
+td {
+	border: 0px solid black;
+}
+/*表格样式设置*/
+.table_list {
+	background-color:#CECECE;
+	border-top:0px;
+	border-bottom:0px;
+}
+
+/*表格th属性设置*/
+.table_list th {
+	font-size: 12px;
+	font-color:#1F4A65;
+	padding-left: 4px;
+	padding-right: 4px;
+	text-align: center;
+	white-space: nowrap;
+	font-family: Verdana, Arial, Helvetica, sans-serif, "宋体";
+	height: 26px;
+	word-break: keep-all;
+	word-wrap: normal;
+}
+
+.table_list .thread {
+	font-size: 12px;
+	background-color: #EFEFEF;
+	font-weight: bold;
+	text-align: center;
+	white-space: nowrap;
+	font-family: Verdana, Arial, Helvetica, sans-serif, "宋体";
+	height: 26px;
+	word-break: keep-all;
+	word-wrap: normal;
+}
+
+/*表格TD属性设置*/
+.table_list td {
+	font-size: 12px;
+	background-color: #fafafa;
+	font-family: Verdana, Arial, Helvetica, sans-serif, "宋体";
+	height: 24px;
+}
