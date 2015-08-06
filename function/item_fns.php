@@ -40,6 +40,9 @@
         else {
             throw new Exception("Could not get the new item_id!");  
         }
+        //end transaction
+        $conn->commit();
+        $conn->autocommit(TRUE);
     }
 
     //insert the follow mark into the DB
@@ -47,7 +50,6 @@
     function new_follow_mark($follow_mark) {
         $current_time = date("Y-m-d H:i:s");
 
-        $conn = db_connect();
         $query = "insert into item_follow_marks VALUES 
                 ('', '".$_SESSION['current_item_id']."', '".$follow_mark."', 
                      '".$_SESSION['current_user_id']."', '".$current_time."')";
@@ -55,6 +57,7 @@
         if (!$result) {
             throw new Exception("Could not insert the mark into the DB.");
         }
+
         return true;
     }
 
@@ -110,7 +113,6 @@
         $row = db_result_to_array($result);
         return $row;
     }
-
 
     // TESTED   SUCCESSFULLY
     //When user search all the items with confidtions
@@ -275,10 +277,6 @@
         } else {
             return true;
         }
-
-        //end transaction
-        $conn->commit();
-        $conn->autocommit(TRUE);
 
     }
 ?>

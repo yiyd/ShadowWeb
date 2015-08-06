@@ -1,25 +1,30 @@
 <?php
 	//set the auto_notify ( NEW)
-	function set_notify ($date, $auto_type, $user_id) {
+	// $users is an array including all the persons needed to be notified
+	// $users stores the user_id
+	function set_notify ($date, $auto_type, $users) {
 		//insert the notify setting into the db
 		$conn = db_connect();
 		$conn->autocommit(false);	
 
-		if ($date && $auto_type && $user_id && (isset($_SESSION['current_item_id']))) {
+		if ($date && $auto_type && $user_id && (isset($_SESSION['current_item_id'])) &&
+				is_array($users)) {
 			//check all the input 
-			$query = "insert into auto_notify values ('".$_SESSION['current_item_id']."', '".$date."', 
-				'".$auto_type."', '".$user_id."')";
+			foreach ($$users as $user) {
+				$query = "insert into auto_notify values ('".$_SESSION['current_item_id']."', '".$date."', 
+				'".$auto_type."', '".$user."')";
 			
-			$result = $conn->query($query);
-			if (!$result) {
-				throw new Exception("Could not connect to the db!");
+				$result = $conn->query($query);
+				if (!$result) {
+					throw new Exception("Could not connect to the db!");
+				}
 			}
+			
 			$conn->commit();
 			$conn->autocommit(true);
 		} else {
 			throw new Exception("Input Error!");			
 		}
-
 	}
 
 	//UPDATE the setting 
