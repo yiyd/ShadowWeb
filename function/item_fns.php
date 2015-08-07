@@ -49,7 +49,7 @@
     // $follow_mark is obtained from the testarea
     function new_follow_mark($follow_mark, $current_time) {
         //$current_time = date("Y-m-d H:i:s");
-
+        $conn = db_connect();
         $query = "insert into item_follow_marks VALUES 
                 ('', '".$_SESSION['current_item_id']."', '".$follow_mark."', 
                      '".$_SESSION['current_user_id']."', '".$current_time."')";

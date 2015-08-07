@@ -10,7 +10,7 @@
 		if ($date && $auto_type && (isset($_SESSION['current_item_id'])) &&
 				is_array($users)) {
 			//check all the input 
-			foreach ($$users as $user) {
+			foreach ($users as $user) {
 				$query = "insert into auto_notify values ('".$_SESSION['current_item_id']."', '".$date."', 
 				'".$auto_type."', '".$user."')";
 			

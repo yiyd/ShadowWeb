@@ -1,7 +1,7 @@
 /**
  * Coder: ZX
  * Date: 2015/8/5
- * Time: 11.30
+ * Time: 11:30
  */
  function addTab(title, url)
  {
