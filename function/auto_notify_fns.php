@@ -7,7 +7,7 @@
 		$conn = db_connect();
 		$conn->autocommit(false);	
 
-		if ($date && $auto_type && $user_id && (isset($_SESSION['current_item_id'])) &&
+		if ($date && $auto_type && (isset($_SESSION['current_item_id'])) &&
 				is_array($users)) {
 			//check all the input 
 			foreach ($$users as $user) {
