@@ -190,6 +190,9 @@
             var inputHTML = "";
 
             lastIndex = $('#dg').datagrid('getRows').length;
+
+            inputHTML += '<input type="hidden" name="follow_mark_number" value="' + lastIndex + '" />';
+            
             if (lastIndex == 1) {
                 followMarkRows = $('#dg').datagrid('getRows');
                 if ('' == $.trim(followMarkRows[0].mark_content) || strlen($.trim(followMarkRows[0].mark_content)) > 255) {

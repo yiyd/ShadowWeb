@@ -20,14 +20,18 @@
 	$date = $_POST['auto_notify_date'];
 	$auto_type = $_POST['auto_notify'];
 	$users = array();
-
 	$users[0] = $_POST['auto_notify_user'];
 
-
+	$follow_mark_number = $_POST['follow_mark_number'];
 	
 	try {
 		new_one_item($items);
 		set_notify($date, $auto_type, $users);
+		if ($follow_mark_number != 0) {
+			$item_follow_mark = $_POST['item_follow_mark'];
+			$mark_create_time = $_POST['mark_create_time'];
+			new_follow_mark($item_follow_mark, $mark_create_time);
+		}		
 	}
 	catch(Exception $e) {
 		do_html_header('');
@@ -37,6 +41,6 @@
 	}
 
 	do_html_header('');
-	echo "貌似成功";
+	echo "新建事项成功";
 	do_html_footer();
 ?>
