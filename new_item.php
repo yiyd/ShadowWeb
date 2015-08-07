@@ -14,54 +14,29 @@
 	$items['item_follower_id'] = $_POST['item_follower'];
 	$items['item_description'] = $_POST['item_description'];
 	$items['item_type_id'] = $_POST['item_type'];
-	$items['item_follow_mark'] = $_POST['item_follow_mark'];
 
 	$items['item_state'] = "PROCESSING";
 
 	$date = $_POST['auto_notify_date'];
-	$auto_type = $_POST['auto_notify_type'];
-	$user_id = $_POST['auto_notify_user'];
+	$auto_type = $_POST['auto_notify'];
+	$users = array();
+
+	$users[0] = $_POST['auto_notify_user'];
 
 
-	if ($items['item_name']) {
-		try {
-			new_one_item($items);
-			set_notify($date, $auto_type, $user_id);
-		}
-		catch(Exception $e) {
-			do_html_header('');
-			echo $e->getMessage();
-			do_html_footer();
-			exit;
-		}
-	}else
-	{
-			do_html_header('');
-			echo "请输入事项名称！";
-			do_html_footer();
-			exit;
-	}
-
+	
 	try {
-		$item = display_selected_item();
-
-		$notify_array = get_notify();
-		$notify= $notify_array[0];
-		
-		$users_array = get_users();
-		$item_types_array = get_item_types();
-		$item['item_creator_name'] = get_user_name($_SESSION['current_user_id']);
+		new_one_item($items);
+		set_notify($date, $auto_type, $users);
 	}
 	catch(Exception $e) {
-			do_html_header('');
-			echo $e->getMessage();
-			do_html_footer();
-			exit;
+		do_html_header('');
+		echo $e->getMessage();
+		do_html_footer();
+		exit;
 	}
 
 	do_html_header('');
-
-	display_item_form($notify, $item, $users_array, $item_types_array);
-
+	echo "貌似成功";
 	do_html_footer();
 ?>
