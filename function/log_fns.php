@@ -6,6 +6,11 @@
  * Time: 17:06
  * log all the changes
  */
+
+
+    // MAYBE WE CAN USE THE TRIGGER TO REALISE SUCH FUNCITON 
+    // INSTED OF THE FOLLOWING THINGS.
+
     //新建基本日志头，插入logs 
     function log_basic() {
         $current_time = date("Y-m-d H:i:s");
@@ -52,5 +57,36 @@
         }
     }
 
+
+
+    // LOG DISPLAY FUNCTIONS 
+    // $log_object is "users", "roles"
+    function get_admin_log_title($log_object, $object_id) {
+        $conn = db_connect();
+        $query = "select * from admin_logs where admin_log_object like '".$log_object."'
+                and admin_log_object_id = '".$object_id."'" ;
+        $result = $conn->query($query);
+        if (!$result) {
+            throw new Exception("Could not connect to DB. Please check the input.");
+        }
+        if ($result->num_rows == 0) {
+            throw new Exception("No such logs!");
+        }
+
+        $row = db_result_to_array($result);
+        return $row;
+    }
+
+    function get_admin_log_content($log_object, $object_id) {
+
+    }
+
+    function get_log_title() {
+
+    }
+
+    function get_log_content() {
+
+    }
 
 ?>
