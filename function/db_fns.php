@@ -7,7 +7,7 @@
  */
     //connect to the DB
     function db_connect() {
-        $conn = new mysqli('22.189.25.112','shadow_admin', 'passwd', 'shadow');
+        $conn = new mysqli('22.189.25.107','shadow_admin', 'passwd', 'shadow');
         if (!$conn) {
             throw new Exception ('Could not connect to database server.');
         } else {
