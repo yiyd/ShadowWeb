@@ -24,7 +24,30 @@
         }
         if ($result->num_rows > 0) {
             $row = $result->fetch_object();
+            $query = "select session_id from user_access where user_id = '".$row->user_id."'";
+            $result = $conn->query($query);
+            if (!$result) {
+                throw new Exception("Could not connect to the DB!");
+            }
+            if ($result->num_rows > 0 ) {
+                $row1 = $result->fetch_object();
+                //delete the session files
+                if (!fopen("..\\..\\..\\..\\tmp\\sess_".$row1->session_id, 'w')) {
+                    echo "file exsits!";
+                    echo "..\\..\\..\\..\\tmp\\sess_".$row1->session_id;
+                }
+                if (!unlink("..\\..\\..\\..\\tmp\\sess_".$row1->session_id)) {  
+                    throw new Exception("Could not delete the session files!");
+                }
+                $result = $conn->query("delete from user_access where userid = '".$row->user_id."'");
+            }
+            
             $_SESSION['current_user_id'] =  $row->user_id;
+            $query = "insert into user_access values ('', '".$_SESSION['current_user_id']."', '".session_id()."')";
+            $result = $conn->query($query);
+            if (!$result) {
+                throw new Exception("Could not insert into the user_access table!");
+            }
             return true;
         }
         else {
@@ -51,6 +74,27 @@
         } else {
             throw new Exception("Your old passwd is wrong!");// old password was wrong
         }
+    }
+
+    //注销所有session变量
+    function logout() {
+        $old_user = $_SESSION['current_user_id'];
+        unset($_SESSION['current_user_id']);
+
+        $result_dest = session_destroy();
+                
+        if (!empty($old_user)) {
+            if ($result_dest) {
+                return true;
+            }
+            else {
+                throw new Exception("Could not log you out!");
+            }
+        }
+        else {
+            throw new Exception("You have not logged in!");
+        }
+
     }
 
     function check_valid_user() {

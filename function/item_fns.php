@@ -31,7 +31,7 @@
         // $conn->autocommit(TRUE);
 
         //get the new item_id
-        $query = "select last_insert_id()";
+        $query = "select max(item_id) from items";
         $result = $conn->query($query);
         if ($result && ($result->num_rows > 0)) {
             $row = $result->fetch_row();
@@ -269,7 +269,7 @@
             $flag = true;
         }
         $query .= " where item_id = '".$_SESSION['current_item_id']."'";    
-        echo $query."<br />";
+        //echo $query."<br />";
 
         $result = $conn->query($query);
         if (!$result) {

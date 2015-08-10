@@ -9,55 +9,52 @@
 
 
     // MAYBE WE CAN USE THE TRIGGER TO REALISE SUCH FUNCITON 
-    // INSTED OF THE FOLLOWING THINGS.
+    // ALL THE ADMIN OPERATIONS ARE LOGGED BY TRIGGERS 
+    // ITEMS NEED TO BE ADDED MANUALLY BY THE FOLLOWING FUNCTIONS
 
-    //新建基本日志头，插入logs 
-    function log_basic() {
+    //新建事项日志，插入到logs 
+    // $log_type : 0 is new, 1 is update, 2 is delete
+    // $change_field is an array stored all the change values
+    //      $change_field inculdes
+    //      $change_field['name'], $change_field['old_value'], $change_field['new_value']
+    function log_items ($log_type, $change_field) {
         $current_time = date("Y-m-d H:i:s");
         $conn = db_connect();
         $conn->autocommit(false);
 
-        //insert the new_log into DB
+        //insert the log_title into DB
         $query = "insert into logs VALUES ('', '".$_SESSION['current_item_id']."', '".$_SESSION['current_user_id']."',
                  '".$current_time."')";
         $result = $conn->query($query);
         if (!$result) {
             throw new Exception("Could not connect to the db!");
         } else {
+            if ($log_type == 1 && isset($change_field)) {
+                //get the new log_id
+                $query1 = "select max(log_id) from admin_logs";
+                $result1 = $conn->query($query1);
+                if ($result1 && ($result1->num_rows > 0)) {
+                    $row1 = $result1->fetch_row();
+                    $current_log_id = $row1[0];
+                }
+
+                if (is_array($change_field)) {
+                    foreach ($change_field as $row) {
+                        $query2 = "insert into log_fields VALUES ('".$current_log_id."', '".$row['name']."',
+                                    '".$row['old_value']."', '".$row['new_value']."')";
+                        $result2 = $conn->query($query2);
+                        if(!$result2) {
+                            throw new Exception("Could not connect to the db!");
+                        }
+                    }
+                }
+            }
+            else 
             $conn->commit();
             $conn->autocommit(true);
             return true;
         }
     }
-
-    //添加修改日志
-    function log_update($change_field) {
-        //insert the update log to the log table
-        log_basic();
-        $conn = db_connect();
-        $conn->autocommit(false);
-
-        //get the new log_id
-        $query = "select last_insert_id()";
-        $result = $conn->query($query);
-        if ($result && ($result->num_rows > 0)) {
-            $row = $result->fetch_row();
-            $current_log_id = $row[0];
-        }
-
-        if (is_array($change_field)) {
-            foreach ($change_field as $row) {
-                $query = "insert into log_fields VALUES ('".$current_log_id."', '".$row['name']."',
-                            '".$row['old_value']."', '".$row['new_value']."')";
-                $result = $conn->query($query);
-                if(!$result) {
-                    throw new Exception("Could not connect to the db!");
-                }
-            }
-        }
-    }
-
-
 
     // LOG DISPLAY FUNCTIONS 
     // $log_object is "users", "roles"

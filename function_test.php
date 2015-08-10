@@ -1,7 +1,7 @@
 <?php
 	include('function\shadow_fns.php');
 	session_start();
-
+/*
 	if (!login('yiyd', '123456')) {
 		throw new Exception("Can not login!");
 	}
@@ -9,7 +9,7 @@
 	$condition = array();
 	$change_field = array();
 
-
+	
 	// array_push($condition, array(
 	// 	'name' => 'item_name',
 	// 	'value' => '11'
@@ -78,4 +78,10 @@
 	} catch(Exception $e) {
 		echo $e->getMessage();
 	}
+*/
+	if (unlink("..\\..\\..\\tmp\\123.txt")) {
+		echo "fjasdklfjaskldf";
+	}
+	session_destroy();
+	echo session_id();
 ?>

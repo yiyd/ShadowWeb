@@ -14,6 +14,7 @@
         }
     }
 
+    // OLD VERSION ------------------------------------------
     function login_admin($username, $passwd) {
         $conn = db_connect();
         $result = $conn->query("select * from admin where admin_name = '".$username."'
