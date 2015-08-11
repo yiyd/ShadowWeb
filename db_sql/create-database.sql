@@ -8,7 +8,7 @@ CREATE TABLE parameters
   para_id int unsigned not null auto_increment primary key,
   para_name CHAR (32) not null,
   para_description VARCHAR (255)
-) ENGINE = InnoDB;
+) ENGINE = InnoDB DEFAULT CHARSET = gbk;
 
 CREATE TABLE para_values
 (
@@ -114,6 +114,6 @@ CREATE TABLE user_access
     session_id char(40) not null
 );
 
-GRANT SELECT, INSERT, UPDATE, DELETE
+GRANT DROP, ALTER, SELECT, INSERT, UPDATE, DELETE
 on shadow.*
 to shadow_admin@'%' identified by 'passwd';

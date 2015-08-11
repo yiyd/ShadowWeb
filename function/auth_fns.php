@@ -113,7 +113,9 @@
 
         if (!isset($_SESSION['current_user_id'])) {
             do_html_header('');
-            do_html_url('login.php', 'Login');
+            //throw new Exception("Notice: You have logged in other place! Please login again!");
+            echo "<h1>Notice: You have logged in other place!<br /></h1>";
+            do_html_url('login.php', 'Back to Login');
             do_html_footer();
             exit;
         }
@@ -124,7 +126,9 @@
             return true;
         } else {
             do_html_header('');
-            do_html_url('login.php', 'Login');
+            //throw new Exception("Notice: You have not logged in! Please login again!");
+            echo "<h1>Notice: You have not logged in!<br /></h1>";
+            do_html_url('login.php', 'Back to Login');
             do_html_footer();
             exit;
         }
