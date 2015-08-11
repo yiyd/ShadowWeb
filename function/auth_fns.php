@@ -36,9 +36,10 @@
                 $old_session_id = $row->session_id;
                 $new_session_id = session_id();
 
-                if ($old_session_id == $new_session_id) {
-                    return true;
-                }
+                // if ($old_session_id == $new_session_id) {
+                //     $_SESSION['current_user_id'] =  $old_user_id;
+                //     return true;
+                // }
 
                 // check the session file is exsit or not 
                 if (@fopen("..\\..\\..\\tmp\\sess_".$old_session_id, 'r')) {

@@ -4,7 +4,7 @@
  * Date: 2015/8/5
  * Time: 15:30
  */
-
+    require_once('item_fns.php');
 	function display_new_item_form($users_array, $item_types_array) {
 ?>
 <!DOCTYPE html>
@@ -322,7 +322,7 @@
         })
 
         function updateItem(){
-            
+
         }
 
         function deleteItem(){
