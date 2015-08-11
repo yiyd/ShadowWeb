@@ -7,8 +7,8 @@
 	require_once('function/shadow_fns.php');
 	session_start();
 
-	check_valid_user();
-	
+	check_valid_user();	
+
 	display_main_page();
 
 ?>

@@ -1,9 +1,8 @@
 use shadow;
 
-
 INSERT INTO parameters VALUES ('', 'item_type', 'Item`s types');
-INSERT INTO para_values VALUES ('1', '', 'common');
-INSERT INTO para_values VALUES ('1', '', 'special');
+INSERT INTO para_values VALUES ('1', '', '日常事务');
+INSERT INTO para_values VALUES ('1', '', '生产问题');
 
 
 INSERT INTO roles VALUES('', 'common');

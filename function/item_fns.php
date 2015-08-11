@@ -31,7 +31,7 @@
         // $conn->autocommit(TRUE);
 
         //get the new item_id
-        $query = "select last_insert_id()";
+        $query = "select max(item_id) from items";
         $result = $conn->query($query);
         if ($result && ($result->num_rows > 0)) {
             $row = $result->fetch_row();
@@ -224,6 +224,7 @@
     //get the item_type
     function get_item_type($item_type_id) {
         $conn = db_connect();
+        $result = $conn->query("set names gbk");
         $result = $conn->query("select para_value_name from para_values where para_value_id = '".$item_type_id."'");
         if (!$result) {
             throw new Exception("Could not connect to the db!");
@@ -238,6 +239,7 @@
     //get all the different item_types
     function get_item_types() {
         $conn = db_connect();
+        $result = $conn->query("set names gbk");
         $result = $conn->query("select para_value_id, para_value_name from para_values where para_id = '1'");
         if (!$result) {  
             throw new Exception("Could not connect to the db!");
@@ -269,7 +271,7 @@
             $flag = true;
         }
         $query .= " where item_id = '".$_SESSION['current_item_id']."'";    
-        echo $query."<br />";
+        //echo $query."<br />";
 
         $result = $conn->query($query);
         if (!$result) {
