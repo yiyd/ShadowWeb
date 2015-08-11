@@ -113,7 +113,7 @@
 
         if (!isset($_SESSION['current_user_id'])) {
             do_html_header('');
-            do_html_url('login,php', 'Login');
+            do_html_url('login.php', 'Login');
             do_html_footer();
             exit;
         }
@@ -124,7 +124,7 @@
             return true;
         } else {
             do_html_header('');
-            do_html_url('login,php', 'Login');
+            do_html_url('login.php', 'Login');
             do_html_footer();
             exit;
         }
