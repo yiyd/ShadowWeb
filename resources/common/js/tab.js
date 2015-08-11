@@ -5,16 +5,12 @@
  */
  function addTab(title, url)
  {
- 	if ($('#tabs').tabs('exists',title)) {
- 		$('#tabs').tabs('select',title);
- 	} else {
-	 	var content = createFrame(url);
-	 	$('#tabs').tabs('add',{
-	 		title: title,
-	 		content: content,
-	 		closable: true 
-	 	});
-	 }
+ 	var content = createFrame(url);
+ 	$('#tabs').tabs('add',{
+ 		title: title,
+ 		content: content,
+ 		closable: true 
+ 	});
 }
 
  function createFrame(url)
