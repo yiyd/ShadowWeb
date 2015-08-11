@@ -4,7 +4,7 @@
  * Date: 2015/8/4
  * Time: 17:20
  */
-    
+    // require_once('function/item_fns.php');
     function display_main_page() {
 ?>
 <!DOCTYPE html>
@@ -18,9 +18,9 @@
         <link rel="stylesheet" type="type/css" href="css/main.css">
         <script type="text/javascript" src="resources/jquery-easyui/jquery.min.js"></script>
         <script type="text/javascript" src="resources/jquery-easyui/jquery.easyui.min.js"></script>
-        <script type="text/javascript" src="resources/common/js/tab.js"></script>
     </head>
     <body class="easyui-layout">
+
 		<div data-options="region:'north',border:false" style="height:40px;padding:10px">待完善</div>
 		<div data-options="region:'west',split:true,title:'系统菜单'" style="width:250px;">
 			<div class="easyui-accordion" data-options="fit:true,border:false">
@@ -31,7 +31,7 @@
 							<ul>
 								<li>日常工作事务</li>
 								<li>生产问题事务</li>
-								<li>
+								<li data-options="id:3">
 									<span>事务管理</span>
 									<ul>
 										<li data-options="iconCls:'icon-add',text:'新建事项',attributes:{url:'new_item_form.php'}">新建事项</li>
@@ -54,18 +54,51 @@
 				</div>
 			</div>
 		</div>
-		<script>
-        
-        	$('#tt').tree({
-        		
-        		onClick:function(node){
-        			if (node.attributes) {
-        				addTab(node.text, node.attributes.url);
-        			}
-        		}
-        	});
-        </script>
+
 	</body>
+	<script>
+    
+		$(function(){
+			$('#tt').tree({
+				
+				onClick:function(node){
+					if (node.attributes) {
+						$('#tabs').tabs('add',{    
+						    title:node.text,    
+						    href:node.attributes.url,    
+						    closable:true,    
+						       
+						}); 
+
+					}
+				}
+			});
+
+			reloadItems();
+		})
+    	
+        function reloadItems()
+		{
+		 // 	var manageNode = $('#tt').tree('find', 3);
+			// $('#tt').tree('insert',{
+			// 	before:manageNode.target,
+			// 	<?php
+			// 		$result = get_related_items();
+			// 		$count = 0;
+			// 		foreach($result as $key) {
+						
+			// 		}
+			// 	?>
+			// 	data:[{
+			// 		id:11,
+			// 		text:'test'
+			// 	}
+			// 	]
+			// });
+		}
+	
+
+    </script>
 </html>
 <?php
 	}

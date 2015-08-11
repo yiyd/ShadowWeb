@@ -50,7 +50,7 @@
             <img id="icon" src="resources/icon_title.png">
             <div class="easyui-panel" title="用户登陆" style="width:300px">
                 <div id="form">
-                    <form onkeydown=enter() id="ff" method="post" action="main.php">
+                    <form onkeydown=enter() id="ff" method="post" action="middle.php">
                         <table cellpadding="5">
                             <tr>
                                 <td align="right">用户名:</td>

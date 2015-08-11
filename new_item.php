@@ -39,8 +39,36 @@
 		do_html_footer();
 		exit;
 	}
+	
+	try {
+		$result = display_selected_item();
+		$auto_notify_result = get_notify();
+	}
+	catch(Exception $e) {
+		do_html_header('');
+		echo $e->getMessage();
+		do_html_footer();
+		exit;
+	}
 
-	do_html_header('');
-	echo "新建事项成功";
-	do_html_footer();
+	if (count($result) == 1 && count($auto_notify_result) == 1) {
+		$row = $result[0];
+		$auto_notify_row = $auto_notify_result[0];
+
+		$row['item_follower_name'] = get_user_name($row['item_follower_id']);
+		$row['item_type_name'] = get_item_type($row['item_type_id']);
+		
+		$auto_notify_row['user_name'] = get_user_name($auto_notify_row['user_id']);
+	}
+
+	
+
+	display_new_item($row, $auto_notify_row);
+
+?>
+	<script>
+		window.parent.reloadItems();
+	</script>
+<?php
+	
 ?>
