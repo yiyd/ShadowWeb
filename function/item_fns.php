@@ -7,6 +7,8 @@
  */
     //insert one item into DB
     // $items is an array including all the inputs
+    //require_once()
+
     function new_one_item($items) {
         $conn = db_connect();
 		//starting one by turning off the autocomit
@@ -66,7 +68,7 @@
         $conn = db_connect();
         $query = "select * from item_follow_marks where item_id = '".$_SESSION['current_item_id']."'
                     order by item_follow_mark_id";
-
+        $result = $conn->query("set names gbk");
         $result = $conn->query($query);
         if (!$result) {
             throw new Exception("Could not connect to DB.");
@@ -84,6 +86,7 @@
         $conn = db_connect();
         $query = "select * from items where item_creator_id = '".$_SESSION['current_user_id']."' 
                     and item_id = '".$_SESSION['current_item_id']."'";
+        $result = $conn->query("set names gbk");
         $result = $conn->query($query);
         if (!$result) {
             throw new Exception("Could not connect to DB.");
@@ -102,6 +105,7 @@
         $conn = db_connect();
         $query = "select * from items where item_creator_id = '".$_SESSION['current_user_id']."'
                     or item_follower_id = '".$_SESSION['current_user_id']."'";
+        $result = $conn->query("set names gbk");
         $result = $conn->query($query);
         if (!$result) {
             throw new Exception("Could not connect to DB.");
@@ -209,6 +213,7 @@
         // if ((flag_start) && (!flag_end) || ((!flag_start) && (flag_end))) {
         //     throw new Exception("Time setting is not correct!");
         // }
+        $result = $conn->query("set names gbk");
         $result = $conn->query($query);
         if (!$result) {
             throw new Exception("Could not connect to DB.");

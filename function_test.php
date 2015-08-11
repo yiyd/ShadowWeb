@@ -82,6 +82,18 @@
 	// if (unlink("..\\..\\..\\tmp\\sess_25236cgsikjl6epkujo4933727")) {
 	// 	echo "fjasdklfjaskldf";
 	// }
+	$conn = db_connect();
+	$query = "select * from admin_logs";
+	$result = $conn->query("set names gbk");
+	$result = $conn->query($query);
+	$result = db_result_to_array($result); 
+
+	$result = get_admin_log('角色', '1')
+	foreach ($result as $key) {
+		echo $key['admin_log_id']." ".$key['admin_log_time']." ".
+			$key['admin_log_object']." ".$key['admin_log_object_id']."<br />";
+	}
+
 	echo "Function test! <br />";
 	$row = get_item_types();
 	foreach ($row as $key) {

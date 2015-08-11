@@ -6,6 +6,10 @@ create trigger t_users_insert
 	after insert on users for each row
 	begin
 		insert into admin_logs values ('', CURRENT_TIMESTAMP, '新建用户', NEW.user_id);
+		insert into admin_log_fields values ('select max(admin_log_id) from admin_logs', '用户名', 'null', NEW.user_name);
+		insert into admin_log_fields values ('select max(admin_log_id) from admin_logs', '密码', 'null', new.user_passwd);
+		insert into admin_log_fields values ('select max(admin_log_id) from admin_logs', '角色', 'null', new.role_id);
+		insert into admin_log_fields values ('select max(admin_log_id) from admin_logs', '邮箱', 'null', new.user_mail);		
 	end;
 //
 
@@ -39,6 +43,7 @@ create trigger t_roles_insert
 	after insert on roles for each row
 	begin 
 		insert into admin_logs values ('', CURRENT_TIMESTAMP, '新建角色', new.role_id);
+		insert into admin_log_fields values ('select max(admin_log_id) from admin_logs', '角色名', 'null', new.role_name);
 	end;
 //
 
@@ -63,6 +68,8 @@ create trigger t_priv_insert
 	after insert on privileges for each row
 	begin 
 		insert into admin_logs values ('', CURRENT_TIMESTAMP, '新建权限', new.priv_id);
+		insert into admin_log_fields values ('select max(admin_log_id) from admin_logs', '权限名', 'null', new.priv_name);
+		insert into admin_log_fields values ('select max(admin_log_id) from admin_logs', '权限值', 'null', new.priv_value);
 	end;
 //
 
@@ -89,7 +96,7 @@ create trigger t_priv_delete
 create trigger t_role_priv_insert 
 	after insert on role_priv for each row
 	begin
-		insert into admin_logs values ('', CURRENT_TIMESTAMP, '添加权限', new.role_id);
+		insert into admin_logs values ('', CURRENT_TIMESTAMP, '角色添加', new.role_id);
 		insert into admin_log_fields values ('select max(admin_log_id) from admin_logs', '权限ID', 'null', new.priv_id);
 	end;
 //
@@ -97,7 +104,7 @@ create trigger t_role_priv_insert
 create trigger t_role_priv_delete
 	after delete on role_priv for each row
 	begin
-		insert into admin_logs values ('', CURRENT_TIMESTAMP, '取消权限', old.role_id);
+		insert into admin_logs values ('', CURRENT_TIMESTAMP, '角色取消', old.role_id);
 		insert into admin_log_fields values ('select max(admin_log_id) from admin_logs', '权限ID', old.priv_id, 'null');
 	end;
 //
@@ -109,3 +116,64 @@ create trigger t_item_follow_mark_insert
 		insert into log_fields values ('select max(log_id) from logs', '添加跟踪备注', 'null', new.item_follow_mark);
 	end;
 //
+
+create trigger t_para_insert
+	after insert on parameters for each row
+	begin
+		insert into admin_logs values ('', CURRENT_TIMESTAMP, '新建参数', new.para_id);
+		insert into admin_log_fields values ('select max(admin_log_id) from admin_logs', '参数名', 'null', new.para_name);
+		if (new.para_description is not null) then
+			insert into admin_log_fields values ('select max(admin_log_id) from admin_logs', '参数描述', 'null', new.para_description);
+		end if;
+	end;
+//
+
+create trigger t_para_update
+	after update on parameters for each row
+	begin
+		insert into admin_logs values ('', CURRENT_TIMESTAMP, '修改参数', old.para_id);
+		if (new.para_name <> old.para_name) then
+			insert into admin_log_fields values ('select max(admin_log_id) from admin_logs', '参数名', old.para_name, new.para_name);
+	 	end if;
+		if (new.para_description <> old.para_description) then
+			insert into admin_log_fields values ('select max(admin_log_id) from admin_logs', '参数描述', old.para_description, new.para_description);
+		end if;
+	end;
+//
+
+create trigger t_para_delete
+	after delete on parameters for each row
+	begin
+		insert into admin_logs values ('', CURRENT_TIMESTAMP, '删除参数', old.para_id);
+	end;
+//
+
+create trigger t_para_value_insert
+	after insert on para_values for each row
+	begin 
+		insert into admin_logs values ('', CURRENT_TIMESTAMP, '添加参数值', new.para_id);
+		insert into admin_log_fields values ('select max(admin_log_id) from admin_logs', '参数值', 'null', new.para_value_name);
+	end;
+//
+
+create trigger t_para_value_update
+	after update on para_values for each row
+	begin 
+		insert into admin_logs values ('', CURRENT_TIMESTAMP, '修改参数值', new.para_id);
+		if (new.para_value_name <> old.para_value_name) then
+			insert into admin_log_fields values ('select max(admin_log_id) from admin_logs', '参数值', old.para_value_name, new.para_value_name);
+		end if;
+	end;
+//
+
+create trigger t_para_value_delete
+	after delete on para_values for each row
+	begin 
+		insert into admin_logs values ('', CURRENT_TIMESTAMP, '删除参数值', old.para_id);
+	end;
+//
+
+
+
+
+

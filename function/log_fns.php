@@ -13,11 +13,10 @@
     // ITEMS NEED TO BE ADDED MANUALLY BY THE FOLLOWING FUNCTIONS
 
     //新建事项日志，插入到logs 
-    // $log_type : 0 is new, 1 is update, 2 is delete
     // $change_field is an array stored all the change values
     //      $change_field inculdes
     //      $change_field['name'], $change_field['old_value'], $change_field['new_value']
-    function log_items ($log_type, $change_field) {
+    function log_items ($change_field) {
         $current_time = date("Y-m-d H:i:s");
         $conn = db_connect();
         $conn->autocommit(false);
@@ -29,7 +28,7 @@
         if (!$result) {
             throw new Exception("Could not connect to the db!");
         } else {
-            if ($log_type == 1 && isset($change_field)) {
+            if ($isset($change_field)) {
                 //get the new log_id
                 $query1 = "select max(log_id) from admin_logs";
                 $result1 = $conn->query($query1);
@@ -58,7 +57,7 @@
 
     // LOG DISPLAY FUNCTIONS 
     // $log_object is "users", "roles"
-    function get_admin_log_title($log_object, $object_id) {
+    function get_admin_log($log_object, $object_id) {
         $conn = db_connect();
         $query = "select * from admin_logs where admin_log_object like '".$log_object."'
                 and admin_log_object_id = '".$object_id."'" ;
@@ -69,13 +68,28 @@
         if ($result->num_rows == 0) {
             throw new Exception("No such logs!");
         }
-
+        // anrange the data into an array
         $row = db_result_to_array($result);
         return $row;
     }
 
-    function get_admin_log_content($log_object, $object_id) {
-
+    //get admin_log details
+    function get_admin_log_detail ($log_object, $object_id) {
+        $conn = db_connect();
+        // get the details from the log_fields table
+        $query = "select * from admin_log_fields where admin_log_id = 
+                (select admin_log_id from admin_logs where admin_log_object like '".$log_object."'
+                    and admin_log_object_id = '".$object_id."')";
+        $result = $conn->query($query);
+        if (!$result) {
+            throw new Exception("Could not connect to DB. Please check the input.");
+        }
+        if ($result->num_rows == 0) {
+            throw new Exception("No log details!");
+        }
+        // anrange the data into an array
+        $row = db_result_to_array($result);
+        return $row;
     }
 
     function get_log_title() {
