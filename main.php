@@ -6,7 +6,6 @@
  */
 	require_once('function/shadow_fns.php');
 	session_start();
-
 	
 	$username = $_POST['username'];
 	$password = $_POST['password'];
@@ -21,16 +20,14 @@
 			do_html_footer();
 			exit;
 		}
-	}else
-	{
+	} else {
 		do_html_header('');
 		echo "请输入用户名和密码！！！";
 		do_html_footer();
 		exit;
 	}
 
-	check_valid_user();
-	
+	check_valid_user();	
 	display_main_page();
 
 ?>

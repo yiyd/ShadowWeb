@@ -24,25 +24,35 @@
         }
         if ($result->num_rows > 0) {
             $row = $result->fetch_object();
-            $query = "select session_id from user_access where user_id = '".$row->user_id."'";
+            $old_user_id = $row->user_id;
+
+            $query = "select session_id from user_access where user_id = '".$old_user_id."'";
             $result = $conn->query($query);
             if (!$result) {
                 throw new Exception("Could not connect to the DB!");
             }
             if ($result->num_rows > 0 ) {
-                $row1 = $result->fetch_object();
-                //delete the session files
-                if (!fopen("..\\..\\..\\..\\tmp\\sess_".$row1->session_id, 'w')) {
-                    echo "file exsits!";
-                    echo "..\\..\\..\\..\\tmp\\sess_".$row1->session_id;
+                $row = $result->fetch_object();
+                $old_session_id = $row->session_id;
+                $new_session_id = session_id();
+
+                if ($old_session_id == $new_session_id) {
+                    return true;
                 }
-                if (!unlink("..\\..\\..\\..\\tmp\\sess_".$row1->session_id)) {  
-                    throw new Exception("Could not delete the session files!");
+
+                // check the session file is exsit or not 
+                if (@fopen("..\\..\\..\\tmp\\sess_".$old_session_id, 'r')) {
+                    // //delete the session files
+                    if (!@unlink("..\\..\\..\\tmp\\sess_".$old_session_id)) {  
+                        throw new Exception("Could not delete the session files! ".$old_session_id);
+                    }
                 }
-                $result = $conn->query("delete from user_access where userid = '".$row->user_id."'");
+                
+                // delete the login info 
+                $result = $conn->query("delete from user_access where user_id = '".$old_user_id."'");
             }
             
-            $_SESSION['current_user_id'] =  $row->user_id;
+            $_SESSION['current_user_id'] =  $old_user_id;
             $query = "insert into user_access values ('', '".$_SESSION['current_user_id']."', '".session_id()."')";
             $result = $conn->query($query);
             if (!$result) {
@@ -98,8 +108,20 @@
     }
 
     function check_valid_user() {
-        if (isset($_SESSION['current_user_id'])) {
-            // echo "Logged in as ".$_SESSION['current_user'].".<br />";
+        $current_session_id = session_id();
+        $conn = db_connect();
+
+        if (!isset($_SESSION['current_user_id'])) {
+            do_html_header('');
+            do_html_url('login,php', 'Login');
+            do_html_footer();
+            exit;
+        }
+        //check the uesr login_info table 
+        $result = $conn->query("select * from user_access where user_id = '".$_SESSION['current_user_id']."' 
+                            and session_id = '".$current_session_id."'");
+        if ($result->num_rows == 1) {
+            return true;
         } else {
             do_html_header('');
             do_html_url('login,php', 'Login');
