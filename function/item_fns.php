@@ -72,7 +72,7 @@
             throw new Exception("Could not connect to DB.");
         }
         if ($result->num_rows == 0) {
-            throw new Exception("No follow mark records!");
+            // throw new Exception("No follow mark records!");
         }
 
         $row = db_result_to_array($result);

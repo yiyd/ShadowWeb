@@ -7,10 +7,22 @@
 
 	function display_new_item_form($users_array, $item_types_array) {
 ?>
+<!DOCTYPE html>
+<html>
+    <head>
 
+    <meta charset="UTF-8">
+
+    <title>中银开放平台-事项跟踪工具</title>
+    <link rel="stylesheet" type="type/css" href="resources/jquery-easyui/themes/default/easyui.css">
+    <link rel="stylesheet" type="type/css" href="resources/jquery-easyui/themes/icon.css">
     <link rel="stylesheet" type="type/css" href="resources/common/css/style.css">
-    <script type="text/javascript" src="resources/jquery-easyui/locale/easyui-lang-zh_CN.js"></script>
     <script type="text/javascript" src="resources/common/js/public.js"></script>
+    <script type="text/javascript" src="resources/jquery-easyui/jquery.min.js"></script>
+    <script type="text/javascript" src="resources/jquery-easyui/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="resources/jquery-easyui/locale/easyui-lang-zh_CN.js"></script>
+
+
     <script>
         function newItem() {
             if (!validateData()) {
@@ -19,8 +31,17 @@
             if (!validateRelationData()) {
                 return;
             }
-            
+
             $('#ff').submit();
+            
+            // $.post("new_item.php", $("#ff").serialize(),function(data){
+
+            //     window.parent.updateTab(data);
+            //     $.messager.show({
+            //         title:'成功',
+            //         msg:'新建事务成功！'
+            //     });
+            // });
         }
 
         function validateData() {
@@ -72,6 +93,8 @@
         }
 
         $(function(){
+            
+
             $('#dg').datagrid({
                 toolbar:[
                     {
@@ -130,9 +153,10 @@
 
     </script>
 
-
-    <div>
-    	<form id="ff" method="post" action="new_item.php">
+    </head>
+    <body>
+    
+    	<form id="ff" method="post" action="new_item.php" >
     		<div class="easyui-panel" style="height:auto;" data-options="title:'事项基本信息',collapsible:true">
     			<table class="table_list" width="100%" border="0" align="center" cellpadding="0" cellspacing="1">
     				<tr height="26">
@@ -256,80 +280,86 @@
             </div>
             <div id="hiddenText"></div>
     	</form>
-    </div>
+    </body>
+</html>
 
 
 <?php
 	}
 
 
-    function display_new_item($row, $auto_notify_row)
+    function display_new_item($row, $auto_notify_row, $follow_mark_row)
     {
 
 ?>  
-    <link rel="stylesheet" type="text/css" href="resources/common/css/style.css" />
+<!DOCTYPE html>
+<html>
+    <head>
+
+    <meta charset="UTF-8">
+
+    <title>中银开放平台-事项跟踪工具</title>
+    <link rel="stylesheet" type="type/css" href="resources/jquery-easyui/themes/default/easyui.css">
+    <link rel="stylesheet" type="type/css" href="resources/jquery-easyui/themes/icon.css">
+    <link rel="stylesheet" type="type/css" href="resources/common/css/style.css">
+    <script type="text/javascript" src="resources/jquery-easyui/jquery.min.js"></script>
+    <script type="text/javascript" src="resources/jquery-easyui/jquery.easyui.min.js"></script>   
     <script>
         $(function(){
-
-            $('#dg').datagrid({
-                toolbar:[
-                    {
-                        text:'增加跟踪备注',
-                        iconCls:'icon-add',
-
-                        handler:function(){
-                            var time = getTime();
-                            lastIndex = $('#dg').datagrid('getRows').length;
-                            if (lastIndex == 0) {
-                                $('#dg').datagrid('appendRow',{
-                                    mark_content:'',
-                                    mark_creator:'<?php 
-                                        $user_id = $_SESSION['current_user_id'];
-                                        try {
-                                            $user_name = get_user_name($user_id);          
-                                        } catch (Exception $e) {
-                                            echo '';
-                                        }
-                                        echo $user_name;    
-                                    ?>',
-                                    create_time:time
-                                });
-                                $('#dg').datagrid('selectRow', lastIndex);
-                                $('#dg').datagrid('beginEdit', lastIndex);
-                            }
-                            
-                        }
-                    },
-                    // {
-                    //     text:'保存所增备注',
-                    //     iconCls:'icon-save',
-                    //     handler:function(){
-                    //         lastIndex = $('#dg').datagrid('getRows').length - 1;
-                    //         if (lastIndex >= 0) {
-                    //             $('#dg').datagrid('unselectRow', lastIndex);
-                    //             $('#dg').datagrid('endEdit', lastIndex);
-                    //         }
-                            
-                    //     }
-                    // },
-                    {
-                        text:'删除所增备注',
-                        iconCls:'icon-remove',
-                        handler:function(){
-                            lastIndex = $('#dg').datagrid('getRows').length - 1;
-                            if (lastIndex >= 0) {
-                                $('#dg').datagrid('deleteRow', lastIndex);
-                            }
-                            
-                        }
-                    }
-                ]
-            });
+            <?php
+                if ($follow_mark_row != "") {
+                    echo "index = $('#dg').datagrid('getRows').length;";
+                    echo "$('#dg').datagrid('appendRow',{";
+                        echo "mark_content:'".$follow_mark_row['item_follow_mark']."',";
+                        echo "mark_creator:'".$follow_mark_row['mark_creator_name']."',";
+                        echo "create_time:'".$follow_mark_row['mark_create_time']."'";
+                    echo "});";
+                }
+            ?>
+            
         })
     </script>
-    <div>
+    <body>
         <div class="easyui-panel" style="height:auto;" data-options="title:'事项基本信息',collapsible:true">
             <table class="table_list" width="100%" border="0" align="center" cellpadding="0" cellspacing="1" >
+                <tr height="26">
+                    <td nowrap="nowrap" width="10%">
+                        <div align="right" style="padding-right=2px;">
+                            事项编号：
+                        </div>
+                    </td>
+                    <td width="23%">
+                        <div align="left" style="padding-left:2px;">
+                            <?php
+                                echo $row['item_id'];
+                            ?>
+                        </div>
+                    </td>
+                    <td nowrap="nowrap" width="10%">
+                        <div align="right" style="padding-right=2px;">
+                            创建人：
+                        </div>
+                    </td>
+                    <td width="23%">
+                        <div align="left" style="padding-left:2px;">
+                            <?php
+                                echo $row['item_creator_name'];
+                            ?>
+                        </div>
+                    </td>
+                    <td nowrap="nowrap" width="10%">
+                        <div align="right" style="padding-right=2px;">
+                            创建时间：
+                        </div>
+                    </td>
+                    <td width="23%">
+                        <div align="left" style="padding-left:2px;">
+                            <?php
+                                echo $row['item_create_time'];
+                            ?>
+                        </div>
+                    </td>
+                </tr>
                 <tr height="26">
                     <td nowrap="nowrap" width="10%">
                         <div align="right" style="padding-right=2px;">
@@ -406,6 +436,21 @@
                         </div>
                     </td>
                 </tr>
+                <tr height="26">
+                    <td nowrap="nowrap">
+                        <div align="right" style="padding-right=2px;">
+                            事项状态：
+                        </div>
+                    </td>
+                    <td>
+                        <div align="left" style="padding-left:2px;">
+                            <?php
+                                echo $row['item_state'];
+                            ?>
+                        </div>
+                    </td>
+                    <td colspan="4"></td>
+                </tr>
                 <tr>
                     <td height="26">
                         <div align="right" style="padding-right:2px;">事项描述：</div>
@@ -413,7 +458,7 @@
                     </td>
                     <td colspan="2">
                         <div align="left" style="margin:5px 0 5px 0;">
-                            <textarea rows="6" cols="40" readonly='readonly'><?php echo $row['item_description']; ?></textarea>
+                            <textarea rows="6" cols="40" readonly='readonly' ><?php echo $row['item_description']; ?></textarea>
                         </div>
                     </td>
                     <td colspan="3"></td>
@@ -431,7 +476,8 @@
                 </thead>
             </table>   
         </div>
-    </div>
+    </body>
+</html>
 <?php
     }
 ?>
