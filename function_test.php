@@ -88,7 +88,7 @@
 	$result = $conn->query($query);
 	$result = db_result_to_array($result); 
 
-	$result = get_admin_log('角色', '1')
+	$result = get_admin_log('角色', '1');
 	foreach ($result as $key) {
 		echo $key['admin_log_id']." ".$key['admin_log_time']." ".
 			$key['admin_log_object']." ".$key['admin_log_object_id']."<br />";

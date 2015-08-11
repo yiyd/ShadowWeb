@@ -66,7 +66,7 @@
             throw new Exception("Could not connect to DB. Please check the input.");
         }
         if ($result->num_rows == 0) {
-            throw new Exception("No such logs!");
+            //throw new Exception("No such logs!");
         }
         // anrange the data into an array
         $row = db_result_to_array($result);
@@ -93,7 +93,7 @@
     }
 
     function get_log() {
-        
+
     }
 
     function get_log_detail() {
