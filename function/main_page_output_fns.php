@@ -80,19 +80,17 @@
 			reloadItems();
 		})
     	
-		// function updateTab(contentHtml)
-		// {
-		// 	// 更新选择的面板的新标题和内容
-		// 	var tab = $('#tabs').tabs('getSelected');  // 获取选择的面板
-			
-		// 	var content = '<iframe scrolling="auto" frameborder="0" src="' + contentHtml + '" style="width:100%;height:100%"></iframe>';
-		// 	$('#tabs').tabs('update', {
-		// 		tab: tab,
-		// 		options: {
-		// 			content:contentHtml
-		// 		}
-		// 	});
-		// }
+		function updateTabName(name)
+		{
+			// 更新选择的面板的新标题和内容
+			var tab = $('#tabs').tabs('getSelected');  // 获取选择的面板
+			$('#tabs').tabs('update', {
+				tab: tab,
+				options: {
+					title:name
+				}
+			});
+		}
 
         function reloadItems()
 		{

@@ -34,14 +34,7 @@
 
             $('#ff').submit();
             
-            // $.post("new_item.php", $("#ff").serialize(),function(data){
-
-            //     window.parent.updateTab(data);
-            //     $.messager.show({
-            //         title:'成功',
-            //         msg:'新建事务成功！'
-            //     });
-            // });
+            window.parent.updateTabName("新建成功");
         }
 
         function validateData() {
@@ -316,7 +309,9 @@
                     echo "});";
                 }
             ?>
-            
+            $('#ff')
+
+
         })
     </script>
     <body>
