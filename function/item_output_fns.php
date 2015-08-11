@@ -34,7 +34,7 @@
 
             $('#ff').submit();
             
-            window.parent.updateTabName("新建成功");
+            
         }
 
         function validateData() {
@@ -268,7 +268,7 @@
             </div>
 
             <div style="padding-top:10px;text-align:center;height:40px">
-                <a href="javascript:void(0)" class="easyui-linkbutton" onclick="newItem()" data-options="iconCls:'icon-save'">新建</a>
+                <a href="javascript:void(0)" class="easyui-linkbutton" onclick="newItem()" data-options="iconCls:'icon-save'">新建事项</a>
 
             </div>
             <div id="hiddenText"></div>
@@ -299,6 +299,13 @@
     <script type="text/javascript" src="resources/jquery-easyui/jquery.easyui.min.js"></script>   
     <script>
         $(function(){
+            $.messager.show({
+                title:"成功",
+                msg:"新建事项成功",
+                timeout:5000,
+                showType:'slide'
+            });
+
             <?php
                 if ($follow_mark_row != "") {
                     echo "index = $('#dg').datagrid('getRows').length;";
@@ -313,6 +320,18 @@
 
 
         })
+
+        function updateItem(){
+            
+        }
+
+        function deleteItem(){
+
+        }
+
+        function completeItem(){
+
+        }
     </script>
     <body>
         <div class="easyui-panel" style="height:auto;" data-options="title:'事项基本信息',collapsible:true">
@@ -470,6 +489,12 @@
                     </tr>
                 </thead>
             </table>   
+        </div>
+
+        <div style="padding-top:10px;text-align:center;height:40px">
+                <a href="javascript:void(0)" class="easyui-linkbutton" onclick="updateItem()" data-options="iconCls:'icon-edit'">修改事项</a>
+                <a href="javascript:void(0)" class="easyui-linkbutton" onclick="deleteItem()" data-options="iconCls:'icon-cut'">删除事项</a>
+                <a href="javascript:void(0)" class="easyui-linkbutton" onclick="completeItem()" data-options="iconCls:'icon-ok'">完成事项</a>
         </div>
     </body>
 </html>
