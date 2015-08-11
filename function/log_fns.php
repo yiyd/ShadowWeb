@@ -92,11 +92,11 @@
         return $row;
     }
 
-    function get_log_title() {
-
+    function get_log() {
+        
     }
 
-    function get_log_content() {
+    function get_log_detail() {
 
     }
 

@@ -26,8 +26,4 @@
         return $res_array;
     }
 
-    //transmit the result to array with one row
-    function db_result_to_array_one($result) {
-        
-    }
 ?>

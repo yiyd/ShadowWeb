@@ -9,7 +9,7 @@
     // $items is an array including all the inputs
     //require_once()
 
-    function new_one_item($items) {
+    function new_one_item($items)
         $conn = db_connect();
 		//starting one by turning off the autocomit
 		$conn->autocommit(False);
@@ -68,13 +68,13 @@
         $conn = db_connect();
         $query = "select * from item_follow_marks where item_id = '".$_SESSION['current_item_id']."'
                     order by item_follow_mark_id";
-        $result = $conn->query("set names gbk");
+        $result = $conn->query("set names utf8");
         $result = $conn->query($query);
         if (!$result) {
             throw new Exception("Could not connect to DB.");
         }
         if ($result->num_rows == 0) {
-            throw new Exception("No follow mark records!");
+            //throw new Exception("No follow mark records!");
         }
 
         $row = db_result_to_array($result);
@@ -86,13 +86,13 @@
         $conn = db_connect();
         $query = "select * from items where item_creator_id = '".$_SESSION['current_user_id']."' 
                     and item_id = '".$_SESSION['current_item_id']."'";
-        $result = $conn->query("set names gbk");
+        $result = $conn->query("set names utf8");
         $result = $conn->query($query);
         if (!$result) {
             throw new Exception("Could not connect to DB.");
         }
         if ($result->num_rows == 0) {
-            throw new Exception("NO items records!");
+            //throw new Exception("NO items records!");
         }
 
         //$row = $result->fetch_assoc();
@@ -105,13 +105,13 @@
         $conn = db_connect();
         $query = "select * from items where item_creator_id = '".$_SESSION['current_user_id']."'
                     or item_follower_id = '".$_SESSION['current_user_id']."'";
-        $result = $conn->query("set names gbk");
+        $result = $conn->query("set names utf8");
         $result = $conn->query($query);
         if (!$result) {
             throw new Exception("Could not connect to DB.");
         }
         if ($result->num_rows == 0) {
-            throw new Exception("NO items records!");
+            //throw new Exception("NO items records!");
         }
 
         $row = db_result_to_array($result);
@@ -213,13 +213,13 @@
         // if ((flag_start) && (!flag_end) || ((!flag_start) && (flag_end))) {
         //     throw new Exception("Time setting is not correct!");
         // }
-        $result = $conn->query("set names gbk");
+        $result = $conn->query("set names utf8");
         $result = $conn->query($query);
         if (!$result) {
             throw new Exception("Could not connect to DB.");
         }
         if ($result->num_rows == 0) {
-            throw new Exception("NO items records!");
+            //throw new Exception("NO items records!");
         }
 
         $row = db_result_to_array($result);
@@ -229,7 +229,7 @@
     //get the item_type
     function get_item_type($item_type_id) {
         $conn = db_connect();
-        $result = $conn->query("set names gbk");
+        $result = $conn->query("set names utf8");
         $result = $conn->query("select para_value_name from para_values where para_value_id = '".$item_type_id."'");
         if (!$result) {
             throw new Exception("Could not connect to the db!");
@@ -244,13 +244,13 @@
     //get all the different item_types
     function get_item_types() {
         $conn = db_connect();
-        $result = $conn->query("set names gbk");
+        $result = $conn->query("set names utf8");
         $result = $conn->query("select para_value_id, para_value_name from para_values where para_id = '1'");
         if (!$result) {  
             throw new Exception("Could not connect to the db!");
         }
         if($result->num_rows == 0) {
-            throw new Exception("No item_types records!");
+            //throw new Exception("No item_types records!");
         }
         $result = db_result_to_array($result);
         return $result;
