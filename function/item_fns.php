@@ -7,12 +7,14 @@
  */
     //insert one item into DB
     // $items is an array including all the inputs
-    //require_once()
+    require_once('log_fns.php');
 
+    //-----------------------------------------ITEM_OPERATIONS-------------------------------------------
+    //----------------------------------------------------------------------------------------------------
     function new_one_item($items) {
         $conn = db_connect();
 		//starting one by turning off the autocomit
-		$conn->autocommit(False);
+		$conn->autocommit(false);
 
         //get the current time
         $current_time = date("Y-m-d H:i:s");
@@ -20,17 +22,13 @@
         // insert the new item into the DB
         $query = "insert into items VALUES ('', '".$items['item_name']."', '".$_SESSION['current_user_id']."',
                 '".$items['item_follower_id']."','".$current_time."', '".$items['item_description']."', 
-                '".$items['item_type_id']."',
-                '".$items['item_state']."')";
+                '".$items['item_type_id']."', '".$items['item_state']."')";
         
-        //echo $query."<br />";
+        $result = $conn->query("set names utf8");
         $result = $conn->query($query);
         if (!$result) {
             throw new Exception("Could not insert the new item into the DB.");
         }
-        //end transaction
-        // $conn->commit();
-        // $conn->autocommit(TRUE);
 
         //get the new item_id
         $query = "select max(item_id) from items";
@@ -45,48 +43,109 @@
         //end transaction
         $conn->commit();
         $conn->autocommit(TRUE);
+
+        // Arrange the $items array to the $change_field
+        // $change_field['name'] $change_field['old_value'] $change_field['new_value'];
+        // $change_field = array(
+        //     array(
+        //         'name' = '事项名称',
+        //         'old_value' = 'null',
+        //         'new_value' = $items['item_name']  
+        //     ),
+        //     array(
+        //         'name' = '事项创建人',
+        //         'old_value' = 'null',
+        //         'new_value' =  $_SESSION['current_user_id'] 
+        //     ),
+        //     array(
+        //         'name' = '事项跟踪人',
+        //         'old_value' = 'null',
+        //         'new_value' = $items['item_follower_id']   
+        //     ),
+        //     array(
+        //         'name' = '创建时间',
+        //         'old_value' = 'null',
+        //         'new_value' = $current_time   
+        //     ),
+        //     array(
+        //         'name' = '事项描述',
+        //         'old_value' = 'null',
+        //         'new_value' = $items['item_description']   
+        //     ),
+        //     array(
+        //         'name' = '事项类型',
+        //         'old_value' = 'null',
+        //         'new_value' = $items['item_type_id']    
+        //     ),
+        //     array(
+        //         'name' = '事项状态',
+        //         'old_value' = 'null',
+        //         'new_value' = $items['item_state'] 
+        //     ),
+        // );
+        // // LOG the NEW information
+        // log_item($change_field);
     }
 
-    //insert the follow mark into the DB
-    // $follow_mark is obtained from the testarea
-    function new_follow_mark($follow_mark, $current_time) {
-        //$current_time = date("Y-m-d H:i:s");
+    // delete the selected item
+    function delete_selected_item () {
         $conn = db_connect();
-        $query = "insert into item_follow_marks VALUES 
-                ('', '".$_SESSION['current_item_id']."', '".$follow_mark."', 
-                     '".$_SESSION['current_user_id']."', '".$current_time."')";
+        $query = "delete from items where item_id = '".$_SESSION['current_item_id']."'";
+        $query1 = "delete from item_follow_marks where item_id = '".$_SESSION['current_item_id']."'";
+        $query2 = "delete from auto_notify where item_id = '".$_SESSION['current_item_id']."'";
         $result = $conn->query($query);
-        if (!$result) {
-            throw new Exception("Could not insert the mark into the DB.");
+        $result1 = $conn->query($query1);
+        $result2 = $conn->query($query2);
+
+        if (!$result || !$result1 || !$result2) {
+            throw new Exception("Delete Error!");
         }
 
+        // log delete information
+        log_item(null);
         return true;
     }
 
-    // get all the follow_marks
-    function get_follow_mark() {
-        $conn = db_connect();
-        $query = "select * from item_follow_marks where item_id = '".$_SESSION['current_item_id']."'
-                    order by item_follow_mark_id";
-        //$result = $conn->query("set names gbk");
+    // TESTED SUCCESSFULLY
+    //update items
+    // $change_field include three keys
+    // $change_field['name'] $change_field['old_value'] $change_field['new_value'];
+    function update_item($change_field) {
+        $flag = false;
+
+		$conn = db_connect();
+  //       $conn->autocommit(false);
+
+        $query = "update items set ";
+        foreach ($change_field as $row) {
+            if ($flag) {
+                $query .= ", ";
+            }
+            $temp = $row['name']." = '".$row['new_value']."'";
+            $query .= $temp;
+            $flag = true;
+        }
+        $query .= " where item_id = '".$_SESSION['current_item_id']."'";    
+
         $result = $conn->query($query);
         if (!$result) {
-            throw new Exception("Could not connect to DB.");
-        }
-        if ($result->num_rows == 0) {
-            //throw new Exception("No follow mark records!");
+            throw new Exception("Could not connect to the db!");
+        } else {
+            return true;
         }
 
-        $row = db_result_to_array($result);
-        return $row;
+        // log the update information
+        log_item($change_field);
     }
 
+    //-----------------------------------------ITEM GET/SEARCH-------------------------------------------
+    //----------------------------------------------------------------------------------------------------
     //simple display function for test
     function display_selected_item (){
         $conn = db_connect();
         $query = "select * from items where item_creator_id = '".$_SESSION['current_user_id']."' 
                     and item_id = '".$_SESSION['current_item_id']."'";
-        //$result = $conn->query("set names gbk");
+        $result = $conn->query("set names utf8");
         $result = $conn->query($query);
         if (!$result) {
             throw new Exception("Could not connect to DB.");
@@ -226,22 +285,44 @@
         return $row;  
     }
 
-    // delete the selected item
-    function delete_selected_item () {
+    //-----------------------------------------ITEM_FOLLOW_MARK-------------------------------------------
+    //----------------------------------------------------------------------------------------------------
+    //insert the follow mark into the DB
+    // $follow_mark is obtained from the testarea
+    function new_follow_mark($follow_mark, $current_time) {
+        //$current_time = date("Y-m-d H:i:s");
         $conn = db_connect();
-        $query = "delete from items where item_id = '".$_SESSION['current_item_id']."'";
-        $query1 = "delete from item_follow_marks where item_id = '".$_SESSION['current_item_id']."'";
-        $query2 = "delete from auto_notify where item_id = '".$_SESSION['current_item_id']."'";
+        $query = "insert into item_follow_marks VALUES 
+                ('', '".$_SESSION['current_item_id']."', '".$follow_mark."', 
+                     '".$_SESSION['current_user_id']."', '".$current_time."')";
         $result = $conn->query($query);
-        $result1 = $conn->query($query1);
-        $result2 = $conn->query($query2);
-
-        if (!$result || !$result1 || !$result2) {
-            throw new Exception("Delete Error!");
+        if (!$result) {
+            throw new Exception("Could not insert the mark into the DB.");
         }
+
         return true;
     }
 
+    // get all the follow_marks
+    function get_follow_mark() {
+        $conn = db_connect();
+        $query = "select * from item_follow_marks where item_id = '".$_SESSION['current_item_id']."'
+                    order by item_follow_mark_id";
+        //$result = $conn->query("set names gbk");
+        $result = $conn->query($query);
+        if (!$result) {
+            throw new Exception("Could not connect to DB.");
+        }
+        if ($result->num_rows == 0) {
+            //throw new Exception("No follow mark records!");
+        }
+
+        $row = db_result_to_array($result);
+        return $row;
+    }
+
+    //------------------------------------------ITEM_TYPES------------------------------------------------
+    //----------------------------------------------------------------------------------------------------
     //get the item_type
     function get_item_type($item_type_id) {
         $conn = db_connect();
@@ -272,34 +353,4 @@
         return $result;
     }
    
-    // TESTED SUCCESSFULLY
-    //update items
-    // $change_field include three keys
-    // $change_field['name'] $change_field['old_value'] $change_field['new_value'];
-    function update_item($change_field) {
-        $flag = false;
-
-		$conn = db_connect();
-  //       $conn->autocommit(false);
-
-        $query = "update items set ";
-        foreach ($change_field as $row) {
-            if ($flag) {
-                $query .= ", ";
-            }
-            $temp = $row['name']." = '".$row['new_value']."'";
-            $query .= $temp;
-            $flag = true;
-        }
-        $query .= " where item_id = '".$_SESSION['current_item_id']."'";    
-        //echo $query."<br />";
-
-        $result = $conn->query($query);
-        if (!$result) {
-            throw new Exception("Could not connect to the db!");
-        } else {
-            return true;
-        }
-
-    }
 ?>

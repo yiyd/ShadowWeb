@@ -1,4 +1,7 @@
 <?php
+
+	require_once('log_fns.php');
+
 	//set the auto_notify ( NEW)
 	// $users is an array including all the persons needed to be notified
 	// $users stores the user_id
@@ -22,20 +25,33 @@
 			
 			$conn->commit();
 			$conn->autocommit(true);
+
+			// log the NEW setting 
+
 		} else {
 			throw new Exception("Input Error!");			
 		}
 	}
 
 	//UPDATE the setting 
-	function update_notify ($date, $auto_type, $user_id) {
+	// $change_field['name'] $change_field['old_value'] $change_field['new_value'];
+	function update_notify ($change_field) {
+		$flag = false;
 		$conn = db_connect();
 		$conn->autocommit(false);
 
-		if ($date && $auto_type && $user_id && (isset($_SESSION['current_item_id']))) {
+		if ($date && $auto_type && $user_id && $_SESSION['current_item_id']) {
 			//check all the input 
-			$query = "update auto_notify set auto_date = '".$date."', auto_type = '".$auto_type."', 
-					user_id = '".$user_id."' where item_id = '".$_SESSION['current_item_id']."'";
+			$query = "update auto_notify set ";
+	        foreach ($change_field as $row) {
+	            if ($flag) {
+	                $query .= ", ";
+	            }
+	            $temp = $row['name']." = '".$row['new_value']."'";
+	            $query .= $temp;
+	            $flag = true;
+	        }
+	        $query .= " where item_id = '".$_SESSION['current_item_id']."'";    
 
 			$result = $conn->query($query);
 			if (!$result) {
@@ -43,6 +59,9 @@
 			}	
 			$conn->commit();
 			$conn->autocommit(true);
+
+			// log the update information
+        	log_item($change_field);
 		} else {
 			throw new Exception("Input Error!");
 		}

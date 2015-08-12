@@ -85,16 +85,27 @@
 	// $conn = db_connect();
 	// $query = "select * from admin_logs";
 
-	// //$result = $conn->query("set names gbk");
+	// $result = $conn->query("set names utf8");
 	
 	// $result = $conn->query($query);
 	// $result = db_result_to_array($result); 
 
-	// $result = get_admin_log('角色', '1');
 	// foreach ($result as $key) {
 	// 	echo $key['admin_log_id']." ".$key['admin_log_time']." ".
 	// 		$key['admin_log_object']." ".$key['admin_log_object_id']."<br />";
 	// }
+
+	//---------------------------------------------------------------------------
+	// 管理员操作日志展示方式
+	$result = get_admin_log('角色', '1');
+	foreach ($result as $key) {
+		echo $key['admin_log_time']." ".$key['admin_log_object']." ".$key['admin_log_object_id']." ";
+		$log_detail = get_admin_log_detail($key['admin_log_id']);
+		foreach ($log_detail as $key) {
+			echo $key['admin_log_field_name']." ".$key['admin_log_field_old']." 改成 "
+			.$key['admin_log_field_new']."<br />";
+		}
+	}
 
 	echo "Function test! <br />";
 	$row = get_item_types();
