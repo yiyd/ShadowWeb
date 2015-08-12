@@ -68,7 +68,7 @@
         $conn = db_connect();
         $query = "select * from item_follow_marks where item_id = '".$_SESSION['current_item_id']."'
                     order by item_follow_mark_id";
-        $result = $conn->query("set names gbk");
+        //$result = $conn->query("set names gbk");
         $result = $conn->query($query);
         if (!$result) {
             throw new Exception("Could not connect to DB.");
@@ -86,7 +86,7 @@
         $conn = db_connect();
         $query = "select * from items where item_creator_id = '".$_SESSION['current_user_id']."' 
                     and item_id = '".$_SESSION['current_item_id']."'";
-        //$result = $conn->query("set names utf8");
+        //$result = $conn->query("set names gbk");
         $result = $conn->query($query);
         if (!$result) {
             throw new Exception("Could not connect to DB.");
@@ -105,7 +105,7 @@
         $conn = db_connect();
         $query = "select * from items where item_creator_id = '".$_SESSION['current_user_id']."'
                     or item_follower_id = '".$_SESSION['current_user_id']."'";
-        $result = $conn->query("set names gbk");
+        //$result = $conn->query("set names utf8");
         $result = $conn->query($query);
         if (!$result) {
             throw new Exception("Could not connect to DB.");
@@ -213,7 +213,7 @@
         // if ((flag_start) && (!flag_end) || ((!flag_start) && (flag_end))) {
         //     throw new Exception("Time setting is not correct!");
         // }
-        $result = $conn->query("set names gbk");
+        //$result = $conn->query("set names gbk");
         $result = $conn->query($query);
         if (!$result) {
             throw new Exception("Could not connect to DB.");
@@ -245,7 +245,7 @@
     //get the item_type
     function get_item_type($item_type_id) {
         $conn = db_connect();
-        $result = $conn->query("set names gbk");
+        $result = $conn->query("set names utf8");
         $result = $conn->query("select para_value_name from para_values where para_value_id = '".$item_type_id."'");
         if (!$result) {
             throw new Exception("Could not connect to the db!");
@@ -260,7 +260,7 @@
     //get all the different item_types
     function get_item_types() {
         $conn = db_connect();
-        $result = $conn->query("set names gbk");
+        $result = $conn->query("set names utf8");
         $result = $conn->query("select para_value_id, para_value_name from para_values where para_id = '1'");
         if (!$result) {  
             throw new Exception("Could not connect to the db!");
