@@ -423,13 +423,13 @@
         }
 
         function deleteItem(){
-            $.messager.confirm('确认','您确认想要删除该事项吗？删除后，该事项将无法恢复！',function(r){    
-                if (r){
-                    <?php    
-                        delete_selected_item();
-                    ?>   
-                }    
-            }); 
+            // $.messager.confirm('确认','您确认想要删除该事项吗？删除后，该事项将无法恢复！',function(r){    
+            //     if (r){
+            //         <?php    
+            //             delete_selected_item();
+            //         ?>   
+            //     }    
+            // }); 
         }
 
         function completeItem(){
