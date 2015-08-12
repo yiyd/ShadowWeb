@@ -23,7 +23,7 @@
         $query = "insert into items VALUES ('', '".$items['item_name']."', '".$_SESSION['current_user_id']."',
                 '".$items['item_follower_id']."','".$current_time."', '".$items['item_description']."', 
                 '".$items['item_type_id']."', '".$items['item_state']."')";
-        
+        echo $query."<br />";
         $result = $conn->query("set names utf8");
         $result = $conn->query($query);
         if (!$result) {
@@ -44,47 +44,47 @@
         $conn->commit();
         $conn->autocommit(TRUE);
 
-        // Arrange the $items array to the $change_field
-        // $change_field['name'] $change_field['old_value'] $change_field['new_value'];
-        // $change_field = array(
-        //     array(
-        //         'name' = '事项名称',
-        //         'old_value' = 'null',
-        //         'new_value' = $items['item_name']  
-        //     ),
-        //     array(
-        //         'name' = '事项创建人',
-        //         'old_value' = 'null',
-        //         'new_value' =  $_SESSION['current_user_id'] 
-        //     ),
-        //     array(
-        //         'name' = '事项跟踪人',
-        //         'old_value' = 'null',
-        //         'new_value' = $items['item_follower_id']   
-        //     ),
-        //     array(
-        //         'name' = '创建时间',
-        //         'old_value' = 'null',
-        //         'new_value' = $current_time   
-        //     ),
-        //     array(
-        //         'name' = '事项描述',
-        //         'old_value' = 'null',
-        //         'new_value' = $items['item_description']   
-        //     ),
-        //     array(
-        //         'name' = '事项类型',
-        //         'old_value' = 'null',
-        //         'new_value' = $items['item_type_id']    
-        //     ),
-        //     array(
-        //         'name' = '事项状态',
-        //         'old_value' = 'null',
-        //         'new_value' = $items['item_state'] 
-        //     ),
-        // );
-        // // LOG the NEW information
-        // log_item($change_field);
+        //Arrange the $items array to the $change_field
+        //$change_field['name'] $change_field['old_value'] $change_field['new_value'];
+        $change_field = array(
+            array(
+                'name' => '事项名称',
+                'old_value' => 'null',
+                'new_value' => $items['item_name']  
+            ),
+            array(
+                'name' => '事项创建人',
+                'old_value' => 'null',
+                'new_value' =>  $_SESSION['current_user_id'] 
+            ),
+            array(
+                'name' => '事项跟踪人',
+                'old_value' => 'null',
+                'new_value' => $items['item_follower_id']   
+            ),
+            array(
+                'name' => '创建时间',
+                'old_value' => 'null',
+                'new_value' => $current_time   
+            ),
+            array(
+                'name' => '事项描述',
+                'old_value' => 'null',
+                'new_value' => $items['item_description']   
+            ),
+            array(
+                'name' => '事项类型',
+                'old_value' => 'null',
+                'new_value' => $items['item_type_id']    
+            ),
+            array(
+                'name' => '事项状态',
+                'old_value' => 'null',
+                'new_value' => $items['item_state'] 
+            )
+        );
+        // LOG the NEW information
+        log_item($change_field);
     }
 
     // delete the selected item
@@ -142,6 +142,7 @@
     //----------------------------------------------------------------------------------------------------
     //simple display function for test
     function display_selected_item (){
+
         $conn = db_connect();
         $query = "select * from items where item_creator_id = '".$_SESSION['current_user_id']."' 
                     and item_id = '".$_SESSION['current_item_id']."'";
@@ -151,7 +152,7 @@
             throw new Exception("Could not connect to DB.");
         }
         if ($result->num_rows == 0) {
-            //throw new Exception("NO items records!");
+            throw new Exception("NO items records!");
         }
 
         //$row = $result->fetch_assoc();

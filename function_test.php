@@ -1,11 +1,8 @@
 <?php
 	include('function\shadow_fns.php');
 	session_start();
-/*
-	if (!login('yiyd', '123456')) {
-		throw new Exception("Can not login!");
-	}
 
+/*
 	$condition = array();
 	$change_field = array();
 
@@ -47,7 +44,7 @@
 
 	try {
 	update_item($change_field);
-
+*/
 	$result = display_selected_item();
 	foreach ($result as $key) {
 		echo "item_id: ".$key['item_id']."<br />";
@@ -60,7 +57,7 @@
 		echo "item_state: ".$key['item_state']."<br />";
 		echo "<hr />";
 	}
-
+/*
 	$result = get_items($condition);
 
 	foreach ($result as $key) {

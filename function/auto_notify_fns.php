@@ -26,8 +26,31 @@
 			$conn->commit();
 			$conn->autocommit(true);
 
+			// arrange the notify setting information into the array
+			$change_field = array();
+			foreach ($users as $key) {
+				array_push($change_field, array(
+					'name' => '提醒时间',
+					'old_value' => 'null',
+					'new_value' => $date
+					)
+				);
+				array_push($change_field, array(
+					'name' => '提醒类型',
+					'old_value' => 'null',
+					'new_value' => $auto_type
+					)
+				);
+				array_push($change_field, array(
+					'name' => '提醒人',
+					'old_value' => 'null',
+					'new_value' => $key
+					)
+				);
+			}
 			// log the NEW setting 
-
+			log_item($change_field);
+			
 		} else {
 			throw new Exception("Input Error!");			
 		}
