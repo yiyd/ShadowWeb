@@ -5,6 +5,8 @@
  * Date: 2015/7/24
  * Time: 11:02
  */
+    //----------------------------------COMMON USER------------------------------------------
+    //---------------------------------------------------------------------------------------
     //login function 
     function login($username, $passwd) {
         $conn = db_connect();
@@ -129,4 +131,51 @@
             exit;
         }
     }
+
+    //----------------------------------ADMIN USER------------------------------------------
+    //---------------------------------------------------------------------------------------
+    //check the current user
+    function check_admin() {
+        if (isset($_SESSION['admin_user'])) {
+            return true;
+        } else {
+            throw new Exception("You are not logged in as admin_user!");    
+        }
+    }
+
+    // OLD VERSION ------------------------------------------
+    function login_admin($username, $passwd) {
+        $conn = db_connect();
+        $result = $conn->query("select * from admin where admin_name = '".$username."'
+                    and admin_passwd = '".$passwd."'");
+        if (!$result) {
+            throw new Exception('Search failed!');
+        }
+        if ($result->num_rows > 0) return true;
+        else {
+            throw new Exception('Could not log you in.');
+        }
+    }
+
+    //change administrator`s password
+    function change_admin_passwd($username, $old_passwd, $new_passwd) {
+        if (login_admin($username, $old_passwd)) {
+
+            if (!($conn = db_connect())) {
+                throw new Exception("Could not connect to the db!");
+            }
+
+            $result = $conn->query("update admin
+                            set admin_passwd = sha1('".$new_passwd."')
+                            where admin_name = '".$username."'");
+            if (!$result) {
+                throw new Exception("The admin_passwd is not changed."); // not changed
+            } else {
+                return true;// changed successfully
+            }
+        } else {
+            throw new Exception("Your old passwd is wrong!"); // old password was wrong
+        }
+    }
+
 ?>
