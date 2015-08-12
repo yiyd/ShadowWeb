@@ -111,14 +111,6 @@ create trigger t_role_priv_delete
 	end;
 //
 
-create trigger t_item_follow_mark_insert
-	after insert on item_follow_marks for each row 
-	begin
-		insert into logs values ('', new.item_id, new.mark_creator_id, new.mark_create_time);
-		insert into log_fields values ((select max(log_id) from logs), '添加跟踪备注', 'null', new.item_follow_mark);
-	end;
-//
-
 create trigger t_para_insert
 	after insert on parameters for each row
 	begin
@@ -172,6 +164,14 @@ create trigger t_para_value_delete
 	after delete on para_values for each row
 	begin 
 		insert into admin_logs values ('', CURRENT_TIMESTAMP, '删除参数值', old.para_id);
+	end;
+//
+
+create trigger t_item_follow_mark_insert
+	after insert on item_follow_marks for each row 
+	begin
+		insert into logs values ('', new.item_id, new.mark_creator_id, new.mark_create_time);
+		insert into log_fields values ((select max(log_id) from logs), '添加跟踪备注', 'null', new.item_follow_mark);
 	end;
 //
 

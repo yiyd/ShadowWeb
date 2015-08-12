@@ -66,3 +66,11 @@ $change_field为数组，保存更改项的 name, old_value, new_value
 		用户名称 user_name 模糊查询
   		用户角色 role_id   直接选中输入
   		用户邮箱 user_mail 模糊查询			
+
+
+
+P.S.
+create trigger t_items_insert
+	after insert on items for each row
+		insert into logs values ('', new.item_id, new.item_creator_id, new.item_create_time);
+		insert into log_fields values

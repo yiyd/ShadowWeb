@@ -102,7 +102,7 @@
 		echo $key['admin_log_time']." ".$key['admin_log_object']." ".$key['admin_log_object_id']." ";
 		$log_detail = get_admin_log_detail($key['admin_log_id']);
 		foreach ($log_detail as $key) {
-			echo $key['admin_log_field_name']." ".$key['admin_log_field_old']." => "
+			echo $key['admin_log_field_name']." ".$key['admin_log_field_old']." 改成 "
 			.$key['admin_log_field_new']."<br />";
 		}
 	}
