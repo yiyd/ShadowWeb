@@ -227,11 +227,11 @@
     }
 
     // delete the selected item
-    function delete_selected_item () {
+    function delete_selected_item ($current_item_id) {
         $conn = db_connect();
-        $query = "delete from items where item_id = '".$_SESSION['current_item_id']."'";
-        $query1 = "delete from item_follow_marks where item_id = '".$_SESSION['current_item_id']."'";
-        $query2 = "delete from auto_notify where item_id = '".$_SESSION['current_item_id']."'";
+        $query = "delete from items where item_id = '".$current_item_id."'";
+        $query1 = "delete from item_follow_marks where item_id = '".$current_item_id."'";
+        $query2 = "delete from auto_notify where item_id = '".$current_item_id."'";
         $result = $conn->query($query);
         $result1 = $conn->query($query1);
         $result2 = $conn->query($query2);

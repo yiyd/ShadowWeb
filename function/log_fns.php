@@ -59,14 +59,15 @@
     // $log_object is "users", "roles"
     function get_admin_log($log_object, $object_id) {
         $conn = db_connect();
-        $query = "select * from admin_logs where admin_log_object like '".$log_object."'
+        $query = "select * from admin_logs where admin_log_object like '%".$log_object."%'
                 and admin_log_object_id = '".$object_id."'" ;
+        $result = $conn->query("set names utf8");
         $result = $conn->query($query);
         if (!$result) {
-            throw new Exception("Could not connect to DB. Please check the input.");
+            throw new Exception("Could not connect to DB.");
         }
         if ($result->num_rows == 0) {
-            //throw new Exception("No such logs!");
+            throw new Exception("No such logs!");
         }
         // anrange the data into an array
         $row = db_result_to_array($result);
@@ -74,15 +75,14 @@
     }
 
     //get admin_log details
-    function get_admin_log_detail ($log_object, $object_id) {
+    function get_admin_log_detail ($admin_log_id) {
         $conn = db_connect();
         // get the details from the log_fields table
-        $query = "select * from admin_log_fields where admin_log_id = 
-                (select admin_log_id from admin_logs where admin_log_object like '".$log_object."'
-                    and admin_log_object_id = '".$object_id."')";
+        $query = "select * from admin_log_fields where admin_log_id = '".$admin_log_id."'";
+        $result = $conn->query("set names utf8");
         $result = $conn->query($query);
         if (!$result) {
-            throw new Exception("Could not connect to DB. Please check the input.");
+            throw new Exception("Could not connect to DB.");
         }
         if ($result->num_rows == 0) {
             throw new Exception("No log details!");
@@ -92,12 +92,41 @@
         return $row;
     }
 
+    //--------------------------------------------------------------------------
+    // get the item_logs 
+    // log_title
     function get_log() {
-
+        $conn = db_connect();
+        $query = "select * from logs where item_id = '".$_SESSION['current_item_id']."'";
+        
+        $result = $conn->query("set names utf8");
+        $result = $conn->query($query);
+        if (!$result) {
+            throw new Exception("Could not connect to DB.");
+        }
+        if ($result->num_rows == 0) {
+            throw new Exception("No such logs!");
+        }
+        // anrange the data into an array
+        $row = db_result_to_array($result);
+        return $row;
     }
 
-    function get_log_detail() {
-
+    //get the 
+    function get_log_detail($log_id) {
+        // get the details from the log_fields table
+        $query = "select * from log_fields where log_id = '".$log_id."'";
+        $result = $conn->query("set names utf8");
+        $result = $conn->query($query);
+        if (!$result) {
+            throw new Exception("Could not connect to DB.");
+        }
+        if ($result->num_rows == 0) {
+            throw new Exception("No log details!");
+        }
+        // anrange the data into an array
+        $row = db_result_to_array($result);
+        return $row;
     }
 
 ?>
