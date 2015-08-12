@@ -18,6 +18,7 @@
         <link rel="stylesheet" type="type/css" href="css/main.css">
         <script type="text/javascript" src="resources/jquery-easyui/jquery.min.js"></script>
         <script type="text/javascript" src="resources/jquery-easyui/jquery.easyui.min.js"></script>
+        <script type="text/javascript" src="resources/common/js/tab.js"></script>
     </head>
     <body class="easyui-layout">
 
@@ -57,40 +58,19 @@
 
 	</body>
 	<script>
-    
 		$(function(){
 			$('#tt').tree({
 				
 				onClick:function(node){
 					if (node.attributes) {
-						var content = '<iframe scrolling="auto" frameborder="0" src="' + node.attributes.url + '" style="width:100%;height:100%"></iframe>';
-						$('#tabs').tabs('add',{    
-					    	title:node.text,    
-						   	content:content,    
-						    closable:true,    
-					       
-						}); 
-
-						
-						
+						addTab(node.attributes.url, node.text);
 					}
 				}
 			});
 
+			addListener();
 			reloadItems();
 		})
-    	
-		function updateTabName(name)
-		{
-			// 更新选择的面板的新标题和内容
-			var tab = $('#tabs').tabs('getSelected');  // 获取选择的面板
-			$('#tabs').tabs('update', {
-				tab: tab,
-				options: {
-					title:name
-				}
-			});
-		}
 
         function reloadItems()
 		{

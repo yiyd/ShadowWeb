@@ -34,7 +34,6 @@
 
             $('#ff').submit();
             
-            
         }
 
         function validateData() {
@@ -295,6 +294,7 @@
     <link rel="stylesheet" type="type/css" href="resources/jquery-easyui/themes/default/easyui.css">
     <link rel="stylesheet" type="type/css" href="resources/jquery-easyui/themes/icon.css">
     <link rel="stylesheet" type="type/css" href="resources/common/css/style.css">
+    <script type="text/javascript" src="resources/common/js/public.js"></script>
     <script type="text/javascript" src="resources/jquery-easyui/jquery.min.js"></script>
     <script type="text/javascript" src="resources/jquery-easyui/jquery.easyui.min.js"></script>   
     <script>
@@ -304,6 +304,71 @@
                 msg:"新建事项成功",
                 timeout:5000,
                 showType:'slide'
+            });
+
+            
+            $('#dg').datagrid({
+                toolbar:[
+                    {
+                        text:'增加跟踪备注',
+                        iconCls:'icon-add',
+
+                        handler:function(){
+                            var time = getTime();
+                            lastIndex = $('#dg').datagrid('getRows').length;
+                            if (lastIndex == rows) {
+                                $('#dg').datagrid('appendRow',{
+                                    mark_content:'',
+                                    mark_creator:'<?php 
+                                        $user_id = $_SESSION['current_user_id'];
+                                        try {
+                                            $user_name = get_user_name($user_id);          
+                                        } catch (Exception $e) {
+                                            echo '';
+                                        }
+                                        echo $user_name;    
+                                    ?>',
+                                    create_time:time
+                                });
+                                $('#dg').datagrid('selectRow', lastIndex);
+                                $('#dg').datagrid('beginEdit', lastIndex);
+                                isSave = false;
+                            }
+                            
+                        }
+                    },
+                    {
+                        text:'保存所增备注',
+                        iconCls:'icon-save',
+                        handler:function(){
+                            lastIndex = $('#dg').datagrid('getRows').length - 1;
+                            if (lastIndex == rows) {
+                                if (validateFollowMarkData()) {
+                                    $('#dg').datagrid('unselectRow', lastIndex);
+                                    $('#dg').datagrid('endEdit', lastIndex);
+                                    isSave = true;
+                                    saveFollowMark();
+                                }else{
+                                    $('#dg').datagrid('selectRow', lastIndex);
+                                    $('#dg').datagrid('beginEdit', lastIndex);
+                                }
+                                
+                            }
+                            
+                        }
+                    },
+                    {
+                        text:'删除所增备注',
+                        iconCls:'icon-remove',
+                        handler:function(){
+                            lastIndex = $('#dg').datagrid('getRows').length - 1;
+                            if (lastIndex == rows && !isSave) {
+                                $('#dg').datagrid('deleteRow', lastIndex);
+                            }
+                            
+                        }
+                    }
+                ]
             });
 
             <?php
@@ -316,17 +381,55 @@
                     echo "});";
                 }
             ?>
-            $('#ff')
 
+            var rows = $('#dg').datagrid('getRows').length;
+            var isSave = false;
 
         })
+
+        function saveFollowMark() {
+            $('#dg').datagrid('acceptChanges');
+
+            lastIndex = $('#dg').datagrid('getRows').length - 1;
+            
+            followMarkRows = $('#dg').datagrid('getRows');
+
+            $.ajax({
+                url:"ajax_php/new_follow_mark.php",
+                type:"POST",
+                data:{item_follow_mark:followMarkRows[lastIndex].mark_content, 
+                    mark_create_time:followMarkRows[lastIndex].create_time},
+            });
+
+        }
+
+        function validateFollowMarkData() {
+            $('#dg').datagrid('acceptChanges');
+
+            lastIndex = $('#dg').datagrid('getRows').length - 1;
+            
+            followMarkRows = $('#dg').datagrid('getRows');
+
+            if ('' == $.trim(followMarkRows[lastIndex].mark_content) || strlen($.trim(followMarkRows[lastIndex].mark_content)) > 255) {
+                $.messager.alert('提示信息', '跟踪备注不能为空，且不能超过255个字符，其中一个汉字是2个字符');
+                return false;
+            }
+
+            return true;
+        }
 
         function updateItem(){
 
         }
 
         function deleteItem(){
-
+            $.messager.confirm('确认','您确认想要删除该事项吗？删除后，该事项将无法恢复！',function(r){    
+                if (r){
+                    <?php    
+                        delete_selected_item();
+                    ?>   
+                }    
+            }); 
         }
 
         function completeItem(){
@@ -480,7 +583,7 @@
             </table>
         </div>
         <div>
-            <table id="dg" class="easyui-datagrid" title="事务跟踪备注" data-options="collapsible:true,rownumbers:true">
+            <table id="dg" class="easyui-datagrid" title="事务跟踪备注(新增备注后请点击‘保存所增备注’按钮，否则备注不予保存)" data-options="collapsible:true,rownumbers:true">
                 <thead>
                     <tr>
                         <th width="65%" data-options="field:'mark_content',editor:'text'">跟踪备注</th>
