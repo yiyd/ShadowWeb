@@ -23,7 +23,7 @@
         $query = "insert into items VALUES ('', '".$items['item_name']."', '".$_SESSION['current_user_id']."',
                 '".$items['item_follower_id']."','".$current_time."', '".$items['item_description']."', 
                 '".$items['item_type_id']."', '".$items['item_state']."')";
-        echo $query."<br />";
+
         $result = $conn->query("set names utf8");
         $result = $conn->query($query);
         if (!$result) {
@@ -131,18 +131,40 @@
         if (!$result) {
             throw new Exception("Could not connect to the db!");
         } else {
+            // log the update information
+            log_item($change_field);
             return true;
         }
+    }
 
+    // finish the item 
+    // set the item_state to FINISH
+    function finish_selected_item () {
+        $conn = db_connect();
+        $query = "update items set item_state = 'FINISH' where item_id = '".$_SESSION['current_item_id']."'";
+        $result = $conn->query("set names utf8");
+        $result = $conn->query($query);
+        if (!$result) {
+            throw new Exception("Could not finish the item.");
+        }
+        // arrange the notify setting information into the array
+        $change_field = array();
+        array_push($change_field, array(
+            'name' => '事项状态',
+            'old_value' => 'null',
+            'new_value' => '关闭'
+            )
+        );
         // log the update information
         log_item($change_field);
+        
+        return true;
     }
 
     //-----------------------------------------ITEM GET/SEARCH-------------------------------------------
     //----------------------------------------------------------------------------------------------------
     //simple display function for test
-    function display_selected_item (){
-
+    function display_selected_item () {
         $conn = db_connect();
         $query = "select * from items where item_creator_id = '".$_SESSION['current_user_id']."' 
                     and item_id = '".$_SESSION['current_item_id']."'";
@@ -324,20 +346,6 @@
 
     //------------------------------------------ITEM_TYPES------------------------------------------------
     //----------------------------------------------------------------------------------------------------
-    //get the item_type
-    function get_item_type($item_type_id) {
-        $conn = db_connect();
-        $result = $conn->query("set names utf8");
-        $result = $conn->query("select para_value_name from para_values where para_value_id = '".$item_type_id."'");
-        if (!$result) {
-            throw new Exception("Could not connect to the db!");
-        }
-        else {
-            $temp = $result->fetch_object();
-            $temp_para_value = $temp->para_value_name;
-            return $temp_para_value;
-        }
-    }
 
     //get all the different item_types
     function get_item_types() {

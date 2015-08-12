@@ -50,7 +50,7 @@
 			}
 			// log the NEW setting 
 			log_item($change_field);
-			
+
 		} else {
 			throw new Exception("Input Error!");			
 		}
@@ -85,6 +85,7 @@
 
 			// log the update information
         	log_item($change_field);
+        	
 		} else {
 			throw new Exception("Input Error!");
 		}

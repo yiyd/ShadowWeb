@@ -15,4 +15,5 @@
     require_once('log_fns.php');
     require_once('main_page_output_fns.php');
     require_once('item_output_fns.php');
+    require_once('id_to_name_fns.php');
 ?>

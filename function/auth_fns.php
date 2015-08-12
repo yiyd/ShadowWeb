@@ -128,26 +128,5 @@
             do_html_footer();
             exit;
         }
-
-
-    }
-
-    // get the users` name through given id
-    function get_user_name ($user_id) {
-        $conn = db_connect();
-        $query = "select user_name from users where user_id = '".$user_id."'";
-        $result = $conn->query("set names utf8");
-        $result = $conn->query($query);
-        if (!$result) {
-            throw new Exception("Could not connect to the db!");
-        }
-        else if ($result->num_rows == 0) {
-            throw new Exception("No such user!");
-        }
-        else {
-            $row = $result->fetch_object();
-            $result = $row->user_name;
-            return $result;
-        }
     }
 ?>

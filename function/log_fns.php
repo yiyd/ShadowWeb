@@ -29,7 +29,7 @@
         if (!$result) {
             throw new Exception("Could not connect to the db!");
         } else {
-            if ($isset($change_field)) {
+            if (isset($change_field)) {
                 //get the new log_id
                 $query1 = "select max(log_id) from logs";
                 $result1 = $conn->query($query1);
@@ -99,7 +99,8 @@
     // log_title
     function get_log() {
         $conn = db_connect();
-        $query = "select * from logs where item_id = '".$_SESSION['current_item_id']."'";
+        //$query = "select * from logs where item_id = '".$_SESSION['current_item_id']."'";
+        $query = "select * from logs where item_id = '5'";
         
         $result = $conn->query("set names utf8");
         $result = $conn->query($query);
@@ -114,8 +115,9 @@
         return $row;
     }
 
-    //get the 
+    //get the log details
     function get_log_detail($log_id) {
+        $conn = db_connect();
         // get the details from the log_fields table
         $query = "select * from log_fields where log_id = '".$log_id."'";
         $result = $conn->query("set names utf8");

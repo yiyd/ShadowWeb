@@ -45,18 +45,18 @@
 	try {
 	update_item($change_field);
 */
-	$result = display_selected_item();
-	foreach ($result as $key) {
-		echo "item_id: ".$key['item_id']."<br />";
-		echo "item_name: ".$key['item_name']."<br />";
-		echo "item_creator_id: ".$key['item_creator_id']."<br />";
-		echo "item_follower_id: ".$key['item_follower_id']."<br />";
-		echo "item_create_time: ".$key['item_create_time']."<br />";
-		echo "item_description: ".$key['item_description']."<br />";
-		echo "item_type_id: ".$key['item_type_id']."<br />";
-		echo "item_state: ".$key['item_state']."<br />";
-		echo "<hr />";
-	}
+	// $result = display_selected_item();
+	// foreach ($result as $key) {
+	// 	echo "item_id: ".$key['item_id']."<br />";
+	// 	echo "item_name: ".$key['item_name']."<br />";
+	// 	echo "item_creator_id: ".$key['item_creator_id']."<br />";
+	// 	echo "item_follower_id: ".$key['item_follower_id']."<br />";
+	// 	echo "item_create_time: ".$key['item_create_time']."<br />";
+	// 	echo "item_description: ".$key['item_description']."<br />";
+	// 	echo "item_type_id: ".$key['item_type_id']."<br />";
+	// 	echo "item_state: ".$key['item_state']."<br />";
+	// 	echo "<hr />";
+	// }
 /*
 	$result = get_items($condition);
 
@@ -100,15 +100,27 @@
 		$log_detail = get_admin_log_detail($key['admin_log_id']);
 		foreach ($log_detail as $key) {
 			echo $key['admin_log_field_name']." ".$key['admin_log_field_old']." 改成 "
-			.$key['admin_log_field_new']."<br />";
+			.$key['admin_log_field_new']." ";
 		}
+		echo "<hr /><br />";
 	}
 
+	// 日志记录展示方式
+	$result = get_log();
+	foreach ($result as $key) {
+		echo $key['item_id']." ".get_user_name($key['log_changer_id'])." ".$key['log_time']." ";
+		$log_detail = get_log_detail($key['log_id']);
+		foreach ($log_detail as $key) {
+			echo $key['log_field_name']." ".$key['log_field_old']." 改成 ".$key['log_field_new']." ";
+		}
+		echo "<hr /><br />";
+	}
 	echo "Function test! <br />";
 	$row = get_item_types();
 	foreach ($row as $key) {
 		echo $key['para_value_id']." ".$key['para_value_name']."<br />";
 	}
+
 	session_destroy();
 	echo session_id();
 ?>
