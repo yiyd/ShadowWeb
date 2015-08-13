@@ -17,19 +17,6 @@
 		do_html_footer();
 		exit;
 	}
-
-	if (!is_array($users_array)) {
-		do_html_header('');
-    	echo "<p>No users currently available</p>";
-    	do_html_footer();
-        exit;
-    }
-    if (!is_array($item_types_array)) {
-    	do_html_header('');
-        echo "<p>No item types currently available</p>";
-        do_html_footer();
-        exit;
-    }
     
 	display_new_item_form($users_array, $item_types_array);
 
