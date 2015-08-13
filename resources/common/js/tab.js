@@ -38,7 +38,7 @@ function addListener()
 			var opts = $('#tabs').tabs('getTab',index).panel('options');
 			if (opts.id) {
 				$.ajax({
-					url:"ajax_php/current_item_id.php",
+					url:"ajax_php/change_current_item_id.php",
 					type:"POST",
 					data:{current_item_id:opts.id},
 				});
@@ -48,4 +48,11 @@ function addListener()
 		// 	$('#tabs').tabs('select', index - 1);
 		// }
 	});
+}
+
+function closeCurrentTab()
+{
+	var tab = $('#tabs').tabs('getSelected');
+	var index = $('#tabs').tabs('getTabIndex',tab);
+	$('#tabs').tabs('close', index);
 }
