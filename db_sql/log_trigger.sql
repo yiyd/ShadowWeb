@@ -71,7 +71,6 @@ create trigger t_priv_insert
 	begin 
 		insert into admin_logs values ('', CURRENT_TIMESTAMP, '新建权限', new.priv_id);
 		insert into admin_log_fields values ((select max(admin_log_id) from admin_logs), '权限名', 'null', new.priv_name);
-		insert into admin_log_fields values ((select max(admin_log_id) from admin_logs), '权限值', 'null', new.priv_value);
 	end;
 //
 
@@ -81,9 +80,6 @@ create trigger t_priv_update
 		insert into admin_logs values ('', CURRENT_TIMESTAMP, '修改权限', new.priv_id);
 			if (new.priv_name <> old.priv_name) then
 				insert into admin_log_fields values ((select max(admin_log_id) from admin_logs), '权限名', old.priv_name, new.priv_name);
-			end if;
-			if (new.priv_value <> old.priv_value) then
-				insert into admin_log_fields values ((select max(admin_log_id) from admin_logs), '权限值', old.priv_value, new.priv_value);
 			end if;
 	end;
 //

@@ -55,8 +55,8 @@
     }
 
     //new one role with the input $new_role
-    // $new_role_name 
-    // $new_role_priv is an array includes all the priv_id
+    // $new_role is an array includes roles attribute
+    // $new_role['role_name'], $new_role['role_priv']
     function new_role ($new_role_name, $new_role_priv) {
         //if (!check_admin()) return false;
         if (!$new_role_name || !is_array($new_role_priv)) {
@@ -85,7 +85,7 @@
 
     //update the role values when admin change someplace
     // $change_field is an array
-    // $change_field['name'] $change_field['old_value'] $change_field['new_value'];
+    // $change_field is an array includes all the new priv_id
     function update_role ($role_id, $change_field) {
         //if (!check_admin()) return false;
         if (!is_array($change_field)) {
@@ -192,7 +192,7 @@
     }
 
     //new_user 
-    // $new_user is an array including:
+    // $new_user is an 2-D array including:
     // $new_user['user_name'], $new_user['user_passwd'], $new_user['role_id'], $new_user['user_mail']
     function new_user ($new_user) {
         if (!check_admin()) return false;
@@ -288,5 +288,26 @@
     //-----------------------------PARAMETERS MANAGMENT--------------------------------------
     //---------------------------------------------------------------------------------------
 
+    //-----------------------------PRIVILEGES MANAGMENT--------------------------------------
+    //---------------------------------------------------------------------------------------
+    // NEW PRIV
+    function new_privileges($new_priv_name) {
+        $conn = db_connect();
+        $result = $conn->query("insert into privileges value ('', '".$new_priv_name."')");
+        if (!$result) {
+            throw new Exception("Could not connect to the DB.");
+        }
+        return true;
+    }   
 
+    // DELETE PRIV
+    function delete_privileges($priv_id) {
+        $conn = db_connect();
+        // delete priv from privileges table
+        $result = $conn->query("delete from privileges where priv_id = '".$priv_id."'");
+        // delete priv from role_priv table 
+        $result = $conn->query("delete from role_priv where priv_id = '".$priv_id."'");
+        
+        return true;
+    }
 ?>
