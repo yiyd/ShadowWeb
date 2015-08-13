@@ -43,13 +43,6 @@
                 $('#item_name').focus();
                 return false;
             }
-            
-            var auto_notify_date = $('#auto_notify_date').datetimebox('getValue');
-            if ('' == auto_notify_date) {
-                $.messager.alert('提示信息', '自动提醒时间不能为空');
-                $('#auto_notify_date').focus();
-                return false;
-            }
 
             var item_description = $.trim($('#item_description').val());
             if (strlen(item_description) > 255) {
@@ -70,22 +63,89 @@
             inputHTML += '<input type="hidden" name="follow_mark_number" value="' + lastIndex + '" />';
             
             if (lastIndex == 1) {
-                followMarkRows = $('#dg').datagrid('getRows');
+                alert($.trim(followMarkRows[0].mark_content));
                 if ('' == $.trim(followMarkRows[0].mark_content) || strlen($.trim(followMarkRows[0].mark_content)) > 255) {
                     $.messager.alert('提示信息', '跟踪备注不能为空，且不能超过255个字符，其中一个汉字是2个字符');
+                    $('#dg').datagrid('selectRow', 0);
+                    $('#dg').datagrid('beginEdit', 0);
                     return false;
                 }
                 inputHTML += '<input type="hidden" name="item_follow_mark" value="' + followMarkRows[0].mark_content + '" />';
                 inputHTML += '<input type="hidden" name="mark_create_time" value="' + followMarkRows[0].create_time + '" />';
             }
 
+            $('#an').datagrid('acceptChanges');
+
+            lastIndex = $('#an').datagrid('getRows').length;
+
+            inputHTML += '<input type="hidden" name="notify_number" value="' + lastIndex + '" />';
+            
+            notifyRows = $('#an').datagrid('getRows');
+
+            for (var i = 0; i < lastIndex; i++) {
+                if ('' == $.trim(notifyRows[i].notify_type)) {
+                    $.messager.alert('提示信息', '自动提醒类型不能为空');
+                    $('#an').datagrid('selectRow', i);
+                    $('#an').datagrid('beginEdit', i);
+                    return false;
+                }
+                if ('' == $.trim(notifyRows[i].notify_user)) {
+                    $.messager.alert('提示信息', '自动提醒人员不能为空');
+                    $('#an').datagrid('selectRow', i);
+                    $('#an').datagrid('beginEdit', i);
+                    return false;
+                }
+
+                if ('' == $.trim(notifyRows[i].notify_date)) {
+                    $.messager.alert('提示信息', '自动提醒时间不能为空');
+                    $('#an').datagrid('selectRow', i);
+                    $('#an').datagrid('beginEdit', i);                    
+                    return false;
+                }
+                inputHTML += '<input type="hidden" name="notifyRows' + i + 'notify_type" value="' + notifyRows[i].notify_type + '" />';
+                inputHTML += '<input type="hidden" name="notifyRows' + i + 'notify_user" value="' + notifyRows[i].notify_user + '" />';
+                inputHTML += '<input type="hidden" name="notifyRows' + i + 'notify_date" value="' + notifyRows[i].notify_date + '" />';
+            };
+
             $('#hiddenText').html(inputHTML);
+
 
             return true;
         }
 
         $(function(){
-            
+            $('#an').datagrid({
+                toolbar:[
+                    {
+                        text:'增加自动提醒',
+                        iconCls:'icon-add',
+
+                        handler:function(){                            
+                            $('#an').datagrid('appendRow',{
+                                delect_check:'',
+                                notify_type:'',
+                                notify_user:'',
+                                notify_date:''
+                            });
+                            lastIndex = $('#an').datagrid('getRows').length - 1;
+                            $('#an').datagrid('selectRow', lastIndex);
+                            $('#an').datagrid('beginEdit', lastIndex);
+                        }
+                    },'-',
+                    
+                    {
+                        text:'删除所选提醒',
+                        iconCls:'icon-remove',
+                        handler:function(){
+                            var rows = $('#an').datagrid('getChecked');
+                            for (var i = rows.length - 1; i >= 0; i--) {
+                                var rowIndex = $('#an').datagrid('getRowIndex',rows[i]);
+                                $('#an').datagrid('deleteRow',rowIndex);
+                            };                            
+                        }
+                    }
+                ],
+            });    
 
             $('#dg').datagrid({
                 toolbar:[
@@ -116,18 +176,6 @@
                             
                         }
                     },'-',
-                    // {
-                    //     text:'保存所增备注',
-                    //     iconCls:'icon-save',
-                    //     handler:function(){
-                    //         lastIndex = $('#dg').datagrid('getRows').length - 1;
-                    //         if (lastIndex >= 0) {
-                    //             $('#dg').datagrid('unselectRow', lastIndex);
-                    //             $('#dg').datagrid('endEdit', lastIndex);
-                    //         }
-                            
-                    //     }
-                    // },
                     {
                         text:'删除所增备注',
                         iconCls:'icon-remove',
@@ -140,6 +188,7 @@
                         }
                     }
                 ]
+
             });   
         })
 
@@ -195,51 +244,6 @@
     						</div>
     					</td>
     				</tr>
-    				<tr height="26">
-    					<td nowrap="nowrap">
-    						<div align="right" style="padding-right=2px;">
-    							自动提醒类型：<font color="red">*</font>
-    						</div>
-    					</td>
-    					<td>
-    						<div align="left" style="padding-left:2px;">
-    							<select name="auto_notify">
-    								<option value="ONCE">单次提醒</option>
-    								<option value="DAILY">每日提醒</option>
-    								<option value="WEEKLY">每周提醒</option>
-    								<option value="MONTHLY">每月提醒</option>
-    								<option value="QUARTERLY">每季度提醒</option>
-    								<option value="YEARLY">每年提醒</option>
-    							</select>
-    						</div>
-    					</td>
-    					<td nowrap="nowrap">
-    						<div align="right" style="padding-right=2px;">
-    							自动提醒人员：<font color="red">*</font>
-    						</div>
-    					</td>
-    					<td>
-    						<div align="left" style="padding-left:2px;">
-    							<select name="auto_notify_user">
-    								<?php
-    									foreach ($users_array as $user) {
-            								echo "<option value=\"".$user['user_id']."\" >".$user['user_name']."</option>";
-        								}
-        							?>
-    							</select>
-    						</div>
-    					</td>
-    					<td nowrap="nowrap">
-    						<div align="right" style="padding-right=2px;">
-    							自动提醒时间：<font color="red">*</font>
-    						</div>
-    					</td>
-    					<td>
-    						<div align="left" style="padding-left:2px;">
-    							<input id="auto_notify_date" name="auto_notify_date" class="easyui-datetimebox" style="width:200px" data-options="editable:false">
-    						</div>
-    					</td>
-    				</tr>
                     <tr>
                         <td height="26">
                             <div align="right" style="padding-right:2px;">事项描述：</div>
@@ -254,17 +258,44 @@
                     </tr>
     			</table>
     		</div>
-            <!-- <div>
+            <div>
                 <table id="an" class="easyui-datagrid" title="自动提醒" data-options="collapsible:true,rownumbers:true">
                     <thead>
                         <tr>
-                            <th width="15%" data-options="field:'notify_type',editor:'text'">自动提醒类型</th>
-                            <th width="15%" data-options="field:'notify_user'">自动提醒人员</th>
-                            <th width="15%" data-options="field:'notify_date'">自动提醒时间</th>
+                            <th data-options="field:'delect_check',checkbox:true"></th>
+                            <th width="15%" data-options="field:'notify_type',editor:{
+                                type:'combobox',
+                                options:{
+                                    valueField:'type_id',
+                                    textField:'type_name',
+                                    url:'ajax_php/notify_types_array.php',
+                                    editable:false,
+                                    panelHeight:'auto'
+                                }
+
+                            }">自动提醒类型</th>
+                            <th width="15%" data-options="field:'notify_user',editor:{
+                                type:'combobox',
+                                options:{
+                                    valueField:'user_id',
+                                    textField:'user_name',
+                                    url:'ajax_php/users_array.php',
+                                    editable:false,
+                                    panelHeight:'auto'
+                                }
+
+                            }">自动提醒人员</th>
+                            <th width="20%" data-options="field:'notify_date',editor:{
+                                type:'datetimebox',
+                                options:{
+                                    editable:false
+                                }
+
+                            }">自动提醒时间</th>
                         </tr>
                     </thead>
                 </table>   
-            </div> -->
+            </div>
             <div>
                 <table id="dg" class="easyui-datagrid" title="事务跟踪备注" data-options="collapsible:true,rownumbers:true">
                     <thead>
@@ -291,7 +322,7 @@
 	}
 
 
-    function display_new_item($row, $auto_notify_row, $follow_mark_row)
+    function display_new_item($row, $auto_notify_result, $follow_mark_result)
     {
 
 ?>  
@@ -384,12 +415,51 @@
             });
 
             <?php
-                if ($follow_mark_row != "") {
-                    echo "$('#dg').datagrid('appendRow',{";
-                        echo "mark_content:'".$follow_mark_row['item_follow_mark']."',";
-                        echo "mark_creator:'".$follow_mark_row['mark_creator_name']."',";
-                        echo "create_time:'".$follow_mark_row['mark_create_time']."'";
-                    echo "});";
+                $mark_number = count($follow_mark_result);
+                if ($mark_number > 0) {
+                    for ($i = 0; $i < $mark_number; $i++) { 
+                        $follow_mark_row = $follow_mark_result[$i];
+                        echo "$('#dg').datagrid('appendRow',{";
+                            echo "mark_content:'".$follow_mark_row['item_follow_mark']."',";
+                            echo "mark_creator:'".$follow_mark_row['mark_creator_name']."',";
+                            echo "create_time:'".$follow_mark_row['mark_create_time']."'";
+                        echo "});";
+                    }
+                }
+                
+                $notify_number = count($auto_notify_result);
+                if ($notify_number > 0) {
+                    for ($i = 0; $i < $notify_number; $i++) { 
+                        $notify_row = $auto_notify_result[$i];
+                        echo "$('#an').datagrid('appendRow',{";
+                            echo "notify_type:'";
+                            switch ($notify_row['auto_type']) {
+                                    case 'ONCE':
+                                        echo '单次提醒';
+                                        break;
+                                    case 'DAILY':
+                                        echo '每日提醒';
+                                        break;
+                                    case 'WEEKLY    ':
+                                        echo '每周提醒';
+                                        break;
+                                    case 'MONTHLY':
+                                        echo '每月提醒';
+                                        break;
+                                    case 'QUARTERLY':
+                                        echo '每季度提醒';
+                                        break;
+                                    case 'YEARLY':
+                                        echo '每年提醒';
+                                        break;
+                                    default:
+                                        break;
+                            }
+                            echo "',";
+                            echo "notify_user:'".$notify_row['user_name']."',";
+                            echo "notify_date:'".$notify_row['auto_date']."'";
+                        echo "});";
+                    }
                 }
             ?>
 
@@ -511,66 +581,6 @@
                 <tr height="26">
                     <td nowrap="nowrap">
                         <div align="right" style="padding-right=2px;">
-                            自动提醒类型：<font color="red">*</font>
-                        </div>
-                    </td>
-                    <td>
-                        <div align="left" style="padding-left:2px;">
-                            <?php
-                                switch ($auto_notify_row['auto_type']) {
-                                    case 'ONCE':
-                                        echo '单次提醒';
-                                        break;
-                                    case 'DAILY':
-                                        echo '每日提醒';
-                                        break;
-                                    case 'WEEKLY    ':
-                                        echo '每周提醒';
-                                        break;
-                                    case 'MONTHLY':
-                                        echo '每月提醒';
-                                        break;
-                                    case 'QUARTERLY':
-                                        echo '每季度提醒';
-                                        break;
-                                    case 'YEARLY':
-                                        echo '每年提醒';
-                                        break;
-                                    default:
-                                        break;
-                                }
-                    
-                            ?>
-                        </div>
-                    </td>
-                    <td nowrap="nowrap">
-                        <div align="right" style="padding-right=2px;">
-                            自动提醒人员：<font color="red">*</font>
-                        </div>
-                    </td>
-                    <td>
-                        <div align="left" style="padding-left:2px;">
-                            <?php
-                                echo $auto_notify_row['user_name'];
-                            ?>
-                        </div>
-                    </td>
-                    <td nowrap="nowrap">
-                        <div align="right" style="padding-right=2px;">
-                            自动提醒时间：<font color="red">*</font>
-                        </div>
-                    </td>
-                    <td>
-                         <div align="left" style="padding-left:2px;">
-                            <?php
-                                echo $auto_notify_row['auto_date'];
-                            ?>
-                        </div>
-                    </td>
-                </tr>
-                <tr height="26">
-                    <td nowrap="nowrap">
-                        <div align="right" style="padding-right=2px;">
                             事项状态：
                         </div>
                     </td>
@@ -596,6 +606,17 @@
                     <td colspan="3"></td>
                 </tr>
             </table>
+        </div>
+        <div>
+            <table id="an" class="easyui-datagrid" title="自动提醒" data-options="collapsible:true,rownumbers:true">
+                <thead>
+                    <tr>
+                        <th width="15%" data-options="field:'notify_type'">自动提醒类型</th>
+                        <th width="15%" data-options="field:'notify_user'">自动提醒人员</th>
+                        <th width="20%" data-options="field:'notify_date'">自动提醒时间</th>
+                    </tr>
+                </thead>
+            </table>   
         </div>
         <div>
             <table id="dg" class="easyui-datagrid" title="事务跟踪备注(新增备注后请点击‘保存所增备注’按钮，否则备注不予保存)" data-options="collapsible:true,rownumbers:true">

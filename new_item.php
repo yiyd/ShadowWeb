@@ -17,20 +17,26 @@
 
 	$items['item_state'] = "PROCESSING";
 
-	$date = $_POST['auto_notify_date'];
-	$auto_type = $_POST['auto_notify'];
-	$users = array();
-	$users[0] = $_POST['auto_notify_user'];
-
+	$notify_number = $_POST['notify_number'];
 	$follow_mark_number = $_POST['follow_mark_number'];
 	
 	try {
 		new_one_item($items);
-		set_notify($date, $auto_type, $users);
 		if ($follow_mark_number != 0) {
 			$item_follow_mark = $_POST['item_follow_mark'];
 			$mark_create_time = $_POST['mark_create_time'];
 			new_follow_mark($item_follow_mark, $mark_create_time);
+		}
+		if ($notify_number != 0) {
+			$notify_array = array();
+			for ($i = 0 ; $i < $notify_number; $i++) { 
+				$notify_row = array();
+				$notify_row['auto_type'] = $_POST['notifyRows'.$i.'notify_type'];
+				$notify_row['user_id'] = $_POST['notifyRows'.$i.'notify_user'];
+				$notify_row['auto_date'] = $_POST['notifyRows'.$i.'notify_date'];
+				$notify_array[$i] = $notify_row;
+			}
+			set_notify($notify_array);			
 		}		
 	}
 	catch(Exception $e) {
