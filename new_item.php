@@ -22,6 +22,8 @@
 	$users = array();
 	$users[0] = $_POST['auto_notify_user'];
 
+	$notify_number = $_POST['notify_number'];
+
 	$follow_mark_number = $_POST['follow_mark_number'];
 	
 	try {
