@@ -106,7 +106,7 @@
         array_push($change_field, array(
             'name' => '删除事项',
             'old_value' => 'item_id',
-            'new_value' => $_SESSION['current_item_id'];
+            'new_value' => $_SESSION['current_item_id']
             )
         );
         // log the delete information 
