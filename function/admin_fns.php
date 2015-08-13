@@ -55,41 +55,28 @@
     }
 
     //new one role with the input $new_role
-    // $new_role is an array including all the informations 
-    function new_role ($new_role) {
+    // $new_role_name 
+    // $new_role_priv is an array includes all the priv_id
+    function new_role ($new_role_name, $new_role_priv) {
         //if (!check_admin()) return false;
-        if (!is_array($new_role)) {
+        if (!$new_role_name || !is_array($new_role_priv)) {
             throw new Exception("input is not an array!");
         }
 
         $conn = db_connect();
         $conn->autocommit(flase);
-        //
 
-
-
-
-
-
-
-
-        // NEED TO BE ADDED
-
-
-
-
-
-
-
-
-
-        //
-        $query = "insert into roles values ()";
+        $query = "insert into roles values ('', '".$new_role_name."')";
         $result = $conn->query("set names utf8");
         $result = $conn->query($query);
         if (!$result) {
             throw new Exception("Could not connect to the db!");
         } else {
+            foreach ($new_role_priv as $key) {
+                $query = "insert into role_priv values ('', (select max(role_id) from roles), '".$key."')";
+                $result = $conn->query($query);
+            }
+            
             $conn->commit();
             $conn->autocommit(true);
             return true;
@@ -99,7 +86,7 @@
     //update the role values when admin change someplace
     // $change_field is an array
     // $change_field['name'] $change_field['old_value'] $change_field['new_value'];
-    function update_role ($change_field, $role_id) {
+    function update_role ($role_id, $change_field) {
         //if (!check_admin()) return false;
         if (!is_array($change_field)) {
             throw new Exception("input is not an array!");
@@ -233,7 +220,7 @@
     //update the user values when admin change someplace
     // $change_field is an array
     // $change_field['name'] $change_field['old_value'] $change_field['new_value'];
-    function update_user ($change_field, $user_id) {
+    function update_user ($user_id, $change_field) {
         //if (!check_admin()) return false;
         if (!is_array($change_field)) {
             throw new Exception("input is not an array!");
