@@ -12,8 +12,8 @@ CREATE TABLE parameters
 
 CREATE TABLE para_values
 (
-  para_id int unsigned not null REFERENCES parameters(para_id),
   para_value_id int unsigned not null auto_increment primary key,
+  para_id int unsigned not null REFERENCES parameters(para_id),
   para_value_name char (32) not null
 ) ENGINE = InnoDB CHARACTER SET utf8;
 
@@ -48,7 +48,6 @@ CREATE TABLE privileges
 (
   priv_id int unsigned not null auto_increment PRIMARY KEY,
   priv_name char (32) not null,
-  priv_value enum('YES', 'NO') NOT NULL DEFAULT 'NO'
 ) ENGINE = InnoDB CHARACTER SET utf8;
 
 CREATE TABLE role_priv

@@ -5,51 +5,9 @@
  * Date: 2015/7/24
  * Time: 11:02
  */
-    //check the current user
-    function check_admin() {
-        if (isset($_SESSION['admin_user'])) {
-            return true;
-        } else {
-            throw new Exception("You are not logged in as admin_user!");    
-        }
-    }
-
-    // OLD VERSION ------------------------------------------
-    function login_admin($username, $passwd) {
-        $conn = db_connect();
-        $result = $conn->query("select * from admin where admin_name = '".$username."'
-                    and admin_passwd = '".$passwd."'");
-        if (!$result) {
-            throw new Exception('Search failed!');
-        }
-        if ($result->num_rows > 0) return true;
-        else {
-            throw new Exception('Could not log you in.');
-        }
-    }
-
-    //change administrator`s password
-    function change_admin_passwd($username, $old_passwd, $new_passwd) {
-        if (login_admin($username, $old_passwd)) {
-
-            if (!($conn = db_connect())) {
-                throw new Exception("Could not connect to the db!");
-            }
-
-            $result = $conn->query("update admin
-                            set admin_passwd = sha1('".$new_passwd."')
-                            where admin_name = '".$username."'");
-            if (!$result) {
-                throw new Exception("The admin_passwd is not changed."); // not changed
-            } else {
-                return true;// changed successfully
-            }
-        } else {
-            throw new Exception("Your old passwd is wrong!"); // old password was wrong
-        }
-    }
-
-    // those funcitons below are releated to the ROLES management
+    
+    //---------------------------------ROLE MANAGEMENT---------------------------------------
+    //---------------------------------------------------------------------------------------
     // GET/NEW/UPDATE/DELETE/
     //------------------------------------------------
     // get all the roles in the DB
@@ -57,7 +15,7 @@
         //if (!check_admin()) return false;
         $conn = db_connect();
         $query = "select * from roles";
-
+        $result = $conn->query("set names utf8");
         $result = $conn->query($query);
         if (!$result) {
             throw new Exception("Could not connect to the db!");
@@ -74,7 +32,7 @@
     // According to the design, the condition only includes the role_name
     // $condition['name'], $condition['value']
     // 角色名称 role_name 模糊查询 （需求书暂时就这么写的）
-    function get_roles_1 ($condition) {
+    function get_roles_with_condition ($condition) {
         //if (!check_admin()) return false;
         $conn = db_connect();
         $query = "select * from roles where ";
@@ -97,23 +55,28 @@
     }
 
     //new one role with the input $new_role
-    // $new_role is an array including all the informations 
-    function new_role ($new_role) {
+    // $new_role_name 
+    // $new_role_priv is an array includes all the priv_id
+    function new_role ($new_role_name, $new_role_priv) {
         //if (!check_admin()) return false;
-        if (!is_array($new_role)) {
+        if (!$new_role_name || !is_array($new_role_priv)) {
             throw new Exception("input is not an array!");
         }
 
         $conn = db_connect();
         $conn->autocommit(flase);
 
-        $query = "insert into roles values ('', '".$new_role['role_name']."', '".$new_role['c_priv']."', 
-                '".$new_role['u_priv']."', '".$new_role['d_priv']."', '".$new_role['s_priv']."', 
-                '".$new_role['f_priv']."', '".$new_role['v_priv']."')";
+        $query = "insert into roles values ('', '".$new_role_name."')";
+        $result = $conn->query("set names utf8");
         $result = $conn->query($query);
         if (!$result) {
             throw new Exception("Could not connect to the db!");
         } else {
+            foreach ($new_role_priv as $key) {
+                $query = "insert into role_priv values ('', (select max(role_id) from roles), '".$key."')";
+                $result = $conn->query($query);
+            }
+            
             $conn->commit();
             $conn->autocommit(true);
             return true;
@@ -121,23 +84,17 @@
     }   
 
     //update the role values when admin change someplace
-    // $change_role is an array
-    // $change_role['name'] $change_role['old_value'] $change_role['new_value'];
-    function update_role ($change_role, $role_id) {
+    // $change_field is an array
+    // $change_field['name'] $change_field['old_value'] $change_field['new_value'];
+    function update_role ($role_id, $change_field) {
         //if (!check_admin()) return false;
-        if (!is_array($change_role)) {
+        if (!is_array($change_field)) {
             throw new Exception("input is not an array!");
         }
 
         $conn = db_connect();
-        $conn->autocommit(flase);
-
-        // $query = "insert into roles values ('".$change_role['role_id']."', '".$change_role['role_name']."', '".$change_role['c_priv']."', 
-        //         '".$change_role['u_priv']."', '".$change_role['d_priv']."', '".$change_role['s_priv']."', 
-        //         '".$change_role['f_priv']."', '".$change_role['v_priv']."')";
-
         $query = "update roles set ";
-        foreach ($change_role as $row) {
+        foreach ($change_field as $row) {
             $temp = $row['name']." = ".$row['new_value'];
             $query .= $temp;
         }
@@ -148,8 +105,6 @@
         if (!$result) {
              throw new Exception("Could not connect to the db!");
         } else {
-            $conn->commit();
-            $conn->autocommit(true);
             return true;
         }
     }
@@ -157,25 +112,25 @@
     function delete_role ($role_id) {
         //if (!check_admin()) return false;
         $conn = db_connect();
-        $conn->autocommit(flase);
-
         $query = "delete from roles where role_id = '".$role_id."'";
         $result = $conn->query($query);
-        if (!$result) {
+        $query = "delete from role_priv where role_id = '".$role_id."'";
+        $result1 = $conn->query($query);
+        if (!$result || !$result1) {
              throw new Exception("Could not connect to the db!");
         } else {
-            $conn->commit();
-            $conn->autocommit(true);
             return true;
         }
     }
 
-    // those funcitons below are releated to the USERS management
+    //------------------------------USER MANAGMENT--------------------------------------------
+    //---------------------------------------------------------------------------------------
     // GET/NEW/UPDATE/DELETE/
     //------------------------------------------------
     //get all the valid users
     function get_users () {        
         $conn = db_connect();
+        $result = $conn->query("set names utf8");
         $result = $conn->query("select user_id, user_name from users");
         if (!$result) {
              throw new Exception("Could not connect to the db!");
@@ -194,7 +149,7 @@
     //     用户名称 user_name 模糊查询
     //     用户角色 role_id   直接选中输入
     //     用户邮箱 user_mail 模糊查询 
-    function get_users_1 ($condition) {
+    function get_users_with_condition ($condition) {
         //if (!check_admin()) return false;
         $flag = false;
 
@@ -223,7 +178,7 @@
                 $flag =true;
             }         
         }
-
+        $result = $conn->query("set names utf8");
         $result = $conn->query($query);
         if (!$result) {
             throw new Exception("Could not connect to the db!");
@@ -250,6 +205,7 @@
 
         $query = "insert into roles values ('', '".$new_user['user_name']."', '".$new_user['user_passwd']."', 
                 '".$new_user['role_id']."', '".$new_user['user_mail']."')";
+        $result = $conn->query("set names utf8");
         $result = $conn->query($query);
         if (!$result) {
             throw new Exception("Could not connect to the db!");
@@ -262,31 +218,28 @@
 
 
     //update the user values when admin change someplace
-    // $change_user is an array
-    // $change_user['name'] $change_user['old_value'] $change_user['new_value'];
-    function update_user ($change_user, $user_id) {
+    // $change_field is an array
+    // $change_field['name'] $change_field['old_value'] $change_field['new_value'];
+    function update_user ($user_id, $change_field) {
         //if (!check_admin()) return false;
-        if (!is_array($change_user)) {
+        if (!is_array($change_field)) {
             throw new Exception("input is not an array!");
         }
 
         $conn = db_connect();
-        $conn->autocommit(flase);
 
         $query = "update users set ";
-        foreach ($change_user as $row) {
+        foreach ($change_field as $row) {
             $temp = $row['name']." = ".$row['new_value'];
             $query .= $temp;
         }
         $query .= "where user_id = '".$user_id."'";    
 
-
+        $result = $conn->query("set names utf8");
         $result = $conn->query($query);
         if (!$result) {
             throw new Exception("Could not connect to the db!");
         } else {
-            $conn->commit();
-            $conn->autocommit(true);
             return true;
         }
     }
@@ -295,15 +248,12 @@
     function delete_user ($user_id) {
         //if (!check_admin()) return false;
         $conn = db_connect();
-        $conn->autocommit(flase);
 
         $query = "delete from users where user_id = '".$user_id."'";
         $result = $conn->query($query);
         if (!$result) {
             throw new Exception("Could not connect to the db!");
         } else {
-            $conn->commit();
-            $conn->autocommit(true);
             return true;
         }
     }
@@ -324,21 +274,19 @@
     
         //update the new passwd with db
         $conn = db_connect();
-        $conn->autocommit(false);
 
         $result = $conn->query("update users set user_passwd = sha1('".$new_passwd."') where user_id = '".$user_id."'");
         if (!$result) {
             throw new Exception ('Could not reset the password.');
         }
         else {
-            $conn->commit();
-            $conn->autocommit(true);
             return true; 
         }
 
     }
 
-
+    //-----------------------------PARAMETERS MANAGMENT--------------------------------------
+    //---------------------------------------------------------------------------------------
 
 
 ?>
