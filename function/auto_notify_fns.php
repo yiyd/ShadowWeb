@@ -148,7 +148,7 @@
 					array_push($change_field, array(
 						'name' => '删除提醒',
 						'old_value' => 'auto_id',
-						'new_value' => $old_id;
+						'new_value' => $old_id
 						)
 					);
 					// log the NEW setting 

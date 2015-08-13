@@ -106,7 +106,7 @@
         array_push($change_field, array(
             'name' => '删除事项',
             'old_value' => 'item_id',
-            'new_value' => $_SESSION['current_item_id'];
+            'new_value' => $_SESSION['current_item_id']
             )
         );
         // log the delete information 
@@ -149,6 +149,7 @@
     // set the item_state to FINISH
     function finish_selected_item () {
         $conn = db_connect();
+        
         $query = "update items set item_state = 'FINISH' where item_id = '".$_SESSION['current_item_id']."'";
         $result = $conn->query("set names utf8");
         $result = $conn->query($query);
