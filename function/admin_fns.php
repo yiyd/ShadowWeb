@@ -85,7 +85,7 @@
 
     //update the role values when admin change someplace
     // $change_field is an array
-    // $change_field['name'] $change_field['old_value'] $change_field['new_value'];
+    // $change_field is an array includes all the new priv_id
     function update_role ($role_id, $change_field) {
         //if (!check_admin()) return false;
         if (!is_array($change_field)) {
@@ -288,5 +288,6 @@
     //-----------------------------PARAMETERS MANAGMENT--------------------------------------
     //---------------------------------------------------------------------------------------
 
-
+    //-----------------------------PRIVILEGES MANAGMENT--------------------------------------
+    //---------------------------------------------------------------------------------------
 ?>

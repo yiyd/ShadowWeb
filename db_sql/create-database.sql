@@ -47,7 +47,7 @@ CREATE TABLE roles
 CREATE TABLE privileges
 (
   priv_id int unsigned not null auto_increment PRIMARY KEY,
-  priv_name char (32) not null,
+  priv_name char (32) not null
 ) ENGINE = InnoDB CHARACTER SET utf8;
 
 CREATE TABLE role_priv
@@ -68,6 +68,7 @@ CREATE TABLE users
 
 CREATE TABLE auto_notify
 (
+  auto_id int unsigned not null auto_increment primary key,
   item_id int unsigned not null REFERENCES items(item_id),
   auto_date datetime not null,
   auto_type enum ('ONCE', 'DAILY', 'WEEKLY', 'MONTHLY', 'QUARTERLY', 'YEARLY') NOT NULL DEFAULT 'ONCE',
