@@ -101,8 +101,16 @@
             throw new Exception("Delete Error!");
         }
 
-        // log delete information
-        log_item(null);
+        // log the delete information
+        $change_field = array();
+        array_push($change_field, array(
+            'name' => '删除事项',
+            'old_value' => 'item_id',
+            'new_value' => $_SESSION['current_item_id'];
+            )
+        );
+        // log the delete information 
+        log_item($change_field);
         return true;
     }
 

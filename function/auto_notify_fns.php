@@ -22,27 +22,26 @@
 				}
 
 				// arrange the notify setting information into the array
-				$change_field = array();
-				foreach ($users as $key) {
-					array_push($change_field, array(
-						'name' => '提醒时间',
-						'old_value' => 'null',
-						'new_value' => $auto['auto_date']
-						)
-					);
-					array_push($change_field, array(
-						'name' => '提醒类型',
-						'old_value' => 'null',
-						'new_value' => $auto['auto_type']
-						)
-					);
-					array_push($change_field, array(
-						'name' => '提醒人',
-						'old_value' => 'null',
-						'new_value' => $auto['user_id']
-						)
-					);
-				}
+				$change_field = array();			
+				array_push($change_field, array(
+					'name' => '提醒时间',
+					'old_value' => 'null',
+					'new_value' => $auto['auto_date']
+					)
+				);
+				array_push($change_field, array(
+					'name' => '提醒类型',
+					'old_value' => 'null',
+					'new_value' => $auto['auto_type']
+					)
+				);
+				array_push($change_field, array(
+					'name' => '提醒人',
+					'old_value' => 'null',
+					'new_value' => $auto['user_id']
+					)
+				);
+				
 				// log the NEW setting 
 				log_item($change_field);
 			}
@@ -65,42 +64,100 @@
 
 		//check all the input 
 		if (is_array($auto_notifies) && isset($_SESSION['current_item_id'])) {
-			
-			// check the $auto_notifies['auto_id'] is null 
-			if ($auto_notifies['auto_id'] == 'null') {
-				// need to be added 
+			// get all the old setting related to the current item for check
+			$result = $conn->query("select auto_id from auto_notify where item_id = '".$_SESSION['current_item_id']."'");
+			$old_auto_id = $result->fetch_assoc();
+			foreach ($old_auto_id as $old_id) {
+				// set a flag for check if the setting need to be deleted
+				$flag = flase;
+				foreach ($auto_notifies as $key) {
 
+					// check the $auto_notifies['auto_id'] is null 
+					if ($key['auto_id'] == 'null') {
+						// need to be added 
+						set_notify($key);
+						continue;
+					}
+
+					// need to be updated of do nothing
+					if ($key['auto_id'] == $old_id) {
+						// log the update information
+						$change_field = array();
+				
+						$result = $conn->query("select * from auto_notify where auto_id = '".$old_id."'");
+						if (!$result) {
+							throw new Exception("Could not connect to the DB.");
+						}
+						$row = $result->fetch_assoc();
+
+						// check the new and old setting
+						if ($key['auto_date'] != $row['auto_date']) {
+							array_push($change_field, array(
+								'name' => '提醒时间',
+								'old_value' => $row['auto_date'],
+								'new_value' => $key['auto_date']
+								)
+							);
+
+							$result = $conn->query("update auto_notify set auto_date = '".$key['auto_date']."' where auto_id = '".$old_id."'");
+						}
+
+						if ($key['auto_type'] != $row['auto_type']) {
+							array_push($change_field, array(
+								'name' => '提醒类型',
+								'old_value' => $row['auto_type'],
+								'new_value' => $key['auto_type']
+								)
+							);
+
+							$result = $conn->query("update auto_notify set auto_type = '".$key['auto_type']."' where auto_id = '".$old_id."'");
+						}
+
+						if ($key['user_id'] != $row['user_id']) {
+							array_push($change_field, array(
+								'name' => '提醒人',
+								'old_value' => 'null',
+								'new_value' => $key['user_id']
+								)
+							);
+
+							$result = $conn->query("update auto_notify set user_id = '".$key['user_id']."' where auto_id = '".$old_id."'");
+						}
+						// set the flag 
+						$flag = true;
+
+						// log the NEW setting 
+						log_item($change_field);
+						continue;
+					}
+				}
+
+				// reset the $auto_notifies
+				reset($auto_notifies);
+
+				if (!$flag) {
+					// need to be deleted
+					$query = "delete from auto_notify where auto_id = '".$old_id."'";
+					$result = $conn->query($query);
+					if (!$result) {
+						throw new Exception("Could not delete the notify setting!");
+					}
+
+					// log the delete information
+					$change_field = array();
+					array_push($change_field, array(
+						'name' => '删除提醒',
+						'old_value' => 'auto_id',
+						'new_value' => $old_id;
+						)
+					);
+					// log the NEW setting 
+					log_item($change_field);
+				}
 			}
-  			//Delete the orginal setting related with current item
-			$query = "delete from auto_notify where item_id = '".$_SESSION['current_item_id']."'";
-			$result = $conn->query($query);
-			if (!$result) {
-				throw new Exception("Could not delete the original notify setting!");
-			}
 			
-			$query = "insert into auto_notify values ('".$_SESSION['current_item_id']."', '".$."')"
-
-			// $query = "update auto_notify set ";
-	  //       foreach ($change_field as $row) {
-	  //           if ($flag) {
-	  //               $query .= ", ";
-	  //           }
-	  //           $temp = $row['name']." = '".$row['new_value']."'";
-	  //           $query .= $temp;
-	  //           $flag = true;
-	  //       }
-	  //       $query .= " where item_id = '".$_SESSION['current_item_id']."'";    
-
-			$result = $conn->query($query);
-			if (!$result) {
-				throw new Exception("Could not connect to the db!");
-			}	
 			$conn->commit();
-			$conn->autocommit(true);
-
-			// log the update information
-        	log_item($change_field);
-        	
+			$conn->autocommit(true);    	
 		} else {
 			throw new Exception("Input Error!");
 		}
