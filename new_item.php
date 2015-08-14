@@ -18,6 +18,7 @@
 	$items['item_state'] = "PROCESSING";
 
 	$notify_number = $_POST['notify_number'];
+	
 	$follow_mark_number = $_POST['follow_mark_number'];
 	
 	try {
@@ -47,6 +48,13 @@
 	}
 ?>
 	<script>
+		window.parent.$.messager.show({
+            title:"新建",
+            msg:"新建事项成功",
+            timeout:5000,
+            showType:'slide'
+        });
+
 		window.parent.reloadItems();
 		window.parent.updateTab('display_item.php', '<?php echo $items['item_name'] ?>', '<?php echo $_SESSION['current_item_id'] ?>');
 	</script>

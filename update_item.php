@@ -22,12 +22,11 @@
 		exit;
 	}
 
-	if (count($result) == 1 && count($auto_notify_result) == 1) {
+	if (count($result) == 1) {
 		$row = $result[0];
-		$auto_notify_row = $auto_notify_result[0];
 
 		$row['item_creator_name'] = get_user_name($row['item_creator_id']);
 	}
 
-	display_update_item($users_array, $item_types_array, $row, $auto_notify_row, $follow_mark_result);
+	display_update_item($users_array, $item_types_array, $row, $auto_notify_result, $follow_mark_result);
 ?>

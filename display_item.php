@@ -26,22 +26,6 @@
 		$row['item_follower_name'] = get_user_name($row['item_follower_id']);
 		$row['item_creator_name'] = get_user_name($row['item_creator_id']);
 		$row['item_type_name'] = get_item_type($row['item_type_id']);
-	}
-
-	$notify_number = count($auto_notify_result);
-	if ($notify_number > 0) {
-		for ($i = 0; $i < $notify_number; $i ++) { 
-			$auto_notify_row = $auto_notify_result[$i];
-			$auto_notify_row['user_name'] = get_user_name($auto_notify_row['user_id']);
-		}
-	}
-
-	$mark_number = count($follow_mark_result);
-	if ($mark_number > 0) {
-		for ($i = 0; $i < $mark_number; $i ++) { 
-			$follow_mark_row = $follow_mark_result[i];
-			$follow_mark_row['mark_creator_name'] = get_user_name($follow_mark_row['mark_creator_id']);
-		}
 	}	
 
 	display_new_item($row, $auto_notify_result, $follow_mark_result);
