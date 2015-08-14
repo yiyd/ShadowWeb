@@ -69,7 +69,7 @@
 			$old_auto_id = $result->fetch_assoc();
 			foreach ($old_auto_id as $old_id) {
 				// set a flag for check if the setting need to be deleted
-				$flag = flase;
+				$flag = false;
 				foreach ($auto_notifies as $key) {
 
 					// check the $auto_notifies['auto_id'] is null 

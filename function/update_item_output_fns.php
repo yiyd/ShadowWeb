@@ -205,7 +205,7 @@
                         notify:notify_array
                     },
                     success:function(data){
-                        alert(data);
+                        
                     }
                 });
             }
