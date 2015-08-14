@@ -87,6 +87,8 @@
     // $change_field is an array
     // $change_field is an array includes all the new priv_id
     function update_role ($role_id, $change_field) {
+        $flag = false;
+
         //if (!check_admin()) return false;
         if (!is_array($change_field)) {
             throw new Exception("input is not an array!");
@@ -95,8 +97,12 @@
         $conn = db_connect();
         $query = "update roles set ";
         foreach ($change_field as $row) {
+            if ($flag) {
+                $query .= ", ";
+            }
             $temp = $row['name']." = ".$row['new_value'];
             $query .= $temp;
+            $flag = true;
         }
         $query .= "where role_id = '".$role_id."'";    
 
@@ -175,7 +181,7 @@
             if ($row['name'] == "user_mail") {
                 if ($flag) $query .= " and ";
                 $query .= "user_mail like '%".$row['value']."%'";
-                $flag =true;
+                c
             }         
         }
         $result = $conn->query("set names utf8");
@@ -221,6 +227,8 @@
     // $change_field is an array
     // $change_field['name'] $change_field['old_value'] $change_field['new_value'];
     function update_user ($user_id, $change_field) {
+        $flag = true;
+        
         //if (!check_admin()) return false;
         if (!is_array($change_field)) {
             throw new Exception("input is not an array!");
@@ -230,8 +238,13 @@
 
         $query = "update users set ";
         foreach ($change_field as $row) {
+            if ($flag) {
+                $query .= ", ";
+            }
+
             $temp = $row['name']." = ".$row['new_value'];
             $query .= $temp;
+            $flag = true;
         }
         $query .= "where user_id = '".$user_id."'";    
 
@@ -287,7 +300,16 @@
 
     //-----------------------------PARAMETERS MANAGMENT--------------------------------------
     //---------------------------------------------------------------------------------------
+    // NEW PARAMETERS
+    function new_parameters() {
 
+    }
+
+    function update_parameters() {
+
+    }
+
+    function delete_para
     //-----------------------------PRIVILEGES MANAGMENT--------------------------------------
     //---------------------------------------------------------------------------------------
     // NEW PRIV
@@ -307,7 +329,7 @@
         $result = $conn->query("delete from privileges where priv_id = '".$priv_id."'");
         // delete priv from role_priv table 
         $result = $conn->query("delete from role_priv where priv_id = '".$priv_id."'");
-        
+
         return true;
     }
 ?>
