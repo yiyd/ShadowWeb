@@ -181,7 +181,6 @@
             if ($row['name'] == "user_mail") {
                 if ($flag) $query .= " and ";
                 $query .= "user_mail like '%".$row['value']."%'";
-                c
             }         
         }
         $result = $conn->query("set names utf8");
@@ -309,7 +308,7 @@
 
     }
 
-    function delete_para
+    // function delete_para
     //-----------------------------PRIVILEGES MANAGMENT--------------------------------------
     //---------------------------------------------------------------------------------------
     // NEW PRIV
