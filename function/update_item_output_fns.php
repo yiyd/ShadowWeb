@@ -99,6 +99,7 @@
 
                         handler:function(){                            
                             $('#an').datagrid('appendRow',{
+                                id:'null',
                                 delect_check:'',
                                 notify_type:'',
                                 notify_user:'',
@@ -148,6 +149,7 @@
                     for ($i = 0; $i < $notify_number; $i++) { 
                         $notify_row = $auto_notify_result[$i];
                         echo "$('#an').datagrid('appendRow',{";
+                            echo "id:'".$notify_row['auto_id']."',";
                             echo "delect_check:'',";
                             echo "notify_type:'".$notify_row['auto_type']."',";
                             echo "notify_user:'".$notify_row['user_id']."',";
@@ -177,6 +179,35 @@
 
             if (!validateRelationData()) {
                 return;
+            }
+
+            lastIndex = $('#an').datagrid('getRows').length;
+
+            if (lastIndex > 0) {
+                notifyRows = $('#an').datagrid('getRows');
+                var notify_array = [];
+
+                for (var i = 0; i < lastIndex; i++) {
+                    var notify_row = [];
+                    notify_row[0] = notifyRows[i].id;
+                    notify_row[1] = notifyRows[i].notify_type;
+                    notify_row[2] = notifyRows[i].notify_user;
+                    notify_row[3] = notifyRows[i].notify_date;
+                    var length = notify_array.length;
+                    notify_array[length] = notify_row;
+                    
+                };
+
+                $.ajax({
+                    url:"ajax_php/update_notify_interface.php",
+                    type:"POST",
+                    data:{
+                        notify:notify_array
+                    },
+                    success:function(data){
+                        alert(data);
+                    }
+                });
             }
 
             makeUpChangeField();
@@ -223,6 +254,35 @@
         }
 
         function validateRelationData() {
+            $('#an').datagrid('acceptChanges');
+
+            lastIndex = $('#an').datagrid('getRows').length;
+            
+            notifyRows = $('#an').datagrid('getRows');
+
+            for (var i = 0; i < lastIndex; i++) {
+                if ('' == $.trim(notifyRows[i].notify_type)) {
+                    $.messager.alert('提示信息', '自动提醒类型不能为空');
+                    $('#an').datagrid('selectRow', i);
+                    $('#an').datagrid('beginEdit', i);
+                    return false;
+                }
+                if ('' == $.trim(notifyRows[i].notify_user)) {
+                    $.messager.alert('提示信息', '自动提醒人员不能为空');
+                    $('#an').datagrid('selectRow', i);
+                    $('#an').datagrid('beginEdit', i);
+                    return false;
+                }
+
+                if ('' == $.trim(notifyRows[i].notify_date)) {
+                    $.messager.alert('提示信息', '自动提醒时间不能为空');
+                    $('#an').datagrid('selectRow', i);
+                    $('#an').datagrid('beginEdit', i);                    
+                    return false;
+                }
+                
+            };
+            
             return true;
         }
 
@@ -395,6 +455,7 @@
                 <table id="an" class="easyui-datagrid" title="自动提醒" data-options="collapsible:true,rownumbers:true">
                     <thead>
                         <tr>
+                            <th data-options="field:'id', hidden:true"></th>
                             <th data-options="field:'delect_check',checkbox:true"></th>
                             <th id="notify_type" width="15%" data-options="field:'notify_type',editor:{
                                 type:'combobox',
