@@ -76,6 +76,7 @@
 					if ($key['auto_id'] == 'null') {
 						// need to be added 
 						set_notify($key);
+						$key['auto_id'] = 'done';
 						continue;
 					}
 
