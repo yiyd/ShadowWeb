@@ -109,18 +109,20 @@
 	            	$.each($.parseJSON(data), function(idx,item){
 	            		// alert(data);
 
-
-	            		var manageNode = $('#tt').tree('find', item.item_type_id);	   
-						$('#tt').tree('append',{
-							parent:manageNode.target,
-							data:[{
-								id:item.item_id,
-								text:item.item_name,
-								attributes:{
-									url:'display_item.php'
-								}
-							}]
-						});
+	            		if (item.item_state == 'PROCESSING') {
+							var manageNode = $('#tt').tree('find', item.item_type_id);	   
+							$('#tt').tree('append',{
+								parent:manageNode.target,
+								data:[{
+									id:item.item_id,
+									text:item.item_name,
+									attributes:{
+										url:'display_item.php'
+									}
+								}]
+							});
+	            		}
+	            		
 	            	});
 
 	            }
