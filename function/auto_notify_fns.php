@@ -17,7 +17,7 @@
 				// print_r($auto);
 				$query = "insert into auto_notify values ('', '".$_SESSION['current_item_id']."', '".$auto['auto_date']."', 
 				'".$auto['auto_type']."', '".$auto['user_id']."')";
-				echo $query;
+				//echo $query;
 				$result = $conn->query($query);
 				if (!$result) {
 					throw new Exception("Could not connect to the db!");
@@ -62,20 +62,21 @@
 	function update_notify ($auto_notifies) {
 		//$flag = false;
 		$conn = db_connect();
-		$conn->autocommit(false);
+		// $conn->autocommit(false);
 
 		//check all the input 
 		if (is_array($auto_notifies) && isset($_SESSION['current_item_id'])) {
 			// get all the old setting related to the current item for check
 			$result = $conn->query("select auto_id from auto_notify where item_id = '".$_SESSION['current_item_id']."'");
-			$old_auto_id = $result->fetch_assoc();
+			$old_auto_id = db_result_to_array($result);
 			foreach ($old_auto_id as $old_id) {
 				// set a flag for check if the setting need to be deleted
 				$flag = false;
-				foreach ($auto_notifies as $key) {
+				foreach ($auto_notifies as &$key) {
 
 					// check the $auto_notifies['auto_id'] is null 
 					if ($key['auto_id'] == 'null') {
+						$key['auto_id'] = 'done';
 						// need to be added 
 						$new_notify = array();
 						array_push($new_notify, array(
@@ -86,17 +87,18 @@
 							'user_id' => $key['user_id']
 							));
 						//print_r($new_notify);
+						
 						set_notify($new_notify);
-						$key['auto_id'] = 'done';
 						continue;
 					}
 
 					// need to be updated of do nothing
-					if ($key['auto_id'] == $old_id) {
+					if ($key['auto_id'] == $old_id['auto_id']) {
+						//echo $old_id."jfkldsafjlkasdjfklasdjfkl<br />";
 						// log the update information
 						$change_field = array();
 				
-						$result = $conn->query("select * from auto_notify where auto_id = '".$old_id."'");
+						$result = $conn->query("select * from auto_notify where auto_id = '".$old_id['auto_id']."'");
 						if (!$result) {
 							throw new Exception("Could not connect to the DB.");
 						}
@@ -111,7 +113,7 @@
 								)
 							);
 
-							$result = $conn->query("update auto_notify set auto_date = '".$key['auto_date']."' where auto_id = '".$old_id."'");
+							$result = $conn->query("update auto_notify set auto_date = '".$key['auto_date']."' where auto_id = '".$old_id['auto_id']."'");
 						}
 
 						if ($key['auto_type'] != $row['auto_type']) {
@@ -122,7 +124,7 @@
 								)
 							);
 
-							$result = $conn->query("update auto_notify set auto_type = '".$key['auto_type']."' where auto_id = '".$old_id."'");
+							$result = $conn->query("update auto_notify set auto_type = '".$key['auto_type']."' where auto_id = '".$old_id['auto_id']."'");
 						}
 
 						if ($key['user_id'] != $row['user_id']) {
@@ -133,14 +135,14 @@
 								)
 							);
 
-							$result = $conn->query("update auto_notify set user_id = '".$key['user_id']."' where auto_id = '".$old_id."'");
+							$result = $conn->query("update auto_notify set user_id = '".$key['user_id']."' where auto_id = '".$old_id['auto_id']."'");
 						}
 						// set the flag 
 						$flag = true;
 
 						// log the NEW setting 
 						log_item($change_field);
-						continue;
+						//continue;
 					}
 				}
 
@@ -149,7 +151,7 @@
 
 				if (!$flag) {
 					// need to be deleted
-					$query = "delete from auto_notify where auto_id = '".$old_id."'";
+					$query = "delete from auto_notify where auto_id = '".$old_id['auto_id']."'";
 					$result = $conn->query($query);
 					if (!$result) {
 						throw new Exception("Could not delete the notify setting!");
@@ -160,7 +162,7 @@
 					array_push($change_field, array(
 						'name' => '删除提醒',
 						'old_value' => 'auto_id',
-						'new_value' => $old_id
+						'new_value' => $old_id['auto_id']
 						)
 					);
 					// log the NEW setting 
@@ -168,8 +170,8 @@
 				}
 			}
 			
-			$conn->commit();
-			$conn->autocommit(true);    	
+			// $conn->commit();
+			// $conn->autocommit(true);    	
 		} else {
 			throw new Exception("Input Error!");
 		}
