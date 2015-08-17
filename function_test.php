@@ -2,6 +2,29 @@
 	include('function\shadow_fns.php');
 	session_start();
 
+	$_SESSION['current_item_id'] = '102';
+	$_SESSION['current_user_id'] = '1';
+	$change_notify = array();
+
+	array_push($change_notify, array(
+		'auto_id' => 'null',
+		'item_id' => '102',
+		'auto_date' => '2015-08-01 00:30:45',
+		'auto_type' => 'DAILY',
+		'user_id' => '1'
+		));
+
+	// array_push($change_notify, array(
+	// 	'auto_id' => '75',
+	// 	'item_id' => '102',
+	// 	'auto_date' => '2015-08-01 00:30:45',
+	// 	'auto_type' => 'ONCE',
+	// 	'user_id' => '1'
+	// 	));
+
+	update_notify ($change_notify);
+
+
 /*
 	$condition = array();
 	$change_field = array();
@@ -94,32 +117,32 @@
 
 	//---------------------------------------------------------------------------
 	// 管理员操作日志展示方式
-	$result = get_admin_log('角色', '1');
-	foreach ($result as $key) {
-		echo $key['admin_log_time']." ".$key['admin_log_object']." ".$key['admin_log_object_id']." ";
-		$log_detail = get_admin_log_detail($key['admin_log_id']);
-		foreach ($log_detail as $key) {
-			echo $key['admin_log_field_name']." ".$key['admin_log_field_old']." 改成 "
-			.$key['admin_log_field_new']." ";
-		}
-		echo "<hr /><br />";
-	}
+	// $result = get_admin_log('角色', '1');
+	// foreach ($result as $key) {
+	// 	echo $key['admin_log_time']." ".$key['admin_log_object']." ".$key['admin_log_object_id']." ";
+	// 	$log_detail = get_admin_log_detail($key['admin_log_id']);
+	// 	foreach ($log_detail as $key) {
+	// 		echo $key['admin_log_field_name']." ".$key['admin_log_field_old']." 改成 "
+	// 		.$key['admin_log_field_new']." ";
+	// 	}
+	// 	echo "<hr /><br />";
+	// }
 
-	// 日志记录展示方式
-	$result = get_log();
-	foreach ($result as $key) {
-		echo $key['item_id']." ".get_user_name($key['log_changer_id'])." ".$key['log_time']." ";
-		$log_detail = get_log_detail($key['log_id']);
-		foreach ($log_detail as $key) {
-			echo $key['log_field_name']." ".$key['log_field_old']." 改成 ".$key['log_field_new']." ";
-		}
-		echo "<hr /><br />";
-	}
-	echo "Function test! <br />";
-	$row = get_item_types();
-	foreach ($row as $key) {
-		echo $key['para_value_id']." ".$key['para_value_name']."<br />";
-	}
+	// // 日志记录展示方式
+	// $result = get_log();
+	// foreach ($result as $key) {
+	// 	echo $key['item_id']." ".get_user_name($key['log_changer_id'])." ".$key['log_time']." ";
+	// 	$log_detail = get_log_detail($key['log_id']);
+	// 	foreach ($log_detail as $key) {
+	// 		echo $key['log_field_name']." ".$key['log_field_old']." 改成 ".$key['log_field_new']." ";
+	// 	}
+	// 	echo "<hr /><br />";
+	// }
+	// echo "Function test! <br />";
+	// $row = get_item_types();
+	// foreach ($row as $key) {
+	// 	echo $key['para_value_id']." ".$key['para_value_name']."<br />";
+	// }
 
 	session_destroy();
 	echo session_id();
