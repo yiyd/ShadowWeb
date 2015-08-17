@@ -9,10 +9,12 @@
 		//insert the notify setting into the db
 		$conn = db_connect();
 		$conn->autocommit(false);	
-		
+
 		//check all the input 
 		if (is_array($auto_notifies) && (isset($_SESSION['current_item_id']))) {
 			foreach ($auto_notifies as $auto) {
+				// echo "<br />";
+				// print_r($auto);
 				$query = "insert into auto_notify values ('', '".$_SESSION['current_item_id']."', '".$auto['auto_date']."', 
 				'".$auto['auto_type']."', '".$auto['user_id']."')";
 				echo $query;
@@ -69,13 +71,22 @@
 			$old_auto_id = $result->fetch_assoc();
 			foreach ($old_auto_id as $old_id) {
 				// set a flag for check if the setting need to be deleted
-				$flag = flase;
+				$flag = false;
 				foreach ($auto_notifies as $key) {
 
 					// check the $auto_notifies['auto_id'] is null 
 					if ($key['auto_id'] == 'null') {
 						// need to be added 
-						set_notify($key);
+						$new_notify = array();
+						array_push($new_notify, array(
+							'auto_id' => 'null',
+							'item_id' => $key['item_id'],
+							'auto_date' => $key['auto_date'],
+							'auto_type' => $key['auto_type'],
+							'user_id' => $key['user_id']
+							));
+						//print_r($new_notify);
+						set_notify($new_notify);
 						$key['auto_id'] = 'done';
 						continue;
 					}
