@@ -119,7 +119,7 @@
                                     case 'DAILY':
                                         echo '每日提醒';
                                         break;
-                                    case 'WEEKLY    ':
+                                    case 'WEEKLY':
                                         echo '每周提醒';
                                         break;
                                     case 'MONTHLY':
@@ -175,7 +175,24 @@
         }
 
         function completeItem(){
+            $.messager.confirm('确认','您确定此事项已完成吗？完成事项后，该事项将关闭，并且无法再修改！',function(r){    
+                if (r){
+                    $.ajax({
+                        url:"ajax_php/finish_item.php",
+                        type:"POST",
+                        success:function(){
+                            window.parent.$.messager.show({
+                                title:"完成",
+                                msg:"完成事项",
+                                timeout:5000,
+                                showType:'slide'
+                            });
 
+                            window.parent.closeCurrentTab();
+                        }
+                    });
+                }    
+            });
         }
     </script>
     <body>
