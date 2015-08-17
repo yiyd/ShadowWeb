@@ -303,7 +303,7 @@
         // if ((flag_start) && (!flag_end) || ((!flag_start) && (flag_end))) {
         //     throw new Exception("Time setting is not correct!");
         // }
-        // $result = $conn->query("set names utf8");
+        $result = $conn->query("set names utf8");
         $result = $conn->query($query);
         if (!$result) {
             throw new Exception("Could not connect to DB.");

@@ -36,7 +36,7 @@
 									<span>事务管理</span>
 									<ul>
 										<li data-options="iconCls:'icon-add',text:'新建事项',attributes:{url:'new_item_form.php'}">新建事项</li>
-										<li data-options="iconCls:'icon-search'">查询事项</li>
+										<li data-options="iconCls:'icon-search',text:'查询事项',attributes:{url:'search_item_form.php'}">查询事项</li>
 									</ul>
 								</li>
 							</ul>
