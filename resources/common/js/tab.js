@@ -26,8 +26,7 @@ function addTab(url, title)
 	$('#tabs').tabs('add',{    
     	title:title,    
 	   	content:content,    
-	    closable:true,    
-       
+	    closable:true,         
 	}); 
 }
 
@@ -44,9 +43,6 @@ function addListener()
 				});
 			}
 		},
-		// onClose:function(title,index){
-		// 	$('#tabs').tabs('select', index - 1);
-		// }
 	});
 }
 

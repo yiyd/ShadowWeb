@@ -30,8 +30,8 @@
 						<li>
 							<span>事项管理系统</span>
 							<ul>
-								<li>日常工作事务</li>
-								<li>生产问题事务</li>
+								<li data-options="id:1">日常工作事务</li>
+								<li data-options="id:2">生产问题事务</li>
 								<li data-options="id:3">
 									<span>事务管理</span>
 									<ul>
@@ -62,6 +62,14 @@
 			$('#tt').tree({
 				
 				onClick:function(node){
+					if (node.id) {
+						$.ajax({
+							url:"ajax_php/change_current_item_id.php",
+							type:"POST",
+							data:{current_item_id:node.id},
+						});
+						alert(node.id);
+					}
 					if (node.attributes) {
 						addTab(node.attributes.url, node.text);
 					}
@@ -74,22 +82,53 @@
 
         function reloadItems()
 		{
-		 // 	var manageNode = $('#tt').tree('find', 3);
-			// $('#tt').tree('insert',{
-			// 	before:manageNode.target,
-			// 	<?php
-			// 		$result = get_related_items();
-			// 		$count = 0;
-			// 		foreach($result as $key) {
-						
-			// 		}
-			// 	?>
-			// 	data:[{
-			// 		id:11,
-			// 		text:'test'
-			// 	}
-			// 	]
-			// });
+			
+			$('#tt').tree('remove', $('#tt').tree('find', 1).target);
+			$('#tt').tree('remove', $('#tt').tree('find', 2).target);
+			var node = $('#tt').tree('find', 3);
+			if (node){
+				$('#tt').tree('insert', {
+					before: node.target,
+					data: [{
+					    	id: 1,
+					    	text: '日常工作事务'
+				    }]
+				});
+				$('#tt').tree('insert', {
+					before: node.target,
+					data: [{
+					    	id: 2,
+					    	text: '生产问题事务'
+				    }]
+				});
+			}
+
+            $.ajax({
+	            url:"ajax_php/items_array.php",
+	            type:"POST",
+	            success:function(data){
+	            	$.each($.parseJSON(data), function(idx,item){
+	            		// alert(data);
+
+
+	            		var manageNode = $('#tt').tree('find', item.item_type_id);	   
+						$('#tt').tree('append',{
+							parent:manageNode.target,
+							data:[{
+								id:item.item_id,
+								text:item.item_name,
+								attributes:{
+									url:'display_item.php'
+								}
+							}]
+						});
+	            	});
+
+	            }
+	        });
+            
+            
+		 	
 		}
 	
 
