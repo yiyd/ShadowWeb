@@ -68,7 +68,6 @@
 							type:"POST",
 							data:{current_item_id:node.id},
 						});
-						alert(node.id);
 					}
 					if (node.attributes) {
 						addTab(node.attributes.url, node.text);
