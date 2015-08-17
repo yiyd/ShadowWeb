@@ -2,25 +2,44 @@
 	include('function\shadow_fns.php');
 	session_start();
 
-	$_SESSION['current_item_id'] = '102';
+	// $conn = db_connect();
+	// $query = "select auto_id from auto_notify where item_id = '3' ";
+
+	// //$result = $conn->query("set names utf8");
+	
+	// $result = $conn->query($query);
+	// $result = db_result_to_array($result); 
+	// //$result = $result->fetch_assoc();
+	// print_r($result);
+
+
+	$_SESSION['current_item_id'] = '2';
 	$_SESSION['current_user_id'] = '1';
 	$change_notify = array();
 
 	array_push($change_notify, array(
-		'auto_id' => 'null',
-		'item_id' => '102',
-		'auto_date' => '2015-08-01 00:30:45',
+		'auto_id' => '3',
+		'item_id' => '2',
+		'auto_date' => '2015-08-01 00:30:11',
 		'auto_type' => 'DAILY',
 		'user_id' => '1'
 		));
 
-	// array_push($change_notify, array(
-	// 	'auto_id' => '75',
-	// 	'item_id' => '102',
-	// 	'auto_date' => '2015-08-01 00:30:45',
-	// 	'auto_type' => 'ONCE',
-	// 	'user_id' => '1'
-	// 	));
+	array_push($change_notify, array(
+		'auto_id' => 'null',
+		'item_id' => '2',
+		'auto_date' => '2015-08-01 00:30:46',
+		'auto_type' => 'DAILY',
+		'user_id' => '1'
+		));
+
+	array_push($change_notify, array(
+		'auto_id' => '49',
+		'item_id' => '2',
+		'auto_date' => '2015-08-01 00:30:12',
+		'auto_type' => 'ONCE',
+		'user_id' => '2'
+		));
 
 	update_notify ($change_notify);
 
