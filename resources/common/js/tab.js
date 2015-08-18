@@ -29,6 +29,8 @@ function addTab(id, url, title)
 	for (var i = 1; i < tabs.length; i++) {
 		var opts = tabs[i].panel('options');
 		if (opts.id == id) {
+			var index = $('#tabs').tabs('getTabIndex',tabs[i]);
+			$('#tabs').tabs('select',index);
 			return;
 		}
 
