@@ -30,9 +30,10 @@
             $('#dg').datagrid({
                 toolbar:[
                     {
+                        id:'add',
                         text:'增加跟踪备注',
                         iconCls:'icon-add',
-
+                        disabled:false,
                         handler:function(){
                             var time = getTime();
                             lastIndex = $('#dg').datagrid('getRows').length;
@@ -53,13 +54,18 @@
                                 $('#dg').datagrid('selectRow', lastIndex);
                                 $('#dg').datagrid('beginEdit', lastIndex);
                                 isSave = false;
+                                $('#save').linkbutton('enable');
+                                $('#delete').linkbutton('enable');
+                                $('#add').linkbutton('disable');
                             }
                             
                         }
                     },'-',
                     {
+                        id:'save',
                         text:'保存所增备注',
                         iconCls:'icon-save',
+                        disabled:true,
                         handler:function(){
                             lastIndex = $('#dg').datagrid('getRows').length - 1;
                             if (lastIndex == rows) {
@@ -68,6 +74,9 @@
                                     $('#dg').datagrid('endEdit', lastIndex);
                                     isSave = true;
                                     saveFollowMark();
+                                    $('#save').linkbutton('disable');
+                                    $('#delete').linkbutton('disable');
+                                    $('#add').linkbutton('disable');
                                 }else{
                                     $('#dg').datagrid('selectRow', lastIndex);
                                     $('#dg').datagrid('beginEdit', lastIndex);
@@ -78,12 +87,17 @@
                         }
                     },'-',
                     {
+                        id:'delete',
                         text:'删除所增备注',
                         iconCls:'icon-remove',
+                        disabled:true,
                         handler:function(){
                             lastIndex = $('#dg').datagrid('getRows').length - 1;
                             if (lastIndex == rows && !isSave) {
                                 $('#dg').datagrid('deleteRow', lastIndex);
+                                $('#save').linkbutton('disable');
+                                $('#delete').linkbutton('disable');
+                                $('#add').linkbutton('enable');
                             }
                             
                         }

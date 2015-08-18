@@ -28,5 +28,10 @@
 		$row['item_type_name'] = get_item_type($row['item_type_id']);
 	}	
 
-	display_new_item($row, $auto_notify_result, $follow_mark_result);
+	if ($row['item_state'] == 'PROCESSING') {
+		display_new_item($row, $auto_notify_result, $follow_mark_result);
+	}else if ($row['item_state'] == 'FINISH') {
+		display_finished_item($row, $auto_notify_result, $follow_mark_result);
+	}
+	
 ?>

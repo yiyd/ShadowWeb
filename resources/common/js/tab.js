@@ -23,19 +23,28 @@ function updateTab(url, title, id)
 	window.parent.reloadItems();
 }
 
-function addTab(url, title)
+function addTab(id, url, title)
 {
+	var tabs = $('#tabs').tabs('tabs');
+	for (var i = 1; i < tabs.length; i++) {
+		var opts = tabs[i].panel('options');
+		if (opts.id == id) {
+			return;
+		}
+
+	};
 	var content = '<iframe scrolling="auto" frameborder="0" src="' + url + '" style="width:100%;height:100%"></iframe>';
 	if (title.length > 12) {
 		title = title.substr(0, 12) + "...";
 	}
-	$('#tabs').tabs('add',{    
+	$('#tabs').tabs('add',{
+		id:id,    
     	title:title,    
 	   	content:content,    
 	    closable:true,         
 	});
+	
 
-	window.parent.reloadItems(); 
 }
 
 function addListener()

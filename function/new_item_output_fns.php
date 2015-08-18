@@ -120,7 +120,6 @@
                     {
                         text:'增加自动提醒',
                         iconCls:'icon-add',
-
                         handler:function(){                            
                             $('#an').datagrid('appendRow',{
                                 delect_check:'',
@@ -151,9 +150,10 @@
             $('#dg').datagrid({
                 toolbar:[
                     {
+                        id:'add',
                         text:'增加跟踪备注',
+                        disabled:false,
                         iconCls:'icon-add',
-
                         handler:function(){
                             var time = getTime();
                             lastIndex = $('#dg').datagrid('getRows').length;
@@ -173,17 +173,23 @@
                                 });
                                 $('#dg').datagrid('selectRow', lastIndex);
                                 $('#dg').datagrid('beginEdit', lastIndex);
+                                $('#delete').linkbutton('enable');
+                                $('#add').linkbutton('disable');
                             }
                             
                         }
                     },'-',
                     {
+                        id:'delete',
                         text:'删除所增备注',
+                        disabled:true,
                         iconCls:'icon-remove',
                         handler:function(){
                             lastIndex = $('#dg').datagrid('getRows').length - 1;
                             if (lastIndex >= 0) {
                                 $('#dg').datagrid('deleteRow', lastIndex);
+                                $('#delete').linkbutton('disable');
+                                $('#add').linkbutton('enable');
                             }
                             
                         }

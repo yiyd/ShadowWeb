@@ -35,8 +35,15 @@
 								<li data-options="id:3">
 									<span>事务管理</span>
 									<ul>
-										<li data-options="iconCls:'icon-add',text:'新建事项',attributes:{url:'new_item_form.php'}">新建事项</li>
-										<li data-options="iconCls:'icon-search',text:'查询事项',attributes:{url:'search_item_form.php'}">查询事项</li>
+										<li data-options="id:-1,iconCls:'icon-add',text:'新建事项',attributes:{url:'new_item_form.php'}">新建事项</li>
+										<li data-options="id:-2,iconCls:'icon-search',text:'查询事项',attributes:{url:'search_item_form.php'}">查询事项</li>
+									</ul>
+								</li>
+								<li data-options="id:4">
+									<span>已完成事务</span>
+									<ul>
+										<li>已完成日常工作事务</li>
+										<li>已完成生产问题事务</li>
 									</ul>
 								</li>
 							</ul>
@@ -62,15 +69,20 @@
 			$('#tt').tree({
 				
 				onClick:function(node){
+					var id;
 					if (node.id) {
+						id = node.id;
 						$.ajax({
 							url:"ajax_php/change_current_item_id.php",
 							type:"POST",
 							data:{current_item_id:node.id},
 						});
+
+					}else {
+						id = -3;
 					}
 					if (node.attributes) {
-						addTab(node.attributes.url, node.text);
+						addTab(id,node.attributes.url, node.text);
 					}
 				}
 			});
@@ -84,6 +96,7 @@
 			
 			$('#tt').tree('remove', $('#tt').tree('find', 1).target);
 			$('#tt').tree('remove', $('#tt').tree('find', 2).target);
+			$('#tt').tree('remove', $('#tt').tree('find', 4).target);			
 			var node = $('#tt').tree('find', 3);
 			if (node){
 				$('#tt').tree('insert', {
@@ -100,6 +113,22 @@
 					    	text: '生产问题事务'
 				    }]
 				});
+				$('#tt').tree('insert', {
+					after: node.target,
+					data: [{
+					    	id: 4,
+					    	text: '已完成事务',
+					    	state: 'closed',
+					    	children: [{
+					    		id: 41,
+					    		text: '已完成日常工作事务',
+					    	},{
+					    		id: 42,
+					    		text: '已完成生产问题事务',
+					    	}
+					    	]
+				    }]
+				});
 			}
 
             $.ajax({
@@ -111,6 +140,18 @@
 
 	            		if (item.item_state == 'PROCESSING') {
 							var manageNode = $('#tt').tree('find', item.item_type_id);	   
+							$('#tt').tree('append',{
+								parent:manageNode.target,
+								data:[{
+									id:item.item_id,
+									text:item.item_name,
+									attributes:{
+										url:'display_item.php'
+									}
+								}]
+							});
+	            		}else if (item.item_state == 'FINISH') {
+							var manageNode = $('#tt').tree('find', '4' + item.item_type_id);	   
 							$('#tt').tree('append',{
 								parent:manageNode.target,
 								data:[{
