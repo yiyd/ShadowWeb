@@ -135,6 +135,7 @@
         }
         $query .= " where item_id = '".$_SESSION['current_item_id']."'";    
 
+        $result = $conn->query("set names utf8");
         $result = $conn->query($query);
         if (!$result) {
             throw new Exception("Could not connect to the db!");
