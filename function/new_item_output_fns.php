@@ -209,7 +209,7 @@
     					</td>
     					<td width="23%">
     						<div align="left" style="padding-left:2px;">
-    							<input id="item_name" type="text" name="item_name" maxlength="200"></input>
+    							<input id="item_name" type="text" name="item_name" maxlength="200" size="30"></input>
     						</div>
     					</td>
     					<td nowrap="nowrap" width="10%">
@@ -301,7 +301,7 @@
                 <table id="dg" class="easyui-datagrid" title="事务跟踪备注" data-options="collapsible:true,rownumbers:true">
                     <thead>
                         <tr>
-                            <th width="65%" data-options="field:'mark_content',editor:'text'">跟踪备注</th>
+                            <th width="65%" data-options="field:'mark_content',editor:'textarea'">跟踪备注</th>
                             <th width="8%" data-options="field:'mark_creator'">创建人</th>
                             <th width="15%" data-options="field:'create_time'">创建时间</th>
                         </tr>

@@ -202,13 +202,25 @@
         function getData(json){
             var rows = [];
             $.each($.parseJSON(json), function(idx,item){
+                var state;
+                switch(item.item_state)
+                {
+                    case 'PROCESSING':
+                        state = '进行中';
+                        break;
+                    case 'FINISH':
+                        state = '已完成';
+                        break;
+                    default:
+                        break;
+                }
                 rows.push({
                     item_id:item.item_id,
                     item_name: item.item_name,
                     item_creator: item.item_creator,
                     item_follower: item.item_follower,
                     item_type: item.item_type,
-                    item_state: item.item_state,
+                    item_state: state,
                     item_create_time: item.item_create_time,
                     item_description: item.item_description
                 });

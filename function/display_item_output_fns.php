@@ -166,7 +166,7 @@
                                 timeout:5000,
                                 showType:'slide'
                             });
-
+                            
                             window.parent.closeCurrentTab();
                         }
                     });
@@ -283,7 +283,18 @@
                     <td>
                         <div align="left" style="padding-left:2px;">
                             <?php
-                                echo $row['item_state'];
+                                switch ($row['item_state']) {
+                                    case 'PROCESSING':
+                                        echo "进行中";
+                                        break;
+                                    case 'FINISH':
+                                        echo "已完成";
+                                        break;
+                                    default:
+                                        
+                                        break;
+                                }
+                                
                             ?>
                         </div>
                     </td>
@@ -315,10 +326,10 @@
             </table>   
         </div>
         <div>
-            <table id="dg" class="easyui-datagrid" title="事务跟踪备注(新增备注后请点击‘保存所增备注’按钮，否则备注不予保存)" data-options="collapsible:true,rownumbers:true">
+            <table id="dg" class="easyui-datagrid" title="事务跟踪备注(新增备注后请点击‘保存所增备注’按钮，否则备注不予保存)" data-options="collapsible:true,rownumbers:true,nowrap:false">
                 <thead>
                     <tr>
-                        <th width="65%" data-options="field:'mark_content',editor:'text'">跟踪备注</th>
+                        <th width="65%" data-options="field:'mark_content',editor:'textarea'">跟踪备注</th>
                         <th width="8%" data-options="field:'mark_creator'">创建人</th>
                         <th width="15%" data-options="field:'create_time'">创建时间</th>
                     </tr>

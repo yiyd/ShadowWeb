@@ -55,7 +55,7 @@
             showType:'slide'
         });
 
-		window.parent.reloadItems();
+		// window.parent.reloadItems();
 		window.parent.updateTab('display_item.php', '<?php echo $items['item_name'] ?>', '<?php echo $_SESSION['current_item_id'] ?>');
 	</script>
 <?php

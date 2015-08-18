@@ -8,6 +8,9 @@ function updateTab(url, title, id)
 	// 更新选择的面板的新标题和内容
 
 	var tab = $('#tabs').tabs('getSelected');  // 获取选择的面板
+	if (title.length > 12) {
+		title = title.substr(0, 12) + "...";
+	}
 	$('#tabs').tabs('update', {
 		tab: tab,
 		options: {
@@ -17,17 +20,22 @@ function updateTab(url, title, id)
 		}
 	});
 
-
+	window.parent.reloadItems();
 }
 
 function addTab(url, title)
 {
 	var content = '<iframe scrolling="auto" frameborder="0" src="' + url + '" style="width:100%;height:100%"></iframe>';
+	if (title.length > 12) {
+		title = title.substr(0, 12) + "...";
+	}
 	$('#tabs').tabs('add',{    
     	title:title,    
 	   	content:content,    
 	    closable:true,         
-	}); 
+	});
+
+	window.parent.reloadItems(); 
 }
 
 function addListener()
@@ -51,4 +59,6 @@ function closeCurrentTab()
 	var tab = $('#tabs').tabs('getSelected');
 	var index = $('#tabs').tabs('getTabIndex',tab);
 	$('#tabs').tabs('close', index);
+
+	window.parent.reloadItems();
 }
