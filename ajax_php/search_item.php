@@ -18,7 +18,14 @@
 			$data[$i] = $new_row;
 		}
 
-		echo json_encode(get_items($data));
+		$item_array = get_items($data);
+		foreach ($item_array as $key => &$value) {
+			$value['item_creator'] = get_user_name($value['item_creator_id']);
+			$value['item_follower'] = get_user_name($value['item_follower_id']);
+			$value['item_type'] = get_item_type($value['item_type_id']);
+
+		}
+		echo json_encode($item_array);
 	}
 	catch(Exception $e) {
 		do_html_header('');
