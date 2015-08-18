@@ -257,7 +257,7 @@
                         </div>
                     </td>
                     <td width="23%">
-                        <div align="left" style="padding-left:2px;">
+                        <div align="left" style="padding-left:2px;word-wrap:break-word;word-break:break-all;">
                             <?php
                                 echo $row['item_name'];
                             ?>
