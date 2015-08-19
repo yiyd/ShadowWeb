@@ -33,7 +33,7 @@
 								<li data-options="id:1">日常工作事务</li>
 								<li data-options="id:2">生产问题事务</li>
 								<li data-options="id:3">
-									<span>事务管理</span>
+									<span>事项操作</span>
 									<ul>
 										<li data-options="id:-1,iconCls:'icon-add',text:'新建事项',attributes:{url:'new_item_form.php'}">新建事项</li>
 										<li data-options="id:-2,iconCls:'icon-search',text:'查询事项',attributes:{url:'search_item_form.php'}">查询事项</li>
@@ -46,6 +46,23 @@
 										<li>已完成生产问题事务</li>
 									</ul>
 								</li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+
+			</div>
+			<div class="easyui-accordion" data-options="fit:true,border:false">
+				<div title="系统管理" style="padding:10px">
+					<ul id="manage" class="easyui-tree">
+						<li>
+							<span>系统管理</span>
+							<ul>
+								<li>角色管理</li>
+								<li>权限管理</li>
+								<li>用户管理</li>
+								<li>参数管理</li>
+								
 							</ul>
 						</li>
 					</ul>
