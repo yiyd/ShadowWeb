@@ -161,7 +161,7 @@
         $change_field = array();
         array_push($change_field, array(
             'name' => '事项状态',
-            'old_value' => 'null',
+            'old_value' => '运行中',
             'new_value' => '关闭'
             )
         );

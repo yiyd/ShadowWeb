@@ -140,8 +140,10 @@
 						// set the flag 
 						$flag = true;
 
-						// log the NEW setting 
-						log_item($change_field);
+						// log the NEW setting if updated 
+						if ($change_field != null) {
+						 	log_item($change_field);
+						} 
 						//continue;
 					}
 				}
