@@ -4,6 +4,7 @@
  * Date: 2015/8/14
  * Time: 16:12
  */
+    require_once('log_fns.php');
     require_once('item_fns.php');
     require_once('translation_fns.php');
     function display_new_item($row, $auto_notify_result, $follow_mark_result){
@@ -134,6 +135,25 @@
                         echo "});";
                     }
                 }
+
+                // $log_result = get_log();
+                // foreach ($result as $log) {
+                //     echo "$('#log').datagrid('appendRow',{";
+                //         echo "log_changer:'".get_user_name($log['log_changer_id'])."',";
+                //         echo "log_time:'".$log['log_time']."',";
+                //         $log_detail = get_log_detail($log['log_id']);
+                //         foreach ($log_detail as $key) {
+                //             echo $key['log_field_name']." ".$key['log_field_old']." 改成 ".$key['log_field_new']." ";
+                //         }
+                //     echo "});";
+
+                //     echo $key['item_id']." ".get_user_name($key['log_changer_id'])." ".$key['log_time']." ";
+                //     $log_detail = get_log_detail($key['log_id']);
+                //     foreach ($log_detail as $key) {
+                //         echo $key['log_field_name']." ".$key['log_field_old']." 改成 ".$key['log_field_new']." ";
+                //     }
+                //     echo "<hr /><br />";
+                // }
             ?>
 
             var rows = $('#dg').datagrid('getRows').length;
@@ -321,17 +341,17 @@
             </table>   
         </div>
 
-<!--         <div>
+        <div>
             <table id="log" class="easyui-datagrid" title="事项日志" data-options="collapsible:true,rownumbers:true,nowrap:false">
                 <thead>
                     <tr>
-                        <th width="65%" data-options="field:'mark_content',editor:'textarea'">跟踪备注</th>
-                        <th width="8%" data-options="field:'mark_creator'">创建人</th>
-                        <th width="15%" data-options="field:'create_time'">创建时间</th>
+                        <th width="8%" data-options="field:'log_changer'">修改人</th>
+                        <th width="15%" data-options="field:'log_time'">修改时间</th>
+                        <th width="65%" data-options="field:'log_detail'">修改详情</th>
                     </tr>
                 </thead>
             </table>   
-        </div> -->
+        </div>
 
         <div style="padding-top:10px;text-align:center;height:40px">
                 <a href="javascript:void(0)" class="easyui-linkbutton" onclick="updateItem()" data-options="iconCls:'icon-edit'">修改事项</a>
