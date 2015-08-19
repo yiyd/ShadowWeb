@@ -49,37 +49,37 @@
         $change_field = array(
             array(
                 'name' => '事项名称',
-                'old_value' => 'null',
+                'old_value' => '空值',
                 'new_value' => $items['item_name']  
             ),
             array(
                 'name' => '事项创建人',
-                'old_value' => 'null',
+                'old_value' => '空值',
                 'new_value' =>  $_SESSION['current_user_id'] 
             ),
             array(
                 'name' => '事项跟踪人',
-                'old_value' => 'null',
+                'old_value' => '空值',
                 'new_value' => $items['item_follower_id']   
             ),
             array(
                 'name' => '创建时间',
-                'old_value' => 'null',
+                'old_value' => '空值',
                 'new_value' => $current_time   
             ),
             array(
                 'name' => '事项描述',
-                'old_value' => 'null',
+                'old_value' => '空值',
                 'new_value' => $items['item_description']   
             ),
             array(
                 'name' => '事项类型',
-                'old_value' => 'null',
+                'old_value' => '空值',
                 'new_value' => $items['item_type_id']    
             ),
             array(
                 'name' => '事项状态',
-                'old_value' => 'null',
+                'old_value' => '空值',
                 'new_value' => $items['item_state'] 
             )
         );
@@ -105,8 +105,8 @@
         $change_field = array();
         array_push($change_field, array(
             'name' => '删除事项',
-            'old_value' => 'item_id',
-            'new_value' => $_SESSION['current_item_id']
+            'old_value' => $_SESSION['current_item_id'],
+            'new_value' => '空值'
             )
         );
         // log the delete information 

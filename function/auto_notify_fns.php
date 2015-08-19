@@ -27,19 +27,19 @@
 				$change_field = array();			
 				array_push($change_field, array(
 					'name' => '提醒时间',
-					'old_value' => 'null',
+					'old_value' => '空值',
 					'new_value' => $auto['auto_date']
 					)
 				);
 				array_push($change_field, array(
 					'name' => '提醒类型',
-					'old_value' => 'null',
+					'old_value' => '空值',
 					'new_value' => $auto['auto_type']
 					)
 				);
 				array_push($change_field, array(
 					'name' => '提醒人',
-					'old_value' => 'null',
+					'old_value' => '空值',
 					'new_value' => $auto['user_id']
 					)
 				);
@@ -130,7 +130,7 @@
 						if ($key['user_id'] != $row['user_id']) {
 							array_push($change_field, array(
 								'name' => '提醒人',
-								'old_value' => 'null',
+								'old_value' => $row['user_id'],
 								'new_value' => $key['user_id']
 								)
 							);
@@ -161,8 +161,8 @@
 					$change_field = array();
 					array_push($change_field, array(
 						'name' => '删除提醒',
-						'old_value' => 'auto_id',
-						'new_value' => $old_id['auto_id']
+						'old_value' => $old_id['auto_id'],
+						'new_value' => '空值'
 						)
 					);
 					// log the NEW setting 
