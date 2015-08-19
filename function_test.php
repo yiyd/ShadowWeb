@@ -13,40 +13,40 @@
 	// print_r($result);
 
 
-	$_SESSION['current_item_id'] = '2';
+	$_SESSION['current_item_id'] = '4';
 	$_SESSION['current_user_id'] = '1';
-	$change_notify = array();
+	//$change_notify = array();
 
-	array_push($change_notify, array(
-		'auto_id' => '3',
-		'item_id' => '2',
-		'auto_date' => '2015-08-01 00:30:11',
-		'auto_type' => 'DAILY',
-		'user_id' => '1'
-		));
+	// array_push($change_notify, array(
+	// 	'auto_id' => '3',
+	// 	'item_id' => '2',
+	// 	'auto_date' => '2015-08-01 00:30:11',
+	// 	'auto_type' => 'DAILY',
+	// 	'user_id' => '1'
+	// 	));
 
-	array_push($change_notify, array(
-		'auto_id' => 'null',
-		'item_id' => '2',
-		'auto_date' => '2015-08-01 00:30:46',
-		'auto_type' => 'DAILY',
-		'user_id' => '1'
-		));
+	// array_push($change_notify, array(
+	// 	'auto_id' => 'null',
+	// 	'item_id' => '2',
+	// 	'auto_date' => '2015-08-01 00:30:46',
+	// 	'auto_type' => 'DAILY',
+	// 	'user_id' => '1'
+	// 	));
 
-	array_push($change_notify, array(
-		'auto_id' => '49',
-		'item_id' => '2',
-		'auto_date' => '2015-08-01 00:30:12',
-		'auto_type' => 'ONCE',
-		'user_id' => '2'
-		));
+	// array_push($change_notify, array(
+	// 	'auto_id' => '49',
+	// 	'item_id' => '2',
+	// 	'auto_date' => '2015-08-01 00:30:12',
+	// 	'auto_type' => 'ONCE',
+	// 	'user_id' => '2'
+	// 	));
 
-	update_notify ($change_notify);
+	// update_notify ($change_notify);
 
 
-/*
-	$condition = array();
-	$change_field = array();
+
+	// $condition = array();
+	//$change_field = array();
 
 	
 	// array_push($condition, array(
@@ -64,29 +64,31 @@
 	// 	'value' => '1'
 	// 	));
 
-	array_push($condition, array(
-		'name' => 'start_time',
-		'value' => '2015-07-30 10:44:59'
-		));
+	// array_push($condition, array(
+	// 	'name' => 'start_time',
+	// 	'value' => '2015-07-30 10:44:59'
+	// 	));
 
-	array_push($condition, array(
-		'name' => 'end_time',
-		'value' => '2015-07-30 11:09:28'
-		));
+	// array_push($condition, array(
+	// 	'name' => 'end_time',
+	// 	'value' => '2015-07-30 11:09:28'
+	// 	));
 
 
-	array_push($change_field, array(
-		'name' => 'item_state',
-		'new_value' => 'PROCESSING'
-		));
-	array_push($change_field, array(
-		'name' => 'item_description',
-		'new_value' => 'PROCESSINGfasdfasdfasdfasd'
-		));
+	// array_push($change_field, array(
+	// 	'name' => 'item_state',
+	// 	'old_value' => 'PROCESSING',
+	// 	'new_value' => 'FINISH'
+	// 	));
+	// array_push($change_field, array(
+	// 	'name' => 'item_description',
+	// 	'old_value' => 'sdkjfklasdfjkl',
+	// 	'new_value' => 'PROCESSINGfasdfasdfasdfasd'
+	// 	));
 
-	try {
-	update_item($change_field);
-*/
+	// try {
+	// 	log_item($change_field);
+
 	// $result = display_selected_item();
 	// foreach ($result as $key) {
 	// 	echo "item_id: ".$key['item_id']."<br />";
@@ -99,25 +101,25 @@
 	// 	echo "item_state: ".$key['item_state']."<br />";
 	// 	echo "<hr />";
 	// }
-/*
-	$result = get_items($condition);
 
-	foreach ($result as $key) {
-		echo "item_id: ".$key['item_id']."<br />";
-		echo "item_name: ".$key['item_name']."<br />";
-		echo "item_creator_id: ".$key['item_creator_id']."<br />";
-		echo "item_follower_id: ".$key['item_follower_id']."<br />";
-		echo "item_create_time: ".$key['item_create_time']."<br />";
-		echo "item_description: ".$key['item_description']."<br />";
-		echo "item_type_id: ".$key['item_type_id']."<br />";
-		echo "item_state: ".$key['item_state']."<br />";
-		echo "<hr />";
-	}
+	// $result = get_items($condition);
+
+	// foreach ($result as $key) {
+	// 	echo "item_id: ".$key['item_id']."<br />";
+	// 	echo "item_name: ".$key['item_name']."<br />";
+	// 	echo "item_creator_id: ".$key['item_creator_id']."<br />";
+	// 	echo "item_follower_id: ".$key['item_follower_id']."<br />";
+	// 	echo "item_create_time: ".$key['item_create_time']."<br />";
+	// 	echo "item_description: ".$key['item_description']."<br />";
+	// 	echo "item_type_id: ".$key['item_type_id']."<br />";
+	// 	echo "item_state: ".$key['item_state']."<br />";
+	// 	echo "<hr />";
+	// }
 	
-	} catch(Exception $e) {
-		echo $e->getMessage();
-	}
-*/
+	// } catch(Exception $e) {
+	// 	echo $e->getMessage();
+	// }
+
 	// if (unlink("..\\..\\..\\tmp\\sess_25236cgsikjl6epkujo4933727")) {
 	// 	echo "fjasdklfjaskldf";
 	// }
@@ -147,16 +149,16 @@
 	// 	echo "<hr /><br />";
 	// }
 
-	// // 日志记录展示方式
-	// $result = get_log();
-	// foreach ($result as $key) {
-	// 	echo $key['item_id']." ".get_user_name($key['log_changer_id'])." ".$key['log_time']." ";
-	// 	$log_detail = get_log_detail($key['log_id']);
-	// 	foreach ($log_detail as $key) {
-	// 		echo $key['log_field_name']." ".$key['log_field_old']." 改成 ".$key['log_field_new']." ";
-	// 	}
-	// 	echo "<hr /><br />";
-	// }
+	// 日志记录展示方式
+	$result = get_log();
+	foreach ($result as $key) {
+		echo $key['item_id']." ".get_user_name($key['log_changer_id'])." ".$key['log_time']." ";
+		$log_detail = get_log_detail($key['log_id']);
+		foreach ($log_detail as $key) {
+			echo $key['log_field_name']." ".$key['log_field_old']." 改成 ".$key['log_field_new']." ";
+		}
+		echo "<hr /><br />";
+	}
 	// echo "Function test! <br />";
 	// $row = get_item_types();
 	// foreach ($row as $key) {
