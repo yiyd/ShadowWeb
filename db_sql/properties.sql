@@ -11,4 +11,6 @@ INSERT INTO privileges values ('', '生产问题');
 INSERT INTO role_priv VALUES('', '1', '1');
 INSERT INTO role_priv VALUES('', '1', '1');
 INSERT INTO users VALUES('', 'yiyd', sha1('123456'), '1', 'yiyd@qq.com');
-INSERT INTO users VALUES('', 'yiyd1', sha1('123456'), '1', 'yiyd@qq.com');
+INSERT INTO users VALUES('', 'yiyd1', sha1('123456'), '1', 'yiyd1@qq.com');
+INSERT INTO users VALUES('', 'yiyd2', sha1('123456'), '1', 'yiyd2@qq.com');
+INSERT INTO users VALUES('', 'yiyd3', sha1('123456'), '1', 'yiyd3@qq.com');

@@ -69,7 +69,7 @@
             throw new Exception("Could not connect to DB.");
         }
         if ($result->num_rows == 0) {
-            throw new Exception("No such logs!");
+            //throw new Exception("No such logs!");
         }
         // anrange the data into an array
         $row = db_result_to_array($result);
@@ -87,7 +87,7 @@
             throw new Exception("Could not connect to DB.");
         }
         if ($result->num_rows == 0) {
-            throw new Exception("No log details!");
+           // throw new Exception("No log details!");
         }
         // anrange the data into an array
         $row = db_result_to_array($result);
@@ -108,7 +108,7 @@
             throw new Exception("Could not connect to DB.");
         }
         if ($result->num_rows == 0) {
-            throw new Exception("No such logs!");
+            //throw new Exception("No such logs!");
         }
         // anrange the data into an array
         $row = db_result_to_array($result);
@@ -126,7 +126,7 @@
             throw new Exception("Could not connect to DB.");
         }
         if ($result->num_rows == 0) {
-            throw new Exception("No log details!");
+            //throw new Exception("No log details!");
         }
         // anrange the data into an array
         $row = db_result_to_array($result);
