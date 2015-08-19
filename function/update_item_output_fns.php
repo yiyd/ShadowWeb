@@ -449,18 +449,7 @@
                         <td>
                             <div align="left" style="padding-left:2px;">
                                 <?php
-                                    switch ($row['item_state']) {
-                                        case 'PROCESSING':
-                                            echo "进行中";
-                                            break;
-                                        case 'FINISH':
-                                            echo "已完成";
-                                            break;
-                                        default:
-                                            
-                                            break;
-                                    }
-                                
+                                    echo item_state_translation($row['item_state']);
                                 ?>
                             </div>
                         </td>

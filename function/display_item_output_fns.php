@@ -5,6 +5,7 @@
  * Time: 16:12
  */
     require_once('item_fns.php');
+    require_once('translation_fns.php');
     function display_new_item($row, $auto_notify_result, $follow_mark_result){
 
 ?>  
@@ -126,28 +127,7 @@
                         $notify_row['user_name'] = get_user_name($notify_row['user_id']);
                         echo "$('#an').datagrid('appendRow',{";
                             echo "notify_type:'";
-                            switch ($notify_row['auto_type']) {
-                                    case 'ONCE':
-                                        echo '单次提醒';
-                                        break;
-                                    case 'DAILY':
-                                        echo '每日提醒';
-                                        break;
-                                    case 'WEEKLY':
-                                        echo '每周提醒';
-                                        break;
-                                    case 'MONTHLY':
-                                        echo '每月提醒';
-                                        break;
-                                    case 'QUARTERLY':
-                                        echo '每季度提醒';
-                                        break;
-                                    case 'YEARLY':
-                                        echo '每年提醒';
-                                        break;
-                                    default:
-                                        break;
-                            }
+                            echo notify_type_translation($notify_row['auto_type']);
                             echo "',";
                             echo "notify_user:'".$notify_row['user_name']."',";
                             echo "notify_date:'".$notify_row['auto_date']."'";
@@ -297,18 +277,8 @@
                     <td>
                         <div align="left" style="padding-left:2px;">
                             <?php
-                                switch ($row['item_state']) {
-                                    case 'PROCESSING':
-                                        echo "进行中";
-                                        break;
-                                    case 'FINISH':
-                                        echo "已完成";
-                                        break;
-                                    default:
-                                        
-                                        break;
-                                }
                                 
+                                echo item_state_translation($row['item_state']);
                             ?>
                         </div>
                     </td>
@@ -350,6 +320,18 @@
                 </thead>
             </table>   
         </div>
+
+<!--         <div>
+            <table id="log" class="easyui-datagrid" title="事项日志" data-options="collapsible:true,rownumbers:true,nowrap:false">
+                <thead>
+                    <tr>
+                        <th width="65%" data-options="field:'mark_content',editor:'textarea'">跟踪备注</th>
+                        <th width="8%" data-options="field:'mark_creator'">创建人</th>
+                        <th width="15%" data-options="field:'create_time'">创建时间</th>
+                    </tr>
+                </thead>
+            </table>   
+        </div> -->
 
         <div style="padding-top:10px;text-align:center;height:40px">
                 <a href="javascript:void(0)" class="easyui-linkbutton" onclick="updateItem()" data-options="iconCls:'icon-edit'">修改事项</a>
@@ -403,28 +385,7 @@
                         $notify_row['user_name'] = get_user_name($notify_row['user_id']);
                         echo "$('#an').datagrid('appendRow',{";
                             echo "notify_type:'";
-                            switch ($notify_row['auto_type']) {
-                                    case 'ONCE':
-                                        echo '单次提醒';
-                                        break;
-                                    case 'DAILY':
-                                        echo '每日提醒';
-                                        break;
-                                    case 'WEEKLY':
-                                        echo '每周提醒';
-                                        break;
-                                    case 'MONTHLY':
-                                        echo '每月提醒';
-                                        break;
-                                    case 'QUARTERLY':
-                                        echo '每季度提醒';
-                                        break;
-                                    case 'YEARLY':
-                                        echo '每年提醒';
-                                        break;
-                                    default:
-                                        break;
-                            }
+                            echo notify_type_translation($notify_row['auto_type']);
                             echo "',";
                             echo "notify_user:'".$notify_row['user_name']."',";
                             echo "notify_date:'".$notify_row['auto_date']."'";
@@ -526,18 +487,8 @@
                     <td>
                         <div align="left" style="padding-left:2px;">
                             <?php
-                                switch ($row['item_state']) {
-                                    case 'PROCESSING':
-                                        echo "进行中";
-                                        break;
-                                    case 'FINISH':
-                                        echo "已完成";
-                                        break;
-                                    default:
-                                        
-                                        break;
-                                }
                                 
+                                echo item_state_translation($row['item_state']);
                             ?>
                         </div>
                     </td>
