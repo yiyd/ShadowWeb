@@ -143,12 +143,12 @@
             reset($change_field);
 
             // change the log information into chinese
-            foreach ($change_field as $key) {
-                if ($change_field['name'] == 'item_name') $change_field['name'] = '事项名称';
-                if ($change_field['name'] == 'item_follower_id') $change_field['name'] = '事项跟踪人';
-                if ($change_field['name'] == 'item_description') $change_field['name'] = '事项描述';
-                if ($change_field['name'] == 'item_type_id') $change_field['name'] = '事项类型';
-                if ($change_field['name'] == 'item_state') $change_field['name'] = '事项状态';
+            foreach ($change_field as &$key) {
+                if ($key['name'] == 'item_name') $key['name'] = '事项名称';
+                if ($key['name'] == 'item_follower_id') $key['name'] = '事项跟踪人';
+                if ($key['name'] == 'item_description') $key['name'] = '事项描述';
+                if ($key['name'] == 'item_type_id') $key['name'] = '事项类型';
+                if ($key['name'] == 'item_state') $key['name'] = '事项状态';
             }
             // log the update information
             log_item($change_field);

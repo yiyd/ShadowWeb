@@ -13,8 +13,8 @@
 	// print_r($result);
 
 
-	$_SESSION['current_item_id'] = '4';
-	$_SESSION['current_user_id'] = '1';
+	$_SESSION['current_item_id'] = '1';
+	$_SESSION['current_user_id'] = '4';
 	//$change_notify = array();
 
 	// array_push($change_notify, array(
