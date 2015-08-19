@@ -35,8 +35,8 @@
 								<li data-options="id:3">
 									<span>事项操作</span>
 									<ul>
-										<li data-options="id:-1,iconCls:'icon-add',text:'新建事项',attributes:{url:'new_item_form.php'}">新建事项</li>
-										<li data-options="id:-2,iconCls:'icon-search',text:'查询事项',attributes:{url:'search_item_form.php'}">查询事项</li>
+										<li data-options="id:31,iconCls:'icon-add',text:'新建事项',attributes:{url:'new_item_form.php'}">新建事项</li>
+										<li data-options="id:32,iconCls:'icon-search',text:'查询事项',attributes:{url:'search_item_form.php'}">查询事项</li>
 									</ul>
 								</li>
 								<li data-options="id:4">
@@ -96,7 +96,7 @@
 						});
 
 					}else {
-						id = -3;
+						id = 5;
 					}
 					if (node.attributes) {
 						addTab(id,node.attributes.url, node.text);
@@ -156,6 +156,8 @@
 	            		// alert(data);
 
 	            		if (item.item_state == 'PROCESSING') {
+	            			
+	            			alert(item.item_type_id);
 							var manageNode = $('#tt').tree('find', item.item_type_id);	   
 							$('#tt').tree('append',{
 								parent:manageNode.target,
