@@ -50,9 +50,6 @@
 						</li>
 					</ul>
 				</div>
-
-			</div>
-			<div class="easyui-accordion" data-options="fit:true,border:false">
 				<div title="系统管理" style="padding:10px">
 					<ul id="manage" class="easyui-tree">
 						<li>
@@ -67,8 +64,11 @@
 						</li>
 					</ul>
 				</div>
+				</div>
+			
+				
 
-			</div>
+			
 
 		</div>
 		<div data-options="region:'south',border:false" style="height:30px;padding:10px;">待完善</div>

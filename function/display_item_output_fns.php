@@ -136,24 +136,40 @@
                     }
                 }
 
-                // $log_result = get_log();
-                // foreach ($result as $log) {
-                //     echo "$('#log').datagrid('appendRow',{";
-                //         echo "log_changer:'".get_user_name($log['log_changer_id'])."',";
-                //         echo "log_time:'".$log['log_time']."',";
-                //         $log_detail = get_log_detail($log['log_id']);
-                //         foreach ($log_detail as $key) {
-                //             echo $key['log_field_name']." ".$key['log_field_old']." 改成 ".$key['log_field_new']." ";
-                //         }
-                //     echo "});";
+                $log_result = get_log();
+                foreach ($log_result as $log) {
+                    echo "$('#log').datagrid('appendRow',{";
+                        echo "log_changer:'".get_user_name($log['log_changer_id'])."',";
+                        echo "log_time:'".$log['log_time']."',";
+                        echo "log_detail:'";
+                        $log_detail = get_log_detail($log['log_id']);
+                        foreach ($log_detail as $key) {
+                            switch ($key['log_field_name']) {
+                                case '事项创建人':
+                                    # code...
+                                    break;
+                                case '事项跟踪人':
+                                    # code...
+                                    break;
+                                case '事项类型':
+                                    # code...
+                                    break;
+                                case '事项状态':
+                                    # code...
+                                    break;
+                                default:
+                                    # code...
+                                    break;
+                            }
+                            
+                            echo $key['log_field_name']." ".$key['log_field_old']." 改成 ".$key['log_field_new']." ";
+                            echo "<br />";
+                        }
+                        echo "',";
+                    echo "});";
 
-                //     echo $key['item_id']." ".get_user_name($key['log_changer_id'])." ".$key['log_time']." ";
-                //     $log_detail = get_log_detail($key['log_id']);
-                //     foreach ($log_detail as $key) {
-                //         echo $key['log_field_name']." ".$key['log_field_old']." 改成 ".$key['log_field_new']." ";
-                //     }
-                //     echo "<hr /><br />";
-                // }
+                    
+                }
             ?>
 
             var rows = $('#dg').datagrid('getRows').length;
