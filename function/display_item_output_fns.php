@@ -23,10 +23,77 @@
     <script type="text/javascript" src="resources/common/js/public.js"></script>
     <script type="text/javascript" src="resources/common/js/datagrid.js"></script>
     <script type="text/javascript" src="resources/jquery-easyui/jquery.min.js"></script>
-    <script type="text/javascript" src="resources/jquery-easyui/jquery.easyui.min.js"></script>   
+    <script type="text/javascript" src="resources/jquery-easyui/jquery.easyui.min.js"></script>
+    <script type="text/javascript" src="resources/jquery-easyui/locale/easyui-lang-zh_CN.js"></script>   
     <script>
+        (function($){
+            function pagerFilter(data){
+                if ($.isArray(data)){   // is array
+                    data = {
+                        total: data.length,
+                        rows: data
+                    }
+                }
+                var dg = $(this);
+                var state = dg.data('datagrid');
+                var opts = dg.datagrid('options');
+                if (!state.allRows){
+                    state.allRows = (data.rows);
+                }
+                var start = (opts.pageNumber-1)*parseInt(opts.pageSize);
+                var end = start + parseInt(opts.pageSize);
+                data.rows = $.extend(true,[],state.allRows.slice(start, end));
+                return data;
+            }
+
+            var loadDataMethod = $.fn.datagrid.methods.loadData;
+            $.extend($.fn.datagrid.methods, {
+                clientPaging: function(jq){
+                    return jq.each(function(){
+                        var dg = $(this);
+                        var state = dg.data('datagrid');
+                        var opts = state.options;
+                        opts.loadFilter = pagerFilter;
+                        var onBeforeLoad = opts.onBeforeLoad;
+                        opts.onBeforeLoad = function(param){
+                            state.allRows = null;
+                            return onBeforeLoad.call(this, param);
+                        }
+                        dg.datagrid('getPager').pagination({
+                            onSelectPage:function(pageNum, pageSize){
+                                opts.pageNumber = pageNum;
+                                opts.pageSize = pageSize;
+                                $(this).pagination('refresh',{
+                                    pageNumber:pageNum,
+                                    pageSize:pageSize
+                                });
+                                dg.datagrid('loadData',state.allRows);
+                            }
+                        });
+                        $(this).datagrid('loadData', state.data);
+                        if (opts.url){
+                            $(this).datagrid('reload');
+                        }
+                    });
+                },
+                loadData: function(jq, data){
+                    jq.each(function(){
+                        $(this).data('datagrid').allRows = null;
+                    });
+                    return loadDataMethod.call($.fn.datagrid.methods, jq, data);
+                },
+                getAllRows: function(jq){
+                    return jq.data('datagrid').allRows;
+                }
+            })
+        })(jQuery);
+
         $(function(){
-            
+            $('#log').datagrid({
+                onSelect:function(rowIndex, rowData){
+                    $('#log').datagrid('unselectRow', rowIndex);
+                }
+            });
             
             $('#dg').datagrid({
                 toolbar:[
@@ -145,20 +212,39 @@
                         $log_detail = get_log_detail($log['log_id']);
                         foreach ($log_detail as $key) {
                             switch ($key['log_field_name']) {
+                                case '提醒人':
                                 case '事项创建人':
-                                    # code...
-                                    break;
                                 case '事项跟踪人':
-                                    # code...
+                                    if ($key['log_field_old'] != '空值') {
+                                        $key['log_field_old'] = get_user_name($key['log_field_old']);
+                                    }
+                                    $key['log_field_new'] = get_user_name($key['log_field_new']);
+                                    
                                     break;
                                 case '事项类型':
-                                    # code...
+                                    if ($key['log_field_old'] != '空值') {
+                                        $key['log_field_old'] = get_item_type($key['log_field_old']);
+                                    }
+                                    $key['log_field_new'] = get_item_type($key['log_field_new']);
+                                    
                                     break;
                                 case '事项状态':
-                                    # code...
+                                    if ($key['log_field_old'] != '空值') {
+                                        $key['log_field_old'] = item_state_translation($key['log_field_old']);
+                                    }
+                                    $key['log_field_new'] = item_state_translation($key['log_field_new']);
+                                    
                                     break;
+                                case '提醒类型':
+                                    if ($key['log_field_old'] != '空值') {
+                                        $key['log_field_old'] = notify_type_translation($key['log_field_old']);
+                                    }
+                                    $key['log_field_new'] = notify_type_translation($key['log_field_new']);
+                                    
+                                    
+                                    break;    
                                 default:
-                                    # code...
+                                    
                                     break;
                             }
                             
@@ -175,9 +261,12 @@
             var rows = $('#dg').datagrid('getRows').length;
             var isSave = false;
 
+            $('#log').datagrid('clientPaging');
+
+            
         })
 
-        
+       
 
         function updateItem(){ 
             window.parent.updateTab('update_item.php', '<?php echo $row['item_name'] ?>', '<?php echo $_SESSION['current_item_id'] ?>');
@@ -358,7 +447,7 @@
         </div>
 
         <div>
-            <table id="log" class="easyui-datagrid" title="事项日志" data-options="collapsible:true,rownumbers:true,nowrap:false">
+            <table id="log" class="easyui-datagrid" title="事项日志" data-options="collapsible:true,rownumbers:true,nowrap:false,pagination:true,pageSize:5,pageList:[5,10,15,20]">
                 <thead>
                     <tr>
                         <th width="8%" data-options="field:'log_changer'">修改人</th>
