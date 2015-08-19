@@ -337,6 +337,7 @@
         $query = "insert into item_follow_marks VALUES 
                 ('', '".$_SESSION['current_item_id']."', '".$follow_mark."', 
                      '".$_SESSION['current_user_id']."', '".$current_time."')";
+        $result = $conn->query("set names utf8");
         $result = $conn->query($query);
         if (!$result) {
             throw new Exception("Could not insert the mark into the DB.");
@@ -350,7 +351,7 @@
         $conn = db_connect();
         $query = "select * from item_follow_marks where item_id = '".$_SESSION['current_item_id']."'
                     order by item_follow_mark_id";
-        //$result = $conn->query("set names gbk");
+        $result = $conn->query("set names utf8");
         $result = $conn->query($query);
         if (!$result) {
             throw new Exception("Could not connect to DB.");

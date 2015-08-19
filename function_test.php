@@ -1,6 +1,33 @@
 <?php
 	include('function\shadow_fns.php');
-	session_start();
+	//session_start();
+
+	// import users 
+	$conn = db_connect();
+	$data = new Spreadsheet_Excel_Reader();
+	$data->setOutputEncoding("utf-8");
+	$data->read('user.xls');
+	error_reporting(E_ALL ^ E_NOTICE);
+
+	for ($i=2; $i <= $data->sheets[0]['numRows']; $i++) { 
+		// import the setting to the users
+		$query = "insert into users values ('', '".
+			$data->sheets[0]['cells'][$i][1]."', sha1('".
+			$data->sheets[0]['cells'][$i][2]."'), '".
+			$data->sheets[0]['cells'][$i][3]."', '".
+			$data->sheets[0]['cells'][$i][4]."')";
+		
+		$result = $conn->query("set names utf8");
+		echo $query."<br /><hr /><br />";
+		@$result = $conn->query($query);
+		if (!$result) {
+			throw new Exception("Error Processing Request");
+		}
+	}
+
+	echo "import sucess";
+
+
 
 	// $conn = db_connect();
 	// $query = "select auto_id from auto_notify where item_id = '3' ";
@@ -13,8 +40,8 @@
 	// print_r($result);
 
 
-	$_SESSION['current_item_id'] = '1';
-	$_SESSION['current_user_id'] = '4';
+	// $_SESSION['current_item_id'] = '1';
+	// $_SESSION['current_user_id'] = '4';
 	//$change_notify = array();
 
 	// array_push($change_notify, array(
@@ -150,21 +177,22 @@
 	// }
 
 	// 日志记录展示方式
-	$result = get_log();
-	foreach ($result as $key) {
-		echo $key['item_id']." ".get_user_name($key['log_changer_id'])." ".$key['log_time']." ";
-		$log_detail = get_log_detail($key['log_id']);
-		foreach ($log_detail as $key) {
-			echo $key['log_field_name']." ".$key['log_field_old']." 改成 ".$key['log_field_new']." ";
-		}
-		echo "<hr /><br />";
-	}
+	// $result = get_log();
+	// foreach ($result as $key) {
+	// 	echo $key['item_id']." ".get_user_name($key['log_changer_id'])." ".$key['log_time']." ";
+	// 	$log_detail = get_log_detail($key['log_id']);
+	// 	foreach ($log_detail as $key) {
+	// 		echo $key['log_field_name']." ".$key['log_field_old']." 改成 ".$key['log_field_new']." ";
+	// 	}
+	// 	echo "<hr /><br />";
+	// }
 	// echo "Function test! <br />";
 	// $row = get_item_types();
 	// foreach ($row as $key) {
 	// 	echo $key['para_value_id']." ".$key['para_value_name']."<br />";
 	// }
 
-	session_destroy();
-	echo session_id();
+// 	session_destroy();
+// 	echo session_id();
+// 
 ?>

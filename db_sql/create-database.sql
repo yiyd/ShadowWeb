@@ -27,7 +27,7 @@ create table items
   item_description varchar(255),
   item_type_id int unsigned not null REFERENCES para_values(para_value_id),
   item_state enum('PROCESSING', 'FINISH') not null DEFAULT 'PROCESSING'
-) ENGINE = InnoDB CHARACTER SET utf8;
+) ENGINE = InnoDB CHARACTER SET utf8 auto_increment = 100;
 
 CREATE TABLE item_follow_marks
 ( 
