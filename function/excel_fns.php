@@ -48,6 +48,7 @@
 		        	$mark_content = explode("|", $key);
 		        	$query = "insert into item_follow_marks values ('', '".$_SESSION['current_item_id']."', 
 		        		'".$mark_content[0]."', '".$mark_content[1]."', '".$mark_content[2]."')";
+					$result = $conn->query("set names utf8");
 					$result = $conn->query($query);
 					if (!$result) {
 						throw new Exception("Insert follow_mark Error!");
