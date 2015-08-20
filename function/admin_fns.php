@@ -137,7 +137,7 @@
     function get_users () {        
         $conn = db_connect();
         $result = $conn->query("set names utf8");
-        $result = $conn->query("select user_id, user_name from users");
+        $result = $conn->query("select user_id, user_name, role_id, user_mail from users");
         if (!$result) {
              throw new Exception("Could not connect to the db!");
         }
@@ -200,15 +200,15 @@
     // $new_user is an 2-D array including:
     // $new_user['user_name'], $new_user['user_passwd'], $new_user['role_id'], $new_user['user_mail']
     function new_user ($new_user) {
-        if (!check_admin()) return false;
+        // if (!check_admin()) return false;
         if (!is_array($new_user)) {
             throw new Exception("input is not an array!");
         }
 
         $conn = db_connect();
-        $conn->autocommit(flase);
+        $conn->autocommit(false);
 
-        $query = "insert into roles values ('', '".$new_user['user_name']."', '".$new_user['user_passwd']."', 
+        $query = "insert into users values ('', '".$new_user['user_name']."', '".$new_user['user_passwd']."', 
                 '".$new_user['role_id']."', '".$new_user['user_mail']."')";
         $result = $conn->query("set names utf8");
         $result = $conn->query($query);

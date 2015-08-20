@@ -17,15 +17,15 @@
         <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge"> -->
         <?php
             if($css_file_name) {
-                echo "<link rel=\"stylesheet\" type=\"type/css\" href=\"css/".$css_file_name."\" >\n";
+                echo "<link rel=\"stylesheet\" type=\"type/css\" href=\"css/".$css_file_name."\" >";
             }
         ?>
         <title>中银开放平台-事项跟踪工具</title>
         <link rel="stylesheet" type="type/css" href="resources/jquery-easyui/themes/default/easyui.css">
         <link rel="stylesheet" type="type/css" href="resources/jquery-easyui/themes/icon.css">
-
         <script type="text/javascript" src="resources/jquery-easyui/jquery.min.js"></script>
         <script type="text/javascript" src="resources/jquery-easyui/jquery.easyui.min.js"></script>
+        <script type="text/javascript" src="resources/jquery-easyui/locale/easyui-lang-zh_CN.js"></script>    
     </head>
     <body>
 

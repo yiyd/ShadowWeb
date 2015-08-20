@@ -14,7 +14,7 @@ $.extend($.fn.dategrid.defaults.editors, {
 		},
 		setValue: function(target, value) {
 			$(target).datetimebox("setValue",value);
-		}
+		},
 		resize: function(target, width) {
 			var input = $(target);
 			if ($.boxModel == true) {
@@ -25,3 +25,6 @@ $.extend($.fn.dategrid.defaults.editors, {
 		}
 	}
 });
+
+ 
+

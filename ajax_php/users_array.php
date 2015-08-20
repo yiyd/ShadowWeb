@@ -10,6 +10,9 @@
 	try {
 		
 		$users_array = get_users();
+		foreach ($users_array as &$user ) {
+			$user['role_name'] = get_role_name($user['role_id']);
+		}
 		
 	}
 	catch(Exception $e) {
