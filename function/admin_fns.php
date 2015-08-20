@@ -208,7 +208,7 @@
         $conn = db_connect();
         $conn->autocommit(flase);
 
-        $query = "insert into roles values ('', '".$new_user['user_name']."', '".$new_user['user_passwd']."', 
+        $query = "insert into users values ('', '".$new_user['user_name']."', '".$new_user['user_passwd']."', 
                 '".$new_user['role_id']."', '".$new_user['user_mail']."')";
         $result = $conn->query("set names utf8");
         $result = $conn->query($query);

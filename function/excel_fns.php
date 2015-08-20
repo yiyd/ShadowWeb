@@ -1,6 +1,6 @@
 <?php
 	require_once('shadow_fns.php');
-	session_start();
+	//session_start();
 
 	// upload the file from front-end 
 	function upload_excel_file () {
