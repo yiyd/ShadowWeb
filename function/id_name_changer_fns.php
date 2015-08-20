@@ -33,6 +33,24 @@
         }
     }
 
+    // get user_id 
+    function get_user_id ($user_name) {
+        $conn = db_connect();
+        $query = "select user_id from users where user_name = '".$user_name."'";
+        $result = $conn->query("set names utf8");
+        $result = $conn->query($query);
+        if (!$result) {
+            throw new Exception("Could not connect to the db!");
+        }
+        if ($result->num_rows == 0) {
+            throw new Exception("No such user!");
+        }
+        else {
+            $row = $result->fetch_row();
+            return $row[0];
+        }
+    }
+
     // get item_name
     function get_item_name($item_id) {
     	$conn = db_connect();
@@ -76,6 +94,23 @@
         $result = $conn->query("set names utf8");
     	$result = $conn->query($query);
     	if (!$result) {
+            throw new Exception("Could not connect to the db!");
+        }
+        if ($result->num_rows == 0) {
+            throw new Exception("No such para!");
+        }
+        else {
+            $row = $result->fetch_row();
+            return $row[0];
+        }
+    }
+
+    function get_para_id ($para_name) {
+        $conn = db_connect();
+        $query = "select para_id from parameters where para_name = '".$para_name."'";
+        $result = $conn->query("set names utf8");
+        $result = $conn->query($query);
+        if (!$result) {
             throw new Exception("Could not connect to the db!");
         }
         if ($result->num_rows == 0) {
