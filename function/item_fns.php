@@ -20,10 +20,16 @@
         $current_time = date("Y-m-d H:i:s");
 
         // insert the new item into the DB
-        $query = "insert into items VALUES ('', '".$items['item_name']."', '".$_SESSION['current_user_id']."',
+        if (isset($items['item_creator_id'])) {
+            $query = "insert into items VALUES ('', '".$items['item_name']."', '".$items['item_creator_id']."',
                 '".$items['item_follower_id']."','".$current_time."', '".$items['item_description']."', 
                 '".$items['item_type_id']."', '".$items['item_state']."')";
-
+        } else {
+            $query = "insert into items VALUES ('', '".$items['item_name']."', '".$_SESSION['current_user_id']."',
+                '".$items['item_follower_id']."','".$current_time."', '".$items['item_description']."', 
+                '".$items['item_type_id']."', '".$items['item_state']."')";
+        }
+        
         $result = $conn->query("set names utf8");
         $result = $conn->query($query);
         if (!$result) {
