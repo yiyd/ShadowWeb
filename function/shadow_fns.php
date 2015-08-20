@@ -19,6 +19,8 @@
     require_once('display_item_output_fns.php');
     require_once('id_name_changer_fns.php');
     require_once('search_item_output_fns.php');
+    require_once('manage_output_fns.php');
     require_once('excel_fns.php');
     require_once('excel_reader2.php')
+
 ?>
