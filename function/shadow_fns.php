@@ -19,4 +19,5 @@
     require_once('display_item_output_fns.php');
     require_once('id_to_name_fns.php');
     require_once('search_item_output_fns.php');
+    require_once('manage_output_fns.php');
 ?>

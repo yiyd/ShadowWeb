@@ -314,6 +314,7 @@
             });
         }
     </script>
+    </head>
     <body>
         <div class="easyui-panel" style="height:auto;" data-options="title:'事项基本信息',collapsible:true">
             <table class="table_list" width="100%" border="0" align="center" cellpadding="0" cellspacing="1" >
@@ -447,7 +448,7 @@
         </div>
 
         <div>
-            <table id="log" class="easyui-datagrid" title="事项日志" data-options="collapsible:true,rownumbers:true,nowrap:false,pagination:true,pageSize:5,pageList:[5,10,15,20]">
+            <table id="log" class="easyui-datagrid" title="事项日志" data-options="collapsed:true,collapsible:true,rownumbers:true,nowrap:false,pagination:true,pageSize:5,pageList:[5,10,15,20]">
                 <thead>
                     <tr>
                         <th width="8%" data-options="field:'log_changer'">修改人</th>
@@ -524,6 +525,7 @@
 
 
     </script>
+    </head>
     <body>
         <div class="easyui-panel" style="height:auto;" data-options="title:'事项基本信息',collapsible:true">
             <table class="table_list" width="100%" border="0" align="center" cellpadding="0" cellspacing="1" >

@@ -55,10 +55,10 @@
 						<li>
 							<span>系统管理</span>
 							<ul>
-								<li>角色管理</li>
-								<li>权限管理</li>
-								<li>用户管理</li>
-								<li>参数管理</li>
+								<li data-options="id:6,text:'角色管理',attributes:{url:'role_manage.php'}">角色管理</li>
+								<li data-options="id:7,text:'权限管理',attributes:{url:'privileges_manage.php'}">权限管理</li>
+								<li data-options="id:8,text:'用户管理',attributes:{url:'user_manage.php'}">用户管理</li>
+								<li data-options="id:9,text:'参数管理',attributes:{url:'parameters_manage.php'}">参数管理</li>
 								
 							</ul>
 						</li>
@@ -104,6 +104,15 @@
 				}
 			});
 
+			$('#manage').tree({
+				
+				onClick:function(node){
+					
+					if (node.attributes) {
+						addTab(node.id,node.attributes.url, node.text);
+					}
+				}
+			});
 			addListener();
 			reloadItems();
 		})
@@ -157,7 +166,6 @@
 
 	            		if (item.item_state == 'PROCESSING') {
 	            			
-	            			alert(item.item_type_id);
 							var manageNode = $('#tt').tree('find', item.item_type_id);	   
 							$('#tt').tree('append',{
 								parent:manageNode.target,
