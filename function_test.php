@@ -4,6 +4,15 @@
 	require_once('function/shadow_fns.php');
 	
 	echo $_SERVER['DOCUMENT_ROOT'];
+
+	$change_field = array();
+	array_push($change_field, array(
+		'name' => 'role_id',
+		'new_value' => '2'
+		));
+
+	update_user ('4', $change_field);
+	echo "sucess";
 	// import users 
 	// $conn = db_connect();
 	// $data = new Spreadsheet_Excel_Reader();
