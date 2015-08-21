@@ -43,7 +43,8 @@
             throw new Exception("Could not connect to the db!");
         }
         if ($result->num_rows == 0) {
-            throw new Exception("No such user!");
+            //throw new Exception("No such user!");
+            return false;
         }
         else {
             $row = $result->fetch_row();
