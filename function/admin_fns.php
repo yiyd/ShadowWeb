@@ -38,7 +38,7 @@
         $query = "select * from roles where ";
 
         foreach ($condition as $row) {
-            $query .= $row['name']." like ".$row['value'];
+            $query .= $row['name']." like '".$row['value']."'";
         }
 
         $result = $conn->query($query);
@@ -100,7 +100,7 @@
             if ($flag) {
                 $query .= ", ";
             }
-            $temp = $row['name']." = ".$row['new_value'];
+            $temp = $row['name']." = '".$row['new_value']."'";
             $query .= $temp;
             $flag = true;
         }
@@ -237,12 +237,12 @@
                 $query .= ", ";
             }
 
-            $temp = $row['name']." = ".$row['new_value'];
+            $temp = $row['name']." = '".$row['new_value']."'";
             $query .= $temp;
             $flag = true;
         }
         $query .= " where user_id = '".$user_id."'";    
-
+        echo $query;
         $result = $conn->query("set names utf8");
         $result = $conn->query($query);
         if (!$result) {
