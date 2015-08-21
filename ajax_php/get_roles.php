@@ -2,14 +2,15 @@
 /**
  * User: ZX
  * Date: 2015/8/21
- * Time: 14:28
+ * Time: 15:20
  */	
  	require_once('../function/shadow_fns.php');	
 	session_start();
-
-	try{
-		$user_id = $_POST['user_id'];
-		reset_user_passwd($user_id);
+	
+	try {
+		
+		$roles_array = get_roles();
+		
 	}
 	catch(Exception $e) {
 		do_html_header('');
@@ -17,4 +18,5 @@
 		do_html_footer();
 		exit;
 	}
+	echo json_encode($roles_array);
 ?>

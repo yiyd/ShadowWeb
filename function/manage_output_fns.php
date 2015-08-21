@@ -24,11 +24,11 @@
 	</head>
 	<body>
 		<div>
-            <table id="dg" class="easyui-datagrid" width="100%" data-options="rownumbers:true,nowrap:false,pagination:true,pageSize:50,pageList:[30,50,80,100],toolbar:toolbar">
+            <table id="dg" class="easyui-datagrid" width="100%" data-options="singleSelect:true, rownumbers:true,nowrap:false,pagination:true,pageSize:50,pageList:[30,50,80,100],toolbar:'#tb'">
                 <thead>
                     <tr>
                         <th data-options="field:'id', hidden:true"></th>
-                        <th data-options="field:'check',checkbox:'true'">是否选择</th>
+                    	<th data-options="field:'check', checkbox:true"></th>
                         <th width="8%" data-options="field:'user_name'">用户名</th>
                         <th width="15%" data-options="field:'role'">角色</th>
                         <th data-options="field:'role_id', hidden:true"></th>
@@ -37,6 +37,22 @@
                 </thead>
             </table>   
         </div>
+        <div id="tb" style="padding:2px 5px;">
+        	<div>
+                <a href="javascript:void(0)" class="easyui-linkbutton" onclick="handlerAdd()" data-options="iconCls:'icon-add'">新建</a>
+				<a href="javascript:void(0)" class="easyui-linkbutton" onclick="handlerEdit()" data-options="iconCls:'icon-edit'">编辑</a>
+				<a href="javascript:void(0)" class="easyui-linkbutton" onclick="handlerDelete()" data-options="iconCls:'icon-remove'">删除</a>
+				<a href="javascript:void(0)" class="easyui-linkbutton" onclick="handlerResetPassword()" data-options="iconCls:'icon-reload'">重置密码</a>
+			</div>
+			<div>
+				用户名：<input id="search_user_name" style="width:110px">
+				角色：<input id="search_role" class="easyui-combobox" name="search_role" data-options="valueField:'role_id',textField:'role_name',url:'ajax_php/get_roles.php',editable:false, panelHeight:'auto'" />   
+				邮箱：<input id="search_email" style="width:110px">
+				<a href="javascript:void(0)" class="easyui-linkbutton" onclick="handlerSearch()" data-options="iconCls:'icon-search'">查询</a>
+				
+			</div>
+		</div>
+
     	<div id="dlg" class="easyui-dialog" title="新增用户" style="width:auto;height:auto;" data-options="iconCls: 'icon-add',closed:true,modal:true,buttons: '#dlg-buttons'">
     		<table class="table_list" width="100%" border="0" align="center" cellpadding="0" cellspacing="1">
 				
@@ -179,10 +195,15 @@
                     success:function(json){
                         // alert(json);      
                         $('#dg').datagrid('loadData', getData(json)).datagrid('clientPaging');
-                                $('#dg').datagrid('beginEdit', 0);
+                        var rows = $('#dg').datagrid('getRows');
+                        for (var i = 0; i < rows.length; i++) {
+                        	$('#dg').datagrid('beginEdit',i);
+                        };
+                                
                     }
                 });
 
+        		
         	});
 
         	function getData(json){
@@ -202,87 +223,139 @@
 	            return rows;
 	        }
 	        
-        	var toolbar = [{
-	        		text:'新增',
-	        		iconCls:'icon-add',
-	        		handler:function(){
-	        			$('#dlg').dialog('open');
-	        			
-	        			$('#user_name').val('');
-	        			$('#password_block').show();
-	        			$('#password').val('');
-	        			$('#role').val('1');
-	        			$('#email').val('');
-	        			isNew = true;
-	        		}
+			function handlerSearch(){
+	        	
+	            var condition_array = [];
+	            
+	            var search_user_name = $('#search_user_name').val();
+	            if ('' != search_user_name) {
+	                var condition_row = [];
+	                condition_row[0] = 'user_name';
+	                condition_row[1] = search_user_name;
+	                var length = condition_array.length;
+	                condition_array[length] = condition_row;   
+	            }
 
-        		},'-',{
-        			text:'编辑',
-        			iconCls:'icon-edit',
-	        		handler:function(){
-	        			var row = $('#dg').datagrid('getSelected');
-	        			if (row != null)
-	        			{
-	        				$('#dlg').dialog('open');
+	            var search_role = $('#search_role').val();
+	            if ('' != search_role) {
+	                var condition_row = [];
+	                condition_row[0] = 'role_id';
+	                condition_row[1] = search_role;
+	                var length = condition_array.length;
+	                condition_array[length] = condition_row;  
 
-		        			$('#user_name').val(row.user_name);
-		        			$('#password_block').hide();
-		        			$('#role').val(row.role_id);
-		        			$('#email').val(row.email);
-		        			isNew = false;
-	        			} 
+	            }
+
+	            var search_email = $('#search_email').val();
+	            if ('' != search_email) {
+	                var condition_row = [];
+	                condition_row[0] = 'user_mail';
+	                condition_row[1] = search_email;
+	                var length = condition_array.length;
+	                condition_array[length] = condition_row;  
+
+	            }
+
+
+	            if (condition_array.length > 0) {
+	                // alert(condition_array.length);
+	                $.ajax({
+	                    url:"ajax_php/search_user.php",
+	                    type:"POST",
+	                    data:{
+	                        condition:condition_array
+	                    },
+	                    success:function(json){
+	                        // alert(json);      
+	                        $('#dg').datagrid('loadData', getData(json)).datagrid('clientPaging');
+	                    }
+	                }); 
+	            }
+            
+        
+	        }
+
+
+
+	        function handlerAdd(){
+	        	$('#dlg').dialog('open');
 	        			
-	        		}
-        		},'-',{
-        			text:'删除',
-        			iconCls:'icon-remove',
-	        		handler:function(){
-	        			var row = $('#dg').datagrid('getSelected');
-	        			if (row != null)
-	        			{
-	        				$.messager.confirm('确认','您确认想要删除该用户吗？删除后，该用户将无法恢复！',function(r){    
-				                if (r){
-				                    $.ajax({
-					                    url:"ajax_php/delete_user.php",
-					                    type:"POST",
-					                    data:{
-					                    	user_id:row.id
-					                	},
-					                	success:function(){
-					                		
-							                window.parent.refreshTabs(); 
-					                	}
-				                	});
-				                }    
-				            });
-	        				
-	        			} 
-	        			
-	        		}
-        		},'-', {
-        			text:'重置密码',
-        			iconCls:'icon-reload',
-	        		handler:function(){
-	        			var row = $('#dg').datagrid('getSelected');
-	        			if (row != null)
-	        			{
-	        				$.messager.confirm('确认','您确认想要重置该用户的密码吗？',function(r){    
-				                if (r){
-				                    $.ajax({
-					                    url:"ajax_php/reset_password.php",
-					                    type:"POST",
-					                    data:{
-					                    	user_id:row.id
-					                	},
-					                	
-				                	});
-				                }    
-				            });
-	        			} 
-	        			
-	        		}
-        		}
-        	];
+    			$('#user_name').val('');
+    			$('#user_name').validatebox('validate');
+    			
+    			$('#password_block').show();
+    			
+    			$('#password').val('');
+    			$('#password').validatebox('validate');
+
+    			$('#role').val('1');
+    			
+    			$('#email').val('');
+    			$('#email').validatebox('validate');
+    			isNew = true;
+	        }
+
+	        function handlerEdit(){
+	        	var row = $('#dg').datagrid('getSelected');
+    			if (row != null)
+    			{
+    				$('#dlg').dialog('open');
+
+        			$('#user_name').val(row.user_name);
+        			$('#user_name').validatebox('validate');
+        			
+        			$('#password_block').hide();
+        			
+        			$('#role').val(row.role_id);
+        			
+        			
+        			$('#email').val(row.email);
+        			$('#email').validatebox('validate');
+        			isNew = false;
+    			} 
+	        }
+
+	        function handlerDelete(){
+	        	var row = $('#dg').datagrid('getSelected');
+    			if (row != null)
+    			{
+    				$.messager.confirm('确认','您确认想要删除该用户吗？删除后，该用户将无法恢复！',function(r){    
+		                if (r){
+		                    $.ajax({
+			                    url:"ajax_php/delete_user.php",
+			                    type:"POST",
+			                    data:{
+			                    	user_id:row.id
+			                	},
+			                	success:function(){
+			                		
+					                window.parent.refreshTabs(); 
+			                	}
+		                	});
+		                }    
+		            });
+    				
+    			}
+	        }
+
+	        function handlerResetPassword() {
+	        	var row = $('#dg').datagrid('getSelected');
+    			if (row != null)
+    			{
+    				$.messager.confirm('确认','您确认想要重置该用户的密码吗？',function(r){    
+		                if (r){
+		                    $.ajax({
+			                    url:"ajax_php/reset_password.php",
+			                    type:"POST",
+			                    data:{
+			                    	user_id:row.id
+			                	},
+			                	
+		                	});
+		                }    
+		            });
+    			} 
+	        }
 
 			$.extend($.fn.validatebox.defaults.rules, {    
 			    minLength: {    
