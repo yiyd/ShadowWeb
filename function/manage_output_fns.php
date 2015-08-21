@@ -28,10 +28,10 @@
                 <thead>
                     <tr>
                         <th data-options="field:'id', hidden:true"></th>
-                        <th data-options="field:'password', hidden:true"></th>
                         <th data-options="field:'check',checkbox:'true'">是否选择</th>
                         <th width="8%" data-options="field:'user_name'">用户名</th>
                         <th width="15%" data-options="field:'role'">角色</th>
+                        <th data-options="field:'role_id', hidden:true"></th>
                         <th width="65%" data-options="field:'email'">邮箱</th>
                     </tr>
                 </thead>
@@ -53,7 +53,7 @@
 					</td>
 					
 				</tr>
-                <tr height="26">
+                <tr id="password_block" height="26">
 					<td nowrap="nowrap">
 						<div align="right" style="padding-right=2px;">
 							初始密码：<font color="red">*</font>
@@ -190,8 +190,8 @@
 	                
 	                rows.push({
 	                	id:item.user_id,
-	                	password:item.user_passwd,
 	                    user_name:item.user_name,
+	                    role_id:item.role_id,
 	                    role: item.role_name,
 	                    email: item.user_mail,
 	                });
@@ -204,13 +204,22 @@
 	        		iconCls:'icon-add',
 	        		handler:function(){
 	        			$('#dlg').dialog('open');
+	        			$('#user_name').val('');
+	        			$('#password').val('');
+	        			$('#role').val('1');
+	        			$('#email').val('');
 	        		}
 
         		},'-',{
         			text:'编辑',
         			iconCls:'icon-edit',
 	        		handler:function(){
-	        			
+	        			var row = $('#dg').datagrid('getSelected');
+	        			$('#dlg').dialog('open');
+	        			$('#user_name').val(row.user_name);
+	        			// $('#password_block').style.display = 'none';
+	        			$('#role').val(row.role_id);
+	        			$('#email').val(row.email);
 	        		}
         		}
         	];
