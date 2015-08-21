@@ -50,6 +50,11 @@
         $conn->commit();
         $conn->autocommit(TRUE);
 
+        if (isset($items['item_creator_id'])) {
+            $current_user = $items['item_creator_id'];
+        } else {
+            $current_user = $_SESSION['current_user_id'];
+        }
         //Arrange the $items array to the $change_field
         //$change_field['name'] $change_field['old_value'] $change_field['new_value'];
         $change_field = array(
@@ -61,7 +66,7 @@
             array(
                 'name' => '事项创建人',
                 'old_value' => '空值',
-                'new_value' =>  $_SESSION['current_user_id'] 
+                'new_value' =>  $current_user
             ),
             array(
                 'name' => '事项跟踪人',
@@ -89,7 +94,11 @@
                 'new_value' => $items['item_state'] 
             )
         );
+
         // LOG the NEW information
+        if (isset($items['item_creator_id'])) {
+            $_SESSION['current_user_id'] = $current_user;
+        } 
         log_item($change_field);
     }
 
@@ -199,7 +208,7 @@
             throw new Exception("Could not connect to DB.");
         }
         if ($result->num_rows == 0) {
-            throw new Exception("NO items records!");
+            //throw new Exception("NO items records!");
         }
 
         //$row = $result->fetch_assoc();

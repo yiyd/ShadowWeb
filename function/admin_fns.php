@@ -142,7 +142,7 @@
              throw new Exception("Could not connect to the db!");
         }
         if ($result->num_rows == 0) {
-            throw new Exception("No records in users table!");
+            //throw new Exception("No records in users table!");
         }
         $result = db_result_to_array($result);
         return $result;
@@ -206,8 +206,6 @@
         }
 
         $conn = db_connect();
-        $conn->autocommit(false);
-
         $query = "insert into users values ('', '".$new_user['user_name']."', '".$new_user['user_passwd']."', 
                 '".$new_user['role_id']."', '".$new_user['user_mail']."')";
         $result = $conn->query("set names utf8");
@@ -215,8 +213,6 @@
         if (!$result) {
             throw new Exception("Could not connect to the db!");
         } else {
-            $conn->commit();
-            $conn->autocommit(true);
             return true;
         }
     }

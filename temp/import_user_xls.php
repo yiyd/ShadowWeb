@@ -1,12 +1,13 @@
 <?php
-	include('function\shadow_fns.php');
+	include('../function/shadow_fns.php');
 	//session_start();
 
+	
 	// import users 
 	$conn = db_connect();
 	$data = new Spreadsheet_Excel_Reader();
 	$data->setOutputEncoding("utf-8");
-	$data->read('..//user.xls');
+	$data->read('user.xls');
 	error_reporting(E_ALL ^ E_NOTICE);
 
 	for ($i=2; $i <= $data->sheets[0]['numRows']; $i++) { 
