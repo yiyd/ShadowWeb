@@ -107,14 +107,14 @@
 
     function get_para_id ($para_name) {
         $conn = db_connect();
-        $query = "select para_id from parameters where para_name = '".$para_name."'";
+        $query = "select para_id from para_values where para_value_name = '".$para_name."'";
         $result = $conn->query("set names utf8");
         $result = $conn->query($query);
         if (!$result) {
             throw new Exception("Could not connect to the db!");
         }
         if ($result->num_rows == 0) {
-            throw new Exception("No such para!");
+            throw new Exception("No such para_id!");
         }
         else {
             $row = $result->fetch_row();

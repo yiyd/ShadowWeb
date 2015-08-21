@@ -7,10 +7,11 @@
  */
     //connect to the DB
     function db_connect() {
-        $conn = new mysqli('localhost','shadow_admin', 'passwd', 'shadow');
+        $conn = new mysqli('22.189.25.107','shadow_admin', 'passwd', 'shadow');
         if (!$conn) {
             throw new Exception ('Could not connect to database server.');
         } else {
+            $result = $conn->query("set names utf8");
 			$conn->autocommit(TRUE);
             return $conn;
         }

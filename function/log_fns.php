@@ -19,12 +19,13 @@
     function log_item ($change_field) {
         $current_time = date("Y-m-d H:i:s");
         $conn = db_connect();
-        $conn->autocommit(false);
+        // $conn->autocommit(false);
 
         //insert the log_title into DB
         $query = "insert into logs VALUES ('', '".$_SESSION['current_item_id']."', '".$_SESSION['current_user_id']."',
                  '".$current_time."')";
-        $result = $conn->query("set names utf8");
+        
+        echo $query."<br />";
         $result = $conn->query($query);
         if (!$result) {
             throw new Exception("Could not connect to the db!");
@@ -50,13 +51,14 @@
                     }
                 }
             }
-            else 
-            $conn->commit();
-            $conn->autocommit(true);
-            return true;
         }
+
+        // $conn->commit();
+        // $conn->autocommit(true);
+        return true;
     }
 
+    //--------------------------------------------------------------------------
     // LOG DISPLAY FUNCTIONS 
     // $log_object is "users", "roles"
     function get_admin_log($log_object, $object_id) {
