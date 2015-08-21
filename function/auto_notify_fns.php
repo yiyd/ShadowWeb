@@ -13,11 +13,10 @@
 		//check all the input 
 		if (is_array($auto_notifies) && (isset($_SESSION['current_item_id']))) {
 			foreach ($auto_notifies as $auto) {
-				// echo "<br />";
-				// print_r($auto);
+
 				$query = "insert into auto_notify values ('', '".$_SESSION['current_item_id']."', '".$auto['auto_date']."', 
 				'".$auto['auto_type']."', '".$auto['user_id']."')";
-				//echo $query;
+				
 				$result = $conn->query($query);
 				if (!$result) {
 					throw new Exception("Could not connect to the db!");
@@ -44,12 +43,12 @@
 					)
 				);
 				
+				$conn->commit();
+				$conn->autocommit(true);
+
 				// log the NEW setting 
 				log_item($change_field);
 			}
-			
-			$conn->commit();
-			$conn->autocommit(true);
 
 		} else {
 			throw new Exception("Input Error!");			

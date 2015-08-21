@@ -25,12 +25,11 @@
             throw new Exception("Could not connect to the db!");
         }
         if ($result->num_rows == 0) {
-            throw new Exception("No such user!");
+            //throw new Exception("No such user!");
         }
-        else {
-            $row = $result->fetch_row();
-            return $row[0];
-        }
+
+        $row = $result->fetch_row();
+        return $row[0];
     }
 
     // get user_id 
@@ -43,12 +42,12 @@
             throw new Exception("Could not connect to the db!");
         }
         if ($result->num_rows == 0) {
-            throw new Exception("No such user!");
+            //throw new Exception("No such user!");
+            //return false;
         }
-        else {
-            $row = $result->fetch_row();
-            return $row[0];
-        }
+
+        $row = $result->fetch_row();
+        return $row[0];
     }
 
     // get item_name
@@ -61,12 +60,11 @@
             throw new Exception("Could not connect to the db!");
         }
         if ($result->num_rows == 0) {
-            throw new Exception("No such item!");
+            //throw new Exception("No such item!");
         }
-        else {
-            $row = $result->fetch_row();
-            return $row[0];
-        }
+
+        $row = $result->fetch_row();
+        return $row[0];
     }
 
     // get role_name
@@ -79,12 +77,11 @@
             throw new Exception("Could not connect to the db!");
         }
         if ($result->num_rows == 0) {
-            throw new Exception("No such role!");
+            //throw new Exception("No such role!");
         }
-        else {
-            $row = $result->fetch_row();
-            return $row[0];
-        }
+
+        $row = $result->fetch_row();
+        return $row[0];
     }
 
     // get para_name
@@ -97,29 +94,30 @@
             throw new Exception("Could not connect to the db!");
         }
         if ($result->num_rows == 0) {
-            throw new Exception("No such para!");
+            //throw new Exception("No such para!");
         }
-        else {
-            $row = $result->fetch_row();
-            return $row[0];
-        }
+
+        $row = $result->fetch_row();
+        return $row[0];
+
     }
 
     function get_para_id ($para_name) {
         $conn = db_connect();
-        $query = "select para_id from parameters where para_name = '".$para_name."'";
+        $query = "select para_id from para_values where para_value_name = '".$para_name."'";
         $result = $conn->query("set names utf8");
         $result = $conn->query($query);
         if (!$result) {
             throw new Exception("Could not connect to the db!");
         }
         if ($result->num_rows == 0) {
-            throw new Exception("No such para!");
+            //throw new Exception("No such para_id!");
         }
         else {
             $row = $result->fetch_row();
             return $row[0];
         }
+
     }
 
     // get privileges_name
@@ -132,11 +130,10 @@
             throw new Exception("Could not connect to the db!");
         }
         if ($result->num_rows == 0) {
-            throw new Exception("No such priv!");
+            //throw new Exception("No such priv!");
         }
-        else {
-            $row = $result->fetch_row();
-            return $row[0];
-        }
+
+        $row = $result->fetch_row();
+        return $row[0];
     }
 ?>

@@ -11,6 +11,7 @@
         if (!$conn) {
             throw new Exception ('Could not connect to database server.');
         } else {
+            $result = $conn->query("set names utf8");
 			$conn->autocommit(TRUE);
             return $conn;
         }

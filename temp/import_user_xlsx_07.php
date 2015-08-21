@@ -1,14 +1,11 @@
 <?php
-	require_once('../function/shadow_fns.php');
-	require_once('../resources/PHPExcel/PHPExcel.php');
-	require_once('../resources/PHPExcel/PHPExcel/IOFactory.php');
-	require_once('../resources/PHPExcel/PHPExcel/Reader/Excel5.php');
-	require_once('../resources/PHPExcel/PHPExcel/Reader/Excel2007.php');
+	echo dirname(__FILE__);
+	require_once('../function/shadow_fns.php');	
 
 	$conn = db_connect();
 	$conn->autocommit(false);
 
-	$inputFileName = '../user.xlsx';
+	$inputFileName = 'user.xlsx';
 
 	//check the file type 
 	$inputFileType = PHPExcel_IOFactory::identify($inputFileName);
