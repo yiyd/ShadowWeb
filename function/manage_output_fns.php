@@ -27,6 +27,8 @@
             <table id="dg" class="easyui-datagrid" width="100%" data-options="rownumbers:true,nowrap:false,pagination:true,pageSize:50,pageList:[30,50,80,100],toolbar:toolbar">
                 <thead>
                     <tr>
+                        <th data-options="field:'id', hidden:true"></th>
+                        <th data-options="field:'password', hidden:true"></th>
                         <th data-options="field:'check',checkbox:'true'">是否选择</th>
                         <th width="8%" data-options="field:'user_name'">用户名</th>
                         <th width="15%" data-options="field:'role'">角色</th>
@@ -179,7 +181,7 @@
                                 $('#dg').datagrid('beginEdit', 0);
                     }
                 });
-                 
+
         	});
 
         	function getData(json){
@@ -187,6 +189,8 @@
 	            $.each($.parseJSON(json), function(idx,item){
 	                
 	                rows.push({
+	                	id:item.user_id,
+	                	password:item.user_passwd,
 	                    user_name:item.user_name,
 	                    role: item.role_name,
 	                    email: item.user_mail,

@@ -137,7 +137,7 @@
     function get_users () {        
         $conn = db_connect();
         $result = $conn->query("set names utf8");
-        $result = $conn->query("select user_id, user_name, role_id, user_mail from users");
+        $result = $conn->query("select * from users");
         if (!$result) {
              throw new Exception("Could not connect to the db!");
         }

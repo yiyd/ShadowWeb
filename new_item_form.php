@@ -5,7 +5,7 @@
  * Time: 11:20
  */
 	require_once('function/shadow_fns.php');
-	//session_start();
+	session_start();
 
 	try {
 		$users_array = get_users();
