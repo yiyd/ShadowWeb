@@ -10,7 +10,10 @@
 		'name' => 'role_id',
 		'new_value' => '2'
 		));
-
+	array_push($change_field, array(
+		'name' => 'user_name',
+		'new_value' => 'jsdkalfjkl@dsf.com'
+		));
 	update_user ('4', $change_field);
 	echo "sucess";
 	// import users 
