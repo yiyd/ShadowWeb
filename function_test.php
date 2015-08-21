@@ -3,6 +3,7 @@
 	//session_start();
 	require_once('function/shadow_fns.php');
 	
+	echo $_SERVER['DOCUMENT_ROOT'];
 	// import users 
 	// $conn = db_connect();
 	// $data = new Spreadsheet_Excel_Reader();
@@ -26,9 +27,9 @@
 	// 	}
 	// }
 
-	$filename = "item_test.xlsx";
-	import_items($filename);
-	echo "import sucess";
+	// $filename = "item_test.xlsx";
+	// import_items($filename);
+	// echo "import sucess";
 
 
 

@@ -113,11 +113,9 @@
         if ($result->num_rows == 0) {
             //throw new Exception("No such para_id!");
         }
-        else {
-            $row = $result->fetch_row();
-            return $row[0];
-        }
-
+        
+        $row = $result->fetch_row();
+        return $row[0];
     }
 
     // get privileges_name

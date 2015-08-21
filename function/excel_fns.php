@@ -1,6 +1,10 @@
 <?php
-
-	require_once('shadow_fns.php');	
+	require_once('shadow_fns.php');
+	set_include_path('.'. PATH_SEPARATOR .$_SERVER['DOCUMENT_ROOT'].'\shadow\shadow-git\resources\PHPExcel' . PATH_SEPARATOR .get_include_path()); 
+	require_once('PHPExcel.php');
+    require_once('PHPExcel\IOFactory.php');
+    require_once('PHPExcel\Reader\Excel5.php');
+    require_once('PHPExcel\Reader\Excel2007.php');
 	
 	// import the excel file to the database support excel5
 	function import_excel_to_items ($filename) {
