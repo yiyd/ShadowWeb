@@ -3,6 +3,15 @@
  * Date: 2015/8/12
  * Time: 10:00
  */
+function refreshTabs() {
+	var refresh_tab = $('#tabs').tabs('getSelected');
+	if (refresh_tab && refresh_tab.find('iframe').length > 0) {
+		var _refresh_ifram = refresh_tab.find('iframe')[0];
+		var refresh_url =_refresh_ifram.src;
+		_refresh_ifram.contentWindow.location.href = refresh_url;
+	}
+}
+ 
 function updateTab(url, title, id)
 {
 	// 更新选择的面板的新标题和内容
