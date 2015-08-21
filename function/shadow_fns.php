@@ -21,10 +21,6 @@
     require_once('search_item_output_fns.php');
     require_once('manage_output_fns.php');
     require_once('excel_fns.php');
-    require_once('excel_reader2.php');
-    // require_once('resources/PHPExcel/PHPExcel.php');
-    // require_once('resources/PHPExcel/PHPExcel/IOFactory.php');
-    // require_once('resources/PHPExcel/PHPExcel/Reader/Excel5.php');
-    // require_once('resources/PHPExcel/PHPExcel/Reader/Excel2007.php');
+
 
 ?>

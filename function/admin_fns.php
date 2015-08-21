@@ -222,7 +222,7 @@
     // $change_field is an array
     // $change_field['name'] $change_field['old_value'] $change_field['new_value'];
     function update_user ($user_id, $change_field) {
-        $flag = true;
+        $flag = false;
         
         //if (!check_admin()) return false;
         if (!is_array($change_field)) {
@@ -241,7 +241,7 @@
             $query .= $temp;
             $flag = true;
         }
-        $query .= "where user_id = '".$user_id."'";    
+        $query .= " where user_id = '".$user_id."'";    
 
         $result = $conn->query("set names utf8");
         $result = $conn->query($query);
