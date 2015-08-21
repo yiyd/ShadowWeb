@@ -39,36 +39,37 @@
         </div>
     	<div id="dlg" class="easyui-dialog" title="新增用户" style="width:auto;height:auto;" data-options="iconCls: 'icon-add',closed:true,modal:true,buttons: '#dlg-buttons'">
     		<table class="table_list" width="100%" border="0" align="center" cellpadding="0" cellspacing="1">
+				
 				<tr height="26">
 					<td nowrap="nowrap">
-						<div align="right" style="padding-right=2px;">
+						<div align="right" style="padding-right:2px;">
 							用户名：<font color="red">*</font>
 						</div>
 					</td>
 					<td>
 						<div align="left" style="padding-left:2px;">
 	
-							<input id="user_name" class="easyui-validatebox" data-options="required:true,validType:'length[8,32]'">
+							<input id="user_name" class="easyui-validatebox" data-options="required:true,validType:'length[1,32]'">
 						</div>
 					</td>
 					
 				</tr>
                 <tr id="password_block" height="26">
 					<td nowrap="nowrap">
-						<div align="right" style="padding-right=2px;">
+						<div align="right" style="padding-right:2px;">
 							初始密码：<font color="red">*</font>
 						</div>
 					</td>
 					<td>
 						<div align="left" style="padding-left:2px;">
-							<input id="password" type="password" class="easyui-validatebox" data-options="required:true,validType:'length[8,40]'">
+							<input id="password" type="password" class="easyui-validatebox" data-options="required:true,validType:'length[1,40]'">
 						</div>
 					</td>
 					
 				</tr>
 				<tr height="26">
 					<td nowrap="nowrap">
-						<div align="right" style="padding-right=2px;">
+						<div align="right" style="padding-right:2px;">
 							所属角色：<font color="red">*</font>
 						</div>
 					</td>
@@ -87,7 +88,7 @@
 				</tr>
 				<tr height="26">
 					<td nowrap="nowrap">
-						<div align="right" style="padding-right=2px;">
+						<div align="right" style="padding-right:2px;">
 							绑定邮箱：<font color="red">*</font>
 						</div>
 					</td>
@@ -191,6 +192,7 @@
 	                rows.push({
 	                	id:item.user_id,
 	                    user_name:item.user_name,
+	                    password:item.user_passwd,
 	                    role_id:item.role_id,
 	                    role: item.role_name,
 	                    email: item.user_mail,
@@ -199,15 +201,19 @@
 	            });
 	            return rows;
 	        }
+	        
         	var toolbar = [{
 	        		text:'新增',
 	        		iconCls:'icon-add',
 	        		handler:function(){
 	        			$('#dlg').dialog('open');
+	        			
 	        			$('#user_name').val('');
+	        			$('#password_block').show();
 	        			$('#password').val('');
 	        			$('#role').val('1');
 	        			$('#email').val('');
+	        			isNew = true;
 	        		}
 
         		},'-',{
@@ -215,11 +221,38 @@
         			iconCls:'icon-edit',
 	        		handler:function(){
 	        			var row = $('#dg').datagrid('getSelected');
-	        			$('#dlg').dialog('open');
-	        			$('#user_name').val(row.user_name);
-	        			// $('#password_block').style.display = 'none';
-	        			$('#role').val(row.role_id);
-	        			$('#email').val(row.email);
+	        			if (row != null)
+	        			{
+	        				$('#dlg').dialog('open');
+
+		        			$('#user_name').val(row.user_name);
+		        			$('#password_block').hide();
+		        			$('#role').val(row.role_id);
+		        			$('#email').val(row.email);
+		        			isNew = false;
+	        			} 
+	        			
+	        		}
+        		},'-',{
+        			text:'删除',
+        			iconCls:'icon-remove',
+	        		handler:function(){
+	        			var row = $('#dg').datagrid('getSelected');
+	        			if (row != null)
+	        			{
+	        				$.ajax({
+			                    url:"ajax_php/delete_user.php",
+			                    type:"POST",
+			                    data:{
+			                    	user_id:row.id
+			                	},
+			                	success:function(){
+			                		
+					                window.parent.refreshTabs(); 
+			                	}
+		                	});
+	        			} 
+	        			
 	        		}
         		}
         	];
@@ -248,25 +281,78 @@
 	            var password = $('#password').val();
 	            var role = $('#role').val();
 	            var email = $('#email').val();
-	            $.ajax({
-                    url:"ajax_php/new_user.php",
-                    type:"POST",
-                    data:{
-                    	user_name:user_name,
-                    	password:password,
-                    	role:role,
-                    	email:email
-                	},
-                	success:function(){
-                		// $('#dg').datagrid('appendRow',{
-		                //     user_name:user_name,
-	                 //    	role:role,
-	                 //    	email:email
+	            if (isNew) {
+	            	if (!$('#password').validatebox('isValid')) {
+	        			$.messager.alert('提示信息', '密码长度为1到40位');
+	                	$('#password').focus();
+	                	return;
+	        		}
+	            	$.ajax({
+	                    url:"ajax_php/new_user.php",
+	                    type:"POST",
+	                    data:{
+	                    	user_name:user_name,
+	                    	password:password,
+	                    	role:role,
+	                    	email:email
+	                	},
+	                	success:function(){
+	                		
+			                window.parent.refreshTabs(); 
+	                	}
+                	});
+	            }else {
+	            	var change_field_array = [];
+        			
+        			var row = $('#dg').datagrid('getSelected');
+		            
+		            var old_user_name = row.user_name;
+		            if (user_name != old_user_name) {
+		                var change_field_row = [];
+		                change_field_row[0] = 'user_name';
+		                change_field_row[1] = user_name;
+		                change_field_row[2] = old_user_name;
+		                var length = change_field_array.length;
+		                change_field_array[length] = change_field_row;
+		            }
 
-		                // });
-		                window.parent.refreshTabs(); 
-                	}
-                });
+		            var old_role_id = row.role_id;
+		            if (role != old_role_id) {
+		                var change_field_row = [];
+		                change_field_row[0] = 'role_id';
+		                change_field_row[1] = role;
+		                change_field_row[2] = old_role_id;
+		                var length = change_field_array.length;
+		                change_field_array[length] = change_field_row;
+		            }
+
+		            var old_email = row.email;
+		            if (email != old_email) {
+		                var change_field_row = [];
+		                change_field_row[0] = 'user_mail';
+		                change_field_row[1] = email;
+		                change_field_row[2] = old_email;
+		                var length = change_field_array.length;
+		                change_field_array[length] = change_field_row;
+		            }
+
+		            if (change_field_array.length > 0) {
+		            	$.ajax({
+		            		url:"ajax_php/update_user.php",
+		            		type:"POST",
+		            		data:{
+		            			user_id:row.id,
+		            			change_field:change_field_array
+		            		},
+		            		success:function(){
+	                		
+				                window.parent.refreshTabs(); 
+		                	}
+		            	});
+		            }
+	            	
+	            }
+	            
 	    		$('#dlg').dialog('close');        
         	}
 
@@ -276,16 +362,12 @@
 
         	function validateData() {
         		if (!$('#user_name').validatebox('isValid')) {
-        			$.messager.alert('提示信息', '用户名长度为8到32位，其中一个汉字是2位');
+        			$.messager.alert('提示信息', '用户名长度为1到32位，其中一个汉字是2位');
                 	$('#user_name').focus();
                 	return false;
         		}
 
-        		if (!$('#password').validatebox('isValid')) {
-        			$.messager.alert('提示信息', '密码长度为8到40位');
-                	$('#password').focus();
-                	return false;
-        		}
+        		
 
         		if (!$('#email').validatebox('isValid')) {
         			$.messager.alert('提示信息', '请输入正确格式的邮箱地址，最大长度100位，其中一个汉字是2位');
@@ -294,6 +376,8 @@
         		}
         		return true;
         	}
+
+
         </script>
 	</body>
 </html>
