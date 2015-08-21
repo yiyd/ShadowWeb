@@ -240,17 +240,44 @@
 	        			var row = $('#dg').datagrid('getSelected');
 	        			if (row != null)
 	        			{
-	        				$.ajax({
-			                    url:"ajax_php/delete_user.php",
-			                    type:"POST",
-			                    data:{
-			                    	user_id:row.id
-			                	},
-			                	success:function(){
-			                		
-					                window.parent.refreshTabs(); 
-			                	}
-		                	});
+	        				$.messager.confirm('确认','您确认想要删除该用户吗？删除后，该用户将无法恢复！',function(r){    
+				                if (r){
+				                    $.ajax({
+					                    url:"ajax_php/delete_user.php",
+					                    type:"POST",
+					                    data:{
+					                    	user_id:row.id
+					                	},
+					                	success:function(){
+					                		
+							                window.parent.refreshTabs(); 
+					                	}
+				                	});
+				                }    
+				            });
+	        				
+	        			} 
+	        			
+	        		}
+        		},'-', {
+        			text:'重置密码',
+        			iconCls:'icon-reload',
+	        		handler:function(){
+	        			var row = $('#dg').datagrid('getSelected');
+	        			if (row != null)
+	        			{
+	        				$.messager.confirm('确认','您确认想要重置该用户的密码吗？',function(r){    
+				                if (r){
+				                    $.ajax({
+					                    url:"ajax_php/reset_password.php",
+					                    type:"POST",
+					                    data:{
+					                    	user_id:row.id
+					                	},
+					                	
+				                	});
+				                }    
+				            });
 	        			} 
 	        			
 	        		}
