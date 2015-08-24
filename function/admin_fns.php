@@ -343,7 +343,7 @@
     }
 
     // GET ROLE`S PRIV
-    function get_privileges($role_id) {
+    function get_privileges_by_id($role_id) {
         $conn = db_connect();
         $result = $conn->query("select priv_id from role_priv where role_id = '".$role_id."'");
         if (!$result) {

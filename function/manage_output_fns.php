@@ -195,10 +195,7 @@
                     success:function(json){
                         // alert(json);      
                         $('#dg').datagrid('loadData', getData(json)).datagrid('clientPaging');
-                        var rows = $('#dg').datagrid('getRows');
-                        for (var i = 0; i < rows.length; i++) {
-                        	$('#dg').datagrid('beginEdit',i);
-                        };
+                        
                                 
                     }
                 });
@@ -632,15 +629,12 @@
 
         	$(function(){
         		$.ajax({
-                    url:"ajax_php/get_roles.php",
+                    url:"ajax_php/get_roles_and_privileges.php",
                     type:"POST",
                     success:function(json){
-                        // alert(json);      
+                        alert(json);      
                         $('#dg').datagrid('loadData', getData(json)).datagrid('clientPaging');
-                        var rows = $('#dg').datagrid('getRows');
-                        for (var i = 0; i < rows.length; i++) {
-                        	$('#dg').datagrid('beginEdit',i);
-                        };
+                        
                                 
                     }
                 });
@@ -653,12 +647,10 @@
 	            $.each($.parseJSON(json), function(idx,item){
 	                
 	                rows.push({
-	                	id:item.user_id,
-	                    user_name:item.user_name,
-	                    password:item.user_passwd,
-	                    role_id:item.role_id,
-	                    role: item.role_name,
-	                    email: item.user_mail,
+	                	id:item.role_id,
+	                    role_name:item.role_name,
+	                    role_priv:item.role_priv,
+	                    
 	                });
 
 	            });
