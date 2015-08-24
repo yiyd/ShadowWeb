@@ -129,7 +129,7 @@
 				// insert the item_follow_mark information
 		        if (!empty($strArray[6])) {
 		        	$follow_mark = $strArray[6];
-			        $follow_mark_array = explode(";", $follow_mark);
+			        $follow_mark_array = explode("；", $follow_mark);
 			        foreach ($follow_mark_array as $key) {
 			        	$mark_content = explode("|", $key);
 			        	$query = "insert into item_follow_marks values ('', '".$_SESSION['current_item_id']."', 

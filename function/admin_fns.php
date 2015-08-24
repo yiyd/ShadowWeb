@@ -38,7 +38,7 @@
         $query = "select * from roles where ";
 
         foreach ($condition as $row) {
-            $query .= $row['name']." like '%".$row['value']."'%";
+            $query .= $row['name']." like '%".$row['value']."%'";
         }
 
         $result = $conn->query($query);
@@ -92,7 +92,7 @@
         //if (!check_admin()) return false;
         if (isset($role_id) && isset($role_name)) {
             // change the role_name
-            $result = $conn->query("update roles set role_name = '".$role_name."'");
+            $result = $conn->query("update roles set role_name = '".$role_name."' where role_id = '".$role_id."'");
             if (!$result) {
                 throw new Exception("Could not connect to the DB.");
             }
