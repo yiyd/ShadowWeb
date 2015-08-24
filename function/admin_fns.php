@@ -38,7 +38,7 @@
         $query = "select * from roles where ";
 
         foreach ($condition as $row) {
-            $query .= $row['name']." like '".$row['value']."'";
+            $query .= $row['name']." like '%".$row['value']."'%";
         }
 
         $result = $conn->query($query);
