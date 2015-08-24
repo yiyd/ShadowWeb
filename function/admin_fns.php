@@ -100,20 +100,25 @@
 
         if (isset($role_id) && is_array($role_priv_array)) {
             $result = $conn->query("select priv_id from role_priv where role_id = '".$role_id."'");
-            $row = $result->fetch_row();
+            
+            while (list($id) = $result->fetch_row()) {
+                $res_array[] = $id;
+            }
 
             foreach ($role_priv_array as $key) {
-                if (!in_array($key, $row)) {
+                if (!in_array($key, $res_array)) {
                     // not exsit, then insert
                     $result = $conn->query("insert into role_priv values ('', '".$role_id."', '".$key."')");
+                    echo "sdfjksd1<br />";
                 }
             }
 
-            foreach ($row as $key) {
-                if (!in_array($key, $row)) {
+            foreach ($res_array as $key) {
+                if (!in_array($key, $role_priv_array)) {
                     // not exsit, then delete
                     $result = $conn->query("delete from role_priv where role_id = '".$role_id."' and 
                         priv_id = '".$key."'");
+                    echo "sdfjksd2<br />";
                 }
             }
         }  

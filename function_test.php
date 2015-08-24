@@ -39,11 +39,12 @@
 	// 	}
 	// }
 
-	$filename = "item_test_60.xlsx";
-	import_items($filename);
-	echo "import sucess";
+	// $filename = "item_test_60.xlsx";
+	// import_items($filename);
+	// echo "import sucess";
 
-
+	$priv_array = array(2);
+	update_role('9', 'test', $priv_array);
 
 	// $conn = db_connect();
 	// $query = "select auto_id from auto_notify where item_id = '3' ";
