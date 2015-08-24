@@ -8,7 +8,7 @@
 	function set_notify ($auto_notifies) {
 		//insert the notify setting into the db
 		$conn = db_connect();
-		$conn->autocommit(false);	
+		//$conn->autocommit(false);	
 
 		//check all the input 
 		if (is_array($auto_notifies) && (isset($_SESSION['current_item_id']))) {
@@ -43,8 +43,8 @@
 					)
 				);
 				
-				$conn->commit();
-				$conn->autocommit(true);
+				// $conn->commit();
+				// $conn->autocommit(true);
 
 				// log the NEW setting 
 				log_item($change_field);

@@ -27,13 +27,18 @@
 		}
 
 		$strArray = explode(";", $str);
-		$query = "insert into users values ('', '".$strArray[0]."', sha1('".$strArray[1]."'), '".$strArray[2]."', '".$strArray[3]."')";
-		$result = $conn->query("set names utf8");
-		echo $query."<br />";
-		$result = $conn->query($query);
+		// check if the user exsit
+		$result = $conn->query("select user_id from users where user_name = '".$strArray[0]."'");
+		if ($result->num_rows == 0) {
+			// not exsit, then new one
+			$query = "insert into users values ('', '".$strArray[0]."', sha1('".$strArray[1]."'), '".$strArray[2]."', '".$strArray[3]."')";
+			$result = $conn->query("set names utf8");
+			//echo $query."<br />";
+			$result = $conn->query($query);
 
-		if (!$result) {
-			throw new Exception("Error Processing Request", 1);
+			if (!$result) {
+				throw new Exception("Error Processing Request", 1);
+			}
 		}
 	}
 

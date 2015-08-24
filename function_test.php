@@ -5,17 +5,17 @@
 	
 	echo $_SERVER['DOCUMENT_ROOT'];
 
-	$change_field = array();
-	array_push($change_field, array(
-		'name' => 'role_id',
-		'new_value' => '2'
-		));
-	array_push($change_field, array(
-		'name' => 'user_name',
-		'new_value' => 'jsdkalfjkl@dsf.com'
-		));
-	update_user ('4', $change_field);
-	echo "sucess";
+	// $change_field = array();
+	// array_push($change_field, array(
+	// 	'name' => 'role_id',
+	// 	'new_value' => '2'
+	// 	));
+	// array_push($change_field, array(
+	// 	'name' => 'user_name',
+	// 	'new_value' => 'jsdkalfjkl@dsf.com'
+	// 	));
+	// update_user ('4', $change_field);
+	// echo "sucess";
 	// import users 
 	// $conn = db_connect();
 	// $data = new Spreadsheet_Excel_Reader();
@@ -39,9 +39,9 @@
 	// 	}
 	// }
 
-	// $filename = "item_test.xlsx";
-	// import_items($filename);
-	// echo "import sucess";
+	$filename = "item_test_60.xlsx";
+	import_items($filename);
+	echo "import sucess";
 
 
 

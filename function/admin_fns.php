@@ -21,7 +21,7 @@
             throw new Exception("Could not connect to the db!");
         }
         if ($result->num_rows == 0) {
-            throw new Exception("No records in roles table!");
+           // throw new Exception("No records in roles table!");
         }
 
         $result = db_result_to_array($result);
@@ -38,7 +38,7 @@
         $query = "select * from roles where ";
 
         foreach ($condition as $row) {
-            $query .= $row['name']." like '".$row['value']."'";
+            $query .= $row['name']." like '%".$row['value']."'%";
         }
 
         $result = $conn->query($query);
@@ -46,7 +46,7 @@
             throw new Exception("Could not connect to the db!");
         }
         if ($result->num_rows == 0) {
-            throw new Exception("No records in roles table!");
+            //throw new Exception("No records in roles table!");
         }
 
         $result = db_result_to_array($result);
@@ -64,7 +64,7 @@
         }
 
         $conn = db_connect();
-        $conn->autocommit(flase);
+        //$conn->autocommit(flase);
 
         $query = "insert into roles values ('', '".$new_role_name."')";
         $result = $conn->query("set names utf8");
@@ -77,8 +77,8 @@
                 $result = $conn->query($query);
             }
             
-            $conn->commit();
-            $conn->autocommit(true);
+            // $conn->commit();
+            // $conn->autocommit(true);
             return true;
         }
     }   
@@ -86,33 +86,39 @@
     //update the role values when admin change someplace
     // $change_field is an array
     // $change_field is an array includes all the new priv_id
-    function update_role ($role_id, $change_field) {
-        $flag = false;
+    function update_role ($role_id, $role_name, $role_priv_array) {
+        $conn = db_connect();
 
         //if (!check_admin()) return false;
-        if (!is_array($change_field)) {
-            throw new Exception("input is not an array!");
-        }
-
-        $conn = db_connect();
-        $query = "update roles set ";
-        foreach ($change_field as $row) {
-            if ($flag) {
-                $query .= ", ";
+        if (isset($role_id) && isset($role_name)) {
+            // change the role_name
+            $result = $conn->query("update roles set role_name = '".$role_name."'");
+            if (!$result) {
+                throw new Exception("Could not connect to the DB.");
             }
-            $temp = $row['name']." = '".$row['new_value']."'";
-            $query .= $temp;
-            $flag = true;
         }
-        $query .= "where role_id = '".$role_id."'";    
 
+        if (isset($role_id) && is_array($role_priv_array)) {
+            $result = $conn->query("select priv_id from role_priv where role_id = '".$role_id."'");
+            $row = $result->fetch_row();
 
-        $result = $conn->query($query);
-        if (!$result) {
-             throw new Exception("Could not connect to the db!");
-        } else {
-            return true;
-        }
+            foreach ($role_priv_array as $key) {
+                if (!in_array($key, $row)) {
+                    // not exsit, then insert
+                    $result = $conn->query("insert into role_priv values ('', '".$role_id."', '".$key."')");
+                }
+            }
+
+            foreach ($row as $key) {
+                if (!in_array($key, $row)) {
+                    // not exsit, then delete
+                    $result = $conn->query("delete from role_priv where role_id = '".$role_id."' and 
+                        priv_id = '".$key."'");
+                }
+            }
+        }  
+
+        return true;
     }
 
     function delete_role ($role_id) {
@@ -122,7 +128,11 @@
         $result = $conn->query($query);
         $query = "delete from role_priv where role_id = '".$role_id."'";
         $result1 = $conn->query($query);
-        if (!$result || !$result1) {
+
+        // change the users` priv to default
+        $result2 = $conn->query("update users set role_id = '1' where role_id = '".$role_id."'");
+
+        if (!$result || !$result1 || !$result2) {
              throw new Exception("Could not connect to the db!");
         } else {
             return true;
@@ -189,7 +199,7 @@
             throw new Exception("Could not connect to the db!");
         }
         if ($result->num_rows == 0) {
-            throw new Exception("No records in roles table!");
+            //throw new Exception("No records in roles table!");
         }
 
         $result = db_result_to_array($result);

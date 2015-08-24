@@ -21,6 +21,4 @@
     require_once('search_item_output_fns.php');
     require_once('manage_output_fns.php');
     require_once('excel_fns.php');
-
-
 ?>
