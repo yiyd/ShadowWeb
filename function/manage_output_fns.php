@@ -236,7 +236,7 @@
 	                condition_array[length] = condition_row;   
 	            }
 
-	            var search_role = $('#search_role').val();
+	            var search_role = $('#search_role').combobox('getValue');
 	            if ('' != search_role) {
 	                var condition_row = [];
 	                condition_row[0] = 'role_id';
@@ -508,14 +508,7 @@
                         <th data-options="field:'id', hidden:true"></th>
                     	<th data-options="field:'check', checkbox:true"></th>
                         <th width="15%" data-options="field:'role_name'">角色名称</th>
-                        <th width="15%" data-options="field:'role_priv',editor:{
-                            type:'combotree',
-                            options:{
-                                url:'get_privileges.php',
-                                required:true
-                            }
-
-                        }">角色权限</th>
+                        <th width="15%" data-options="field:'role_priv'">角色权限</th>
                         
                     </tr>
                 </thead>
@@ -534,69 +527,37 @@
 			</div>
 		</div>
 
-    	<div id="dlg" class="easyui-dialog" title="新增用户" style="width:auto;height:auto;" data-options="iconCls: 'icon-add',closed:true,modal:true,buttons: '#dlg-buttons'">
+    	<div id="dlg" class="easyui-dialog" title="新建角色" style="width:auto;height:auto;" data-options="iconCls: 'icon-add',closed:true,modal:true,buttons: '#dlg-buttons'">
     		<table class="table_list" width="100%" border="0" align="center" cellpadding="0" cellspacing="1">
 				
 				<tr height="26">
 					<td nowrap="nowrap">
 						<div align="right" style="padding-right:2px;">
-							用户名：<font color="red">*</font>
+							角色名称：<font color="red">*</font>
 						</div>
 					</td>
 					<td>
 						<div align="left" style="padding-left:2px;">
 	
-							<input id="user_name" class="easyui-validatebox" data-options="required:true,validType:'length[1,32]'">
+							<input id="role_name" class="easyui-validatebox" data-options="required:true,validType:'length[1,32]'">
 						</div>
 					</td>
 					
 				</tr>
-                <tr id="password_block" height="26">
+                <tr height="26">
 					<td nowrap="nowrap">
 						<div align="right" style="padding-right:2px;">
-							初始密码：<font color="red">*</font>
+							角色权限：<font color="red">*</font>
 						</div>
 					</td>
 					<td>
 						<div align="left" style="padding-left:2px;">
-							<input id="password" type="password" class="easyui-validatebox" data-options="required:true,validType:'length[1,40]'">
+							<select id="cc" class="easyui-combotree" style="width:200px;" multiple data-options="url:'ajax_php/get_privileges.php',required:true"></select>  
 						</div>
 					</td>
 					
 				</tr>
-				<tr height="26">
-					<td nowrap="nowrap">
-						<div align="right" style="padding-right:2px;">
-							所属角色：<font color="red">*</font>
-						</div>
-					</td>
-					<td>
-						<div align="left" style="padding-left:2px;">
-							<select id="role" name="role">
-								<?php
-									foreach ($roles_array as $role) {
-        								echo "<option value=\"".$role['role_id']."\" >".$role['role_name']."</option>";
-    								}
-    							?>
-							</select>
-						</div>
-					</td>
-					
-				</tr>
-				<tr height="26">
-					<td nowrap="nowrap">
-						<div align="right" style="padding-right:2px;">
-							绑定邮箱：<font color="red">*</font>
-						</div>
-					</td>
-					<td>
-						<div align="left" style="padding-left:2px;">
-							<input id="email" class="easyui-validatebox" data-options="required:true,validType:['email','length[0,100]']">
-
-						</div>
-					</td>
-					
-				</tr>
+				
 			</table>
 		</div>
 		<div id='dlg-buttons' style="padding-top:10px;text-align:center;">
@@ -671,7 +632,7 @@
 
         	$(function(){
         		$.ajax({
-                    url:"ajax_php/users_array.php",
+                    url:"ajax_php/get_roles.php",
                     type:"POST",
                     success:function(json){
                         // alert(json);      
