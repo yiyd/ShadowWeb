@@ -310,6 +310,7 @@
     // NEW PRIV
     function new_privileges($new_priv_name) {
         $conn = db_connect();
+        $result = $conn->query("set names utf8");
         $result = $conn->query("insert into privileges value ('', '".$new_priv_name."')");
         if (!$result) {
             throw new Exception("Could not connect to the DB.");
@@ -326,5 +327,18 @@
         $result = $conn->query("delete from role_priv where priv_id = '".$priv_id."'");
 
         return true;
+    }
+
+    // GET ALL PRIV
+    function get_privileges() {
+        $conn = db_connect();
+        $result = $conn->query("set names utf8");
+        $result = $conn->query("select * from privileges");
+        if (!$result) {
+            throw new Exception("Could not connect to the DB.");
+        }
+
+        $row = db_result_to_array($result);
+        return $row; 
     }
 ?>
