@@ -341,4 +341,16 @@
         $row = db_result_to_array($result);
         return $row; 
     }
+
+    // GET ROLE`S PRIV
+    function get_privileges($role_id) {
+        $conn = db_connect();
+        $result = $conn->query("select priv_id from role_priv where role_id = '".$role_id."'");
+        if (!$result) {
+            throw new Exception("Could not connect to the DB.");
+        }
+
+        $row = db_result_to_array($result);
+        return $row; 
+    }
 ?>
