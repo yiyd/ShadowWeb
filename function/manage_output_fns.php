@@ -296,6 +296,7 @@
 	        	var row = $('#dg').datagrid('getSelected');
     			if (row != null)
     			{
+    				$('#dlg').dialog('setTitle','编辑用户');
     				$('#dlg').dialog('open');
 
         			$('#user_name').val(row.user_name);
@@ -505,7 +506,8 @@
                         <th data-options="field:'id', hidden:true"></th>
                     	<th data-options="field:'check', checkbox:true"></th>
                         <th width="15%" data-options="field:'role_name'">角色名称</th>
-                        <th width="15%" data-options="field:'role_priv'">角色权限</th>
+                        <th data-options="field:'role_priv'">角色权限</th>
+                        <th data-options="field:'role_priv_id', hidden:true"></th>
                         
                     </tr>
                 </thead>
@@ -549,7 +551,7 @@
 					</td>
 					<td>
 						<div align="left" style="padding-left:2px;">
-							<select id="cc" class="easyui-combotree" style="width:200px;" multiple data-options="url:'ajax_php/get_privileges.php',required:true"></select>  
+							<select id="role_priv" class="easyui-combotree" style="width:200px;" multiple data-options="url:'ajax_php/get_privileges.php',required:true"></select>  
 						</div>
 					</td>
 					
@@ -632,7 +634,7 @@
                     url:"ajax_php/get_roles_and_privileges.php",
                     type:"POST",
                     success:function(json){
-                        alert(json);      
+                        // alert(json);      
                         $('#dg').datagrid('loadData', getData(json)).datagrid('clientPaging');
                         
                                 
@@ -650,7 +652,7 @@
 	                	id:item.role_id,
 	                    role_name:item.role_name,
 	                    role_priv:item.role_priv,
-	                    
+	                    role_priv_id:item.role_priv_id
 	                });
 
 	            });
@@ -661,40 +663,19 @@
 	        	
 	            var condition_array = [];
 	            
-	            var search_user_name = $('#search_user_name').val();
-	            if ('' != search_user_name) {
+	            var search_role_name = $('#search_role_name').val();
+	            if ('' != search_role_name) {
 	                var condition_row = [];
-	                condition_row[0] = 'user_name';
-	                condition_row[1] = search_user_name;
+	                condition_row[0] = 'role_name';
+	                condition_row[1] = search_role_name;
 	                var length = condition_array.length;
 	                condition_array[length] = condition_row;   
 	            }
 
-	            var search_role = $('#search_role').val();
-	            if ('' != search_role) {
-	                var condition_row = [];
-	                condition_row[0] = 'role_id';
-	                condition_row[1] = search_role;
-	                var length = condition_array.length;
-	                condition_array[length] = condition_row;  
-
-	            }
-
-	            var search_email = $('#search_email').val();
-	            if ('' != search_email) {
-	                var condition_row = [];
-	                condition_row[0] = 'user_mail';
-	                condition_row[1] = search_email;
-	                var length = condition_array.length;
-	                condition_array[length] = condition_row;  
-
-	            }
-
-
 	            if (condition_array.length > 0) {
 	                // alert(condition_array.length);
 	                $.ajax({
-	                    url:"ajax_php/search_user.php",
+	                    url:"ajax_php/search_role.php",
 	                    type:"POST",
 	                    data:{
 	                        condition:condition_array
@@ -714,52 +695,51 @@
 	        function handlerAdd(){
 	        	$('#dlg').dialog('open');
 	        			
-    			$('#user_name').val('');
-    			$('#user_name').validatebox('validate');
+    			$('#role_name').val('');
+    			$('#role_name').validatebox('validate');
     			
-    			$('#password_block').show();
-    			
-    			$('#password').val('');
-    			$('#password').validatebox('validate');
+    			$('#role_priv').combotree('setValue','');
 
-    			$('#role').val('1');
-    			
-    			$('#email').val('');
-    			$('#email').validatebox('validate');
     			isNew = true;
 	        }
 
 	        function handlerEdit(){
 	        	var row = $('#dg').datagrid('getSelected');
+	        	var index = $('#dg').datagrid('getRowIndex',row);
+	        	if (index == 0 || index == 1 ) {
+	        		$.messager.alert('提示信息', '不能编辑或删除default和admin的权限');
+                    return;
+	        	}
     			if (row != null)
     			{
+    				$('#dlg').dialog('setTitle','编辑角色');
     				$('#dlg').dialog('open');
 
-        			$('#user_name').val(row.user_name);
-        			$('#user_name').validatebox('validate');
+        			$('#role_name').val(row.role_name);
+        			$('#role_name').validatebox('validate');
         			
-        			$('#password_block').hide();
+        			$('#role_priv').combotree('setValues', row.role_priv_id);
         			
-        			$('#role').val(row.role_id);
-        			
-        			
-        			$('#email').val(row.email);
-        			$('#email').validatebox('validate');
         			isNew = false;
     			} 
 	        }
 
 	        function handlerDelete(){
 	        	var row = $('#dg').datagrid('getSelected');
+	        	var index = $('#dg').datagrid('getRowIndex',row);
+	        	if (index == 0 || index == 1 ) {
+	        		$.messager.alert('提示信息', '不能编辑或删除default和admin的权限');
+                    return;
+	        	}
     			if (row != null)
     			{
-    				$.messager.confirm('确认','您确认想要删除该用户吗？删除后，该用户将无法恢复！',function(r){    
+    				$.messager.confirm('确认','您确认想要删除该角色吗？删除后，该角色将无法恢复！',function(r){    
 		                if (r){
 		                    $.ajax({
-			                    url:"ajax_php/delete_user.php",
+			                    url:"ajax_php/delete_role.php",
 			                    type:"POST",
 			                    data:{
-			                    	user_id:row.id
+			                    	role_id:row.id
 			                	},
 			                	success:function(){
 			                		
@@ -772,118 +752,49 @@
     			}
 	        }
 
-	        function handlerResetPassword() {
-	        	var row = $('#dg').datagrid('getSelected');
-    			if (row != null)
-    			{
-    				$.messager.confirm('确认','您确认想要重置该用户的密码吗？',function(r){    
-		                if (r){
-		                    $.ajax({
-			                    url:"ajax_php/reset_password.php",
-			                    type:"POST",
-			                    data:{
-			                    	user_id:row.id
-			                	},
-			                	
-		                	});
-		                }    
-		            });
-    			} 
-	        }
+	        
 
-			$.extend($.fn.validatebox.defaults.rules, {    
-			    minLength: {    
-			        validator: function(value, param){    
-			            return value.length >= param[0];    
-			        },    
-			        message: '请输入至少{0}个字符.'   
-			    },
-			    maxLength: {    
-			        validator: function(value, param){    
-			            return value.length <= param[0];    
-			        },    
-			        message: '请不要输入超过{0}个字符.'   
-			    }     
-			}); 
+			
 
         	function save() {
         		if (!validateData()) {
 	                return;
 	            }
 
-	            var user_name = $('#user_name').val();
-	            var password = $('#password').val();
-	            var role = $('#role').val();
-	            var email = $('#email').val();
+	            var role_name = $('#role_name').val();
+	            var role_priv = $('#role_priv').combotree('getValues');
 	            if (isNew) {
-	            	if (!$('#password').validatebox('isValid')) {
-	        			$.messager.alert('提示信息', '密码长度为1到40位');
-	                	$('#password').focus();
-	                	return;
-	        		}
+	            	
 	            	$.ajax({
-	                    url:"ajax_php/new_user.php",
+	                    url:"ajax_php/new_role.php",
 	                    type:"POST",
 	                    data:{
-	                    	user_name:user_name,
-	                    	password:password,
-	                    	role:role,
-	                    	email:email
+	                    	role_name:role_name,
+	                    	role_priv:role_priv,
 	                	},
 	                	success:function(){
 	                		
 			                window.parent.refreshTabs(); 
 	                	}
                 	});
-	            }else {
-	            	var change_field_array = [];
-        			
+	            }else {        			
         			var row = $('#dg').datagrid('getSelected');
+
 		            
-		            var old_user_name = row.user_name;
-		            if (user_name != old_user_name) {
-		                var change_field_row = [];
-		                change_field_row[0] = 'user_name';
-		                change_field_row[1] = user_name;
-		                change_field_row[2] = old_user_name;
-		                var length = change_field_array.length;
-		                change_field_array[length] = change_field_row;
-		            }
-
-		            var old_role_id = row.role_id;
-		            if (role != old_role_id) {
-		                var change_field_row = [];
-		                change_field_row[0] = 'role_id';
-		                change_field_row[1] = role;
-		                change_field_row[2] = old_role_id;
-		                var length = change_field_array.length;
-		                change_field_array[length] = change_field_row;
-		            }
-
-		            var old_email = row.email;
-		            if (email != old_email) {
-		                var change_field_row = [];
-		                change_field_row[0] = 'user_mail';
-		                change_field_row[1] = email;
-		                change_field_row[2] = old_email;
-		                var length = change_field_array.length;
-		                change_field_array[length] = change_field_row;
-		            }
-
-		            if (change_field_array.length > 0) {
-		            	$.ajax({
-		            		url:"ajax_php/update_user.php",
-		            		type:"POST",
-		            		data:{
-		            			user_id:row.id,
-		            			change_field:change_field_array
-		            		},
-		            		success:function(){
-	                		
-				                window.parent.refreshTabs(); 
-		                	}
-		            	});
-		            }
+	            	$.ajax({
+	            		url:"ajax_php/update_role.php",
+	            		type:"POST",
+	            		data:{
+	            			role_id:row.id,
+	            			role_name:role_name,
+	            			role_priv:role_priv
+	            		},
+	            		success:function(){
+                		
+			                window.parent.refreshTabs(); 
+	                	}
+	            	});
+		            
 	            	
 	            }
 	            
@@ -895,19 +806,19 @@
         	}
 
         	function validateData() {
-        		if (!$('#user_name').validatebox('isValid')) {
-        			$.messager.alert('提示信息', '用户名长度为1到32位，其中一个汉字是2位');
-                	$('#user_name').focus();
+        		if (!$('#role_name').validatebox('isValid')) {
+        			$.messager.alert('提示信息', '角色名称长度为1到32位，其中一个汉字是2位');
+                	$('#role_name').focus();
                 	return false;
         		}
+
+        		if ('' == $('#role_priv').combotree('getValue')) {
+                    $.messager.alert('提示信息', '角色权限不能为空');
+                    $('#role_priv').focus();                    
+                    return false;
+                }
 
         		
-
-        		if (!$('#email').validatebox('isValid')) {
-        			$.messager.alert('提示信息', '请输入正确格式的邮箱地址，最大长度100位，其中一个汉字是2位');
-                	$('#email').focus();
-                	return false;
-        		}
         		return true;
         	}
 
