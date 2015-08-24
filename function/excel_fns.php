@@ -100,7 +100,7 @@
 				//$conn->autocommit(false);
 				$str = '';
 				
-				for ($j = 'A'; $j <= $highestColumn; $j++) {
+				for ($j = 'A'; $j < $highestColumn; $j++) {
 					// reader one row
 					$str .= iconv('utf-8', 'utf-8', $objPHPExcel->getActiveSheet()->getCell("$j$i")->getValue()).'&&';
 				}
@@ -113,7 +113,7 @@
 				$items['item_creator_id'] = get_user_id($strArray[1]);
 				$items['item_follower_id'] = get_user_id($strArray[2]);
 				$items['item_description'] = $strArray[3];
-				echo $strArray[4]."<br />";
+				//echo $strArray[4]."<br />";
 				$items['item_type_id'] = get_para_id($strArray[4]);
 
 				if ($strArray[5] == '进行中') {
@@ -125,73 +125,75 @@
 				// new one item 
 				new_one_item($items);
 
-				echo "insert the item_follow_mark<br />";
+				//echo "insert the item_follow_mark<br />";
 				// insert the item_follow_mark information
-		        $follow_mark = $strArray[6];
-		        $follow_mark_array = explode(";", $follow_mark);
-		        foreach ($follow_mark_array as $key) {
-		        	$mark_content = explode("|", $key);
-		        	$query = "insert into item_follow_marks values ('', '".$_SESSION['current_item_id']."', 
-		        		'".$mark_content[0]."', '".get_user_id($mark_content[1])."', '".$mark_content[2]."')";
-					$result = $conn->query("set names utf8");
-					echo $query."<br />"; 
-					$result = $conn->query($query);
-					if (!$result) {
-						throw new Exception("Insert follow_mark Error!");
-					}
+		        if (!empty($strArray[6])) {
+		        	$follow_mark = $strArray[6];
+			        $follow_mark_array = explode(";", $follow_mark);
+			        foreach ($follow_mark_array as $key) {
+			        	$mark_content = explode("|", $key);
+			        	$query = "insert into item_follow_marks values ('', '".$_SESSION['current_item_id']."', 
+			        		'".$mark_content[0]."', '".get_user_id($mark_content[1])."', '".$mark_content[2]."')";
+						$result = $conn->query("set names utf8");
+						//echo $query."<br />"; 
+						$result = $conn->query($query);
+						if (!$result) {
+							throw new Exception("Insert follow_mark Error!");
+						}
+			        }		        
 		        }
+		        
 
-		        echo "insert the notify<br />";
+		        //echo "insert the notify<br />";
 		        // insert the notify into the auto_notify
-		        $auto_notify = $strArray[7];
-		        $auto_notify_array = explode("；", $auto_notify);
-		        $auto_notifies = array();
-		        foreach ($auto_notify_array as $key) {
-		        	$notify_content = explode("|", $key);
+		        if (!empty($strArray[7])) {
+			        $auto_notify = $strArray[7];
+			        $auto_notify_array = explode("；", $auto_notify);
+			        $auto_notifies = array();
+			        foreach ($auto_notify_array as $key) {
+			        	$notify_content = explode("|", $key);
 
-		        	switch ($notify_content[0]) {
-		        		case '单次提醒':
-		        			$notify_content[0] = 'ONCE';
-		        			break;
+			        	switch ($notify_content[0]) {
+			        		case '单次提醒':
+			        			$notify_content[0] = 'ONCE';
+			        			break;
 
-		        		case '每日提醒':
-		        			$notify_content[0] = 'DAILY';
-		        			break;
+			        		case '每日提醒':
+			        			$notify_content[0] = 'DAILY';
+			        			break;
 
-		        		case '每周提醒':
-		        			$notify_content[0] = 'WEEKLY';
-		        			break;
+			        		case '每周提醒':
+			        			$notify_content[0] = 'WEEKLY';
+			        			break;
 
-		        		case '每月提醒':
-		        			$notify_content[0] = 'MONTHLY';
-		        			break;
+			        		case '每月提醒':
+			        			$notify_content[0] = 'MONTHLY';
+			        			break;
 
-		        		case '每季度提醒':
-		        			$notify_content[0] = 'QUARTERLY';
-		        			break;
+			        		case '每季度提醒':
+			        			$notify_content[0] = 'QUARTERLY';
+			        			break;
 
-		        		case '每年提醒':
-		        			$notify_content[0] = 'YEARLY';
-		        			break;
+			        		case '每年提醒':
+			        			$notify_content[0] = 'YEARLY';
+			        			break;
 
-		        		default:
-		        			$notify_content[0] = 'ONCE';
-		        			break;
-		        	}
+			        		default:
+			        			$notify_content[0] = 'ONCE';
+			        			break;
+			        	}
 
-		        	array_push($auto_notifies, array(
-		        		'auto_type' => $notify_content[0],
-		        		'auto_date' => $notify_content[2],
-		        		'user_id' => get_user_id($notify_content[1])
-		        	));
-		        }
+			        	array_push($auto_notifies, array(
+			        		'auto_type' => $notify_content[0],
+			        		'auto_date' => $notify_content[2],
+			        		'user_id' => get_user_id($notify_content[1])
+			        	));
+			        }
 
-		        print_r($auto_notifies);
-		        // call the setting function
-		        set_notify($auto_notifies);
-
-		        // $conn->commit();
-		        // $conn->autocommit(true);
+			        //print_r($auto_notifies);
+			        // call the setting function
+			        set_notify($auto_notifies);
+			    }
 			}
 		} catch (Exception $e) {
 			echo $e."<br />";

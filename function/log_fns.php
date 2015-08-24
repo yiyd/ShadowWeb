@@ -25,7 +25,7 @@
         $query = "insert into logs VALUES ('', '".$_SESSION['current_item_id']."', '".$_SESSION['current_user_id']."',
                  '".$current_time."')";
         
-        echo $query."<br />";
+        //echo $query."<br />";
         $result = $conn->query($query);
         if (!$result) {
             throw new Exception("Could not connect to the db!");
