@@ -122,7 +122,11 @@
         $result = $conn->query($query);
         $query = "delete from role_priv where role_id = '".$role_id."'";
         $result1 = $conn->query($query);
-        if (!$result || !$result1) {
+
+        // change the users` priv to default
+        $result2 = $conn->query("update users set role_id = '1' where role_id = '".$role_id."'");
+
+        if (!$result || !$result1 || !$result2) {
              throw new Exception("Could not connect to the db!");
         } else {
             return true;
