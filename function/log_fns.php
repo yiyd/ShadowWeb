@@ -64,7 +64,7 @@
     function get_admin_log($log_object, $object_id) {
         $conn = db_connect();
         $query = "select * from admin_logs where admin_log_object like '%".$log_object."%'
-                and admin_log_object_id = '".$object_id."'" ;
+                and admin_log_object_id = '".$object_id."' order by admin_log_id desc" ;
         $result = $conn->query("set names utf8");
         $result = $conn->query($query);
         if (!$result) {
@@ -101,7 +101,7 @@
     // log_title
     function get_log() {
         $conn = db_connect();
-        $query = "select * from logs where item_id = '".$_SESSION['current_item_id']."'";
+        $query = "select * from logs where item_id = '".$_SESSION['current_item_id']."' order by log_id desc";
         //$query = "select * from logs where item_id = '5'";
         
         $result = $conn->query("set names utf8");

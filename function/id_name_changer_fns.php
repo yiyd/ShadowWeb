@@ -35,7 +35,7 @@
     // get user_id 
     function get_user_id ($user_name) {
         $conn = db_connect();
-        $query = "select user_id from users where user_name = '".$user_name."'";
+        $query = "select user_id from users where user_name = '".trim($user_name)."'";
         $result = $conn->query("set names utf8");
         $result = $conn->query($query);
         if (!$result) {
@@ -104,7 +104,7 @@
 
     function get_para_id ($para_name) {
         $conn = db_connect();
-        $query = "select para_id from para_values where para_value_name = '".$para_name."'";
+        $query = "select para_id from para_values where para_value_name = '".trim($para_name)."'";
         $result = $conn->query("set names utf8");
         $result = $conn->query($query);
         if (!$result) {

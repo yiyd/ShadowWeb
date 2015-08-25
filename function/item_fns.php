@@ -21,12 +21,12 @@
 
         // insert the new item into the DB
         if (isset($items['item_creator_id'])) {
-            $query = "insert into items VALUES ('', '".$items['item_name']."', '".$items['item_creator_id']."',
-                '".$items['item_follower_id']."','".$current_time."', '".$items['item_description']."', 
+            $query = "insert into items VALUES ('', '".trim($items['item_name'])."', '".$items['item_creator_id']."',
+                '".$items['item_follower_id']."','".$current_time."', '".addslashes($items['item_description'])."', 
                 '".$items['item_type_id']."', '".$items['item_state']."')";
         } else {
-            $query = "insert into items VALUES ('', '".$items['item_name']."', '".$_SESSION['current_user_id']."',
-                '".$items['item_follower_id']."','".$current_time."', '".$items['item_description']."', 
+            $query = "insert into items VALUES ('', '".trim($items['item_name'])."', '".$_SESSION['current_user_id']."',
+                '".$items['item_follower_id']."','".$current_time."', '".addslashes($items['item_description'])."', 
                 '".$items['item_type_id']."', '".$items['item_state']."')";
         }
         
@@ -144,7 +144,7 @@
             if ($flag) {
                 $query .= ", ";
             }
-            $temp = $row['name']." = '".$row['new_value']."'";
+            $temp = $row['name']." = '".addslashes($row['new_value'])."'";
             $query .= $temp;
             $flag = true;
         }
@@ -182,6 +182,9 @@
         if (!$result) {
             throw new Exception("Could not finish the item.");
         }
+        // delete the auto_notify setting
+        $result = $conn->query("delete from auto_notify where item_id = '".$_SESSION['current_item_id']."'");
+
         // arrange the notify setting information into the array
         $change_field = array();
         array_push($change_field, array(
@@ -192,9 +195,50 @@
         );
         // log the update information
         log_item($change_field);
-        
         return true;
     }
+
+    // check the item state 
+    // This function is used to check item_state before all the actions
+    function is_finished ($item_id) {
+        $conn = db_connect();
+        $result = $conn->query("set names utf8");
+        $result = $conn->query("select item_state from items where item_id = '".$item_id."'");
+
+        if (!$result) {
+            throw new Exception("Could not connect to the db!");
+        }
+        if ($result->num_rows == 0) {
+            //throw new Exception("No such user!");
+        }
+
+        $row = $result->fetch_row();
+        if ($row[0] == 'FINISH') {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    // check if the item is related to the current user
+    // if the current user is creator , follower or the persons who need to be notified.
+    function is_related ($item_id) {
+        $conn = db_connect();
+        $query = "select item_id from items where item_id = '".$item_id."' and item_creator_id = '".$_SESSION['current_user_id']."'";
+        $query1 = "select item_id from items where item_id = '".$item_id."' and item_follower_id = '".$_SESSION['current_user_id']."'";
+        $query2 = "select item_id from auto_notify where item_id = '".$item_id."' and user_id = '".$_SESSION['current_user_id']."'";
+
+        $result = $conn->query($query);
+        $result1 = $conn->query($query1);
+        $result2 = $conn->query($query2);
+
+        if (($result->num_rows > 0) || ($result1->num_rows > 0) || ($result2->num_rows > 0)) {
+            return true;
+        }
+        else {
+            return false;
+        }
+     }
 
     //-----------------------------------------ITEM GET/SEARCH-------------------------------------------
     //----------------------------------------------------------------------------------------------------
@@ -261,7 +305,7 @@
             //if the item_name is the search condition
             if ($row['name'] == "item_name") {
                 if ($flag) $query .= " and ";
-                $query .= "item_name like '%".$row['value']."%'";
+                $query .= "item_name like '%".trim($row['value'])."%'";
                 $flag =true;
             }
 
@@ -275,7 +319,7 @@
             //if the item_description is the search condition
             if ($row['name'] == "item_description") {
                 if ($flag) $query .= " and ";
-                $query .= "item_description like '%".$row['value']."%'";
+                $query .= "item_description like '%".addslashes($row['value'])."%'";
                 $flag =true;
             }
 
@@ -350,7 +394,7 @@
         //$current_time = date("Y-m-d H:i:s");
         $conn = db_connect();
         $query = "insert into item_follow_marks VALUES 
-                ('', '".$_SESSION['current_item_id']."', '".$follow_mark."', 
+                ('', '".$_SESSION['current_item_id']."', '".addslashes($follow_mark)."', 
                      '".$_SESSION['current_user_id']."', '".$current_time."')";
         $result = $conn->query("set names utf8");
         $result = $conn->query($query);
@@ -382,19 +426,32 @@
     //------------------------------------------ITEM_TYPES------------------------------------------------
     //----------------------------------------------------------------------------------------------------
 
-    //get all the different item_types
+    //get all the different item_types according to the current user`s priv
     function get_item_types() {
         $conn = db_connect();
         $result = $conn->query("set names utf8");
-        $result = $conn->query("select para_value_id, para_value_name from para_values where para_id = '1'");
+        //$result = $conn->query("select para_value_id, para_value_name from para_values where para_id = '1'");
+        $result = $conn->query("select priv_id from role_priv where priv_id > 1 and role_id = (
+            select role_id from users where user_id = '".$_SESSION['current_user_id']."')");
         if (!$result) {  
             throw new Exception("Could not connect to the db!");
         }
-        if($result->num_rows == 0) {
-            //throw new Exception("No item_types records!");
+        
+        // store the priv_id
+        $priv_array = array();
+        while (list($id) = $result->fetch_row()) {
+            $priv_array[] = $id;
         }
-        $result = db_result_to_array($result);
-        return $result;
+
+        $type_array = array();
+        foreach ($priv_array as $key) {
+            $result = $conn->query("select para_value_id, para_value_name from para_values 
+                where para_value_name = (select priv_name from privileges where priv_id = '".$key."')");
+            $row = db_result_to_array($result);
+            $type_array = array_merge($type_array, $row);
+        }
+        //$result = db_result_to_array($result);
+        return $type_array;
     }
    
 ?>

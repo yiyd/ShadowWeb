@@ -74,3 +74,6 @@ create trigger t_items_insert
 	after insert on items for each row
 		insert into logs values ('', new.item_id, new.item_creator_id, new.item_create_time);
 		insert into log_fields values
+
+
+9 function is_finished($item_id)  判断事项是否处于关闭状态，前台每次调用函数必须要使用此函数进行判断。
