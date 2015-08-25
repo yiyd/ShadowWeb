@@ -34,7 +34,7 @@ if %ifo% == 3 (
 	goto loop
 )
 if %ifo% == 4 (
-	mysql -u root -p --routines --default-character-set=utf8 --databases shadow > shadow.sql
+	mysqldump -u root -p --routines --default-character-set=utf8 --databases shadow > shadow.sql
 	echo   DONE!!!!!!
 	goto loop
 )
