@@ -28,47 +28,50 @@
 				<div title="事项管理系统" style="padding:10px">
 					<ul id="tt" class="easyui-tree">
 						<li>
-							<span>事项管理系统</span>
+							<span>事项管理</span>
 							<ul>
-								<li data-options="id:1">日常工作事务</li>
-								<li data-options="id:2">生产问题事务</li>
-								<li data-options="id:3">
-									<span>事项操作</span>
+								<li data-options="id:90">无此权限</li>
+								<!-- <li data-options="id:91">
+									<span>未完成事务</span>
 									<ul>
-										<li data-options="id:31,iconCls:'icon-add',text:'新建事项',attributes:{url:'new_item_form.php'}">新建事项</li>
-										<li data-options="id:32,iconCls:'icon-search',text:'查询事项',attributes:{url:'search_item_form.php'}">查询事项</li>
+										<li data-options="id:11">日常工作事务</li>
+										<li data-options="id:12">生产问题事务</li>
 									</ul>
-								</li>
-								<li data-options="id:4">
+								</li> -->
+								
+								<!-- <li data-options="id:92">
 									<span>已完成事务</span>
 									<ul>
-										<li>已完成日常工作事务</li>
-										<li>已完成生产问题事务</li>
+										<li data-options="id:21">已完成日常工作事务</li>
+										<li data-options="id:22">已完成生产问题事务</li>
 									</ul>
-								</li>
+								</li> -->
+							</ul>
+						</li>
+						<li>
+							<span>事项操作</span>
+							<ul>
+								<li data-options="id:93,iconCls:'icon-add',text:'新建事项',attributes:{url:'new_item_form.php'}">新建事项</li>
+								<li data-options="id:94,iconCls:'icon-search',text:'查询事项',attributes:{url:'search_item_form.php'}">查询事项</li>
 							</ul>
 						</li>
 					</ul>
 				</div>
-				<div title="系统管理" style="padding:10px">
+				<div id="manageDiv" title="系统管理" style="padding:10px">
 					<ul id="manage" class="easyui-tree">
 						<li>
 							<span>系统管理</span>
 							<ul>
-								<li data-options="id:6,text:'角色管理',attributes:{url:'role_manage.php'}">角色管理</li>
-								<li data-options="id:7,text:'权限管理',attributes:{url:'privileges_manage.php'}">权限管理</li>
-								<li data-options="id:8,text:'用户管理',attributes:{url:'user_manage.php'}">用户管理</li>
-								<li data-options="id:9,text:'参数管理',attributes:{url:'parameters_manage.php'}">参数管理</li>
+								<li data-options="id:95,text:'角色管理',attributes:{url:'role_manage.php'}">角色管理</li>
+<!-- 								<li data-options="id:96,text:'权限管理',attributes:{url:'privileges_manage.php'}">权限管理</li>-->
+								<li data-options="id:97,text:'用户管理',attributes:{url:'user_manage.php'}">用户管理</li> 
+								<li data-options="id:98,text:'参数管理',attributes:{url:'parameters_manage.php'}">参数管理</li>
 								
 							</ul>
 						</li>
 					</ul>
 				</div>
 				</div>
-			
-				
-
-			
 
 		</div>
 		<div data-options="region:'south',border:false" style="height:30px;padding:10px;">待完善</div>
@@ -96,7 +99,7 @@
 						});
 
 					}else {
-						id = 5;
+						id = 99;
 					}
 					if (node.attributes) {
 						addTab(id,node.attributes.url, node.text);
