@@ -1,6 +1,6 @@
 <?php
 	require_once('shadow_fns.php');
-	set_include_path('.'. PATH_SEPARATOR .$_SERVER['DOCUMENT_ROOT'].'\shadow-git\resources\PHPExcel' . PATH_SEPARATOR .get_include_path()); 
+	set_include_path('.'. PATH_SEPARATOR .$_SERVER['DOCUMENT_ROOT'].'\shadow\shadow-git\resources\PHPExcel' . PATH_SEPARATOR .get_include_path()); 
 	require_once('PHPExcel.php');
     require_once('PHPExcel\IOFactory.php');
     require_once('PHPExcel\Reader\Excel5.php');

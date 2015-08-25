@@ -27,6 +27,7 @@ if %ifo% == 2 (
 	goto loop
 )
 if %ifo% == 3 (
+	cd D:\mysql-5.1.48-win32\bin
 	mysql -u root -p < d:\xampp\htdocs\shadow\shadow-git\db_sql\delete.sql
 	mysql -u root -p < d:\xampp\htdocs\shadow\shadow-git\db_sql\create-database.sql
 	mysql -u root -p < d:\xampp\htdocs\shadow\shadow-git\db_sql\log_trigger.sql
