@@ -122,13 +122,15 @@
 					$items['item_state'] = 'FINISH';
 				}
 
+				$items['item_priority_id'] = get_priority_id($strArray[6]);
+
 				// new one item 
 				new_one_item($items);
 
 				//echo "insert the item_follow_mark<br />";
 				// insert the item_follow_mark information
-		        if (!empty($strArray[6])) {
-		        	$follow_mark = $strArray[6];
+		        if (!empty($strArray[7])) {
+		        	$follow_mark = $strArray[7];
 			        $follow_mark_array = explode("；", $follow_mark);
 			        foreach ($follow_mark_array as $key) {
 			        	$mark_content = explode("|", $key);
@@ -146,8 +148,8 @@
 
 		        //echo "insert the notify<br />";
 		        // insert the notify into the auto_notify
-		        if (!empty($strArray[7])) {
-			        $auto_notify = $strArray[7];
+		        if (!empty($strArray[8])) {
+			        $auto_notify = $strArray[8];
 			        $auto_notify_array = explode("；", $auto_notify);
 			        $auto_notifies = array();
 			        foreach ($auto_notify_array as $key) {
