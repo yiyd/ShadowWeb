@@ -134,4 +134,20 @@
         $row = $result->fetch_row();
         return $row[0];
     }
+
+    function get_role_id ($user_id) {
+        $conn = db_connect();
+        $query = "select role_id from users where user_id = '".$user_id."'";
+        $result = $conn->query("set names utf8");
+        $result = $conn->query($query);
+        if (!$result) {
+            throw new Exception("Could not connect to the db!");
+        }
+        if ($result->num_rows == 0) {
+            //throw new Exception("No such priv!");
+        }
+
+        $row = $result->fetch_row();
+        return $row[0];
+    }
 ?>
