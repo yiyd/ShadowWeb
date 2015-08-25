@@ -8,14 +8,19 @@
 	session_start();
 	
 	try {
+		$item_types = get_item_types();
+		
 		$user_id = $_POST['user_id'];
-		$privs_array = get_privileges();
-		for ($i=0; $i < count($privs_array); $i++) { 
-			$row = $privs_array[$i];
-			$new_row = array();
-			$new_row['id'] = $row['priv_id'];
-			$new_row['text'] = $row['priv_name'];			
-			$privs_array[$i] = $new_row;
+		$role_id = get_role_id($user_id);
+		$privs = get_privileges_by_id($role_id);
+		foreach ($privs as $key => $value) {
+			if ($value['priv_id'] == 1) {
+				$row = array();
+				$row['para_value_id'] = 0;
+				$row['para_value_name'] = '系统管理';
+				$count = count($item_types);
+				$item_types[$count] = $row;
+			}
 		}
 	}
 	catch(Exception $e) {
@@ -24,5 +29,6 @@
 		do_html_footer();
 		exit;
 	}
-	echo json_encode($privs_array);
-?>
+	echo json_encode($item_types);
+
+?> 

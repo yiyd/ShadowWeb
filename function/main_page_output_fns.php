@@ -24,31 +24,17 @@
 
 		<div data-options="region:'north',border:false" style="height:40px;padding:10px">待完善</div>
 		<div data-options="region:'west',split:true,title:'系统菜单'" style="width:250px;">
-			<div class="easyui-accordion" data-options="fit:true,border:false">
+			<div id="ea" class="easyui-accordion" data-options="fit:true,border:false">
 				<div title="事项管理系统" style="padding:10px">
 					<ul id="tt" class="easyui-tree">
-						<li>
+						<li data-options="id:90">
 							<span>事项管理</span>
 							<ul>
-								<li data-options="id:90">无此权限</li>
-								<!-- <li data-options="id:91">
-									<span>未完成事务</span>
-									<ul>
-										<li data-options="id:11">日常工作事务</li>
-										<li data-options="id:12">生产问题事务</li>
-									</ul>
-								</li> -->
 								
-								<!-- <li data-options="id:92">
-									<span>已完成事务</span>
-									<ul>
-										<li data-options="id:21">已完成日常工作事务</li>
-										<li data-options="id:22">已完成生产问题事务</li>
-									</ul>
-								</li> -->
+								
 							</ul>
 						</li>
-						<li>
+						<li data-options="id:92">
 							<span>事项操作</span>
 							<ul>
 								<li data-options="id:93,iconCls:'icon-add',text:'新建事项',attributes:{url:'new_item_form.php'}">新建事项</li>
@@ -57,7 +43,7 @@
 						</li>
 					</ul>
 				</div>
-				<div id="manageDiv" title="系统管理" style="padding:10px">
+				<div title="系统管理" style="padding:10px">
 					<ul id="manage" class="easyui-tree">
 						<li>
 							<span>系统管理</span>
@@ -85,7 +71,10 @@
 
 	</body>
 	<script>
+		
+
 		$(function(){
+
 			$('#tt').tree({
 				
 				onClick:function(node){
@@ -122,85 +111,314 @@
 
         function reloadItems()
 		{
-			
-			$('#tt').tree('remove', $('#tt').tree('find', 1).target);
-			$('#tt').tree('remove', $('#tt').tree('find', 2).target);
-			$('#tt').tree('remove', $('#tt').tree('find', 4).target);			
-			var node = $('#tt').tree('find', 3);
-			if (node){
-				$('#tt').tree('insert', {
-					before: node.target,
-					data: [{
-					    	id: 1,
-					    	text: '日常工作事务'
-				    }]
-				});
-				$('#tt').tree('insert', {
-					before: node.target,
-					data: [{
-					    	id: 2,
-					    	text: '生产问题事务'
-				    }]
-				});
-				$('#tt').tree('insert', {
-					after: node.target,
-					data: [{
-					    	id: 4,
-					    	text: '已完成事务',
-					    	state: 'closed',
-					    	children: [{
-					    		id: 41,
-					    		text: '已完成日常工作事务',
-					    	},{
-					    		id: 42,
-					    		text: '已完成生产问题事务',
-					    	}
-					    	]
-				    }]
-				});
+			var n = $('#tt').tree('find', 1);
+			if (n) {
+				$('#tt').tree('remove',n.target);
+			}
+			n = $('#tt').tree('find', 51);
+			if (n) {
+				$('#tt').tree('remove',n.target);
 			}
 
-            $.ajax({
-	            url:"ajax_php/items_array.php",
-	            type:"POST",
-	            success:function(data){
-	            	$.each($.parseJSON(data), function(idx,item){
-	            		// alert(data);
+			$.ajax({
+				url:'ajax_php/get_user_privileges.php',
+				type:'POST',
+				data:{
+					user_id:<?php echo $_SESSION['current_user_id'] ?>
+				},
+				success:function(json){
+					// alert(json);
+					var rows = [];
+	            	$.each($.parseJSON(json), function(idx,item){
+		                rows.push({
+		                	priv_id:item.para_value_id,
+		                    priv_name:item.para_value_name,
+		                    
+		                });
 
-	            		if (item.item_state == 'PROCESSING') {
-	            			
-							var manageNode = $('#tt').tree('find', item.item_type_id);	   
+		            });
+
+	            	var node = $('#tt').tree('find', 90);
+					if (rows.length > 0) {
+						
+						if (node){
+							
 							$('#tt').tree('append',{
-								parent:manageNode.target,
+								parent:node.target,
 								data:[{
-									id:item.item_id,
-									text:item.item_name,
-									attributes:{
-										url:'display_item.php'
-									}
+									id:1,
+									text:"未完成事务",
+									
 								}]
 							});
-	            		}else if (item.item_state == 'FINISH') {
-							var manageNode = $('#tt').tree('find', '4' + item.item_type_id);	   
+
 							$('#tt').tree('append',{
-								parent:manageNode.target,
+								parent:node.target,
 								data:[{
-									id:item.item_id,
-									text:item.item_name,
-									attributes:{
-										url:'display_item.php'
-									}
+									id:51,
+									text:"已完成事务",
+									
 								}]
 							});
-	            		}
-	            		
-	            	});
+							
+							
+						}
 
-	            }
-	        });
-            
-            
-		 	
+						var adminFlag = false;
+
+			            for (var i = 0; i < rows.length; i++) {
+			            	
+			            	row = rows[i];
+			            	// alert(row['priv_name']);
+			            	switch(row['priv_name'])
+			            	{
+			            		case '系统管理':
+			            			adminFlag = true;
+			            			break;
+			            		default:
+			            			$('#tt').tree('append',{
+										parent:$('#tt').tree('find', 1).target,
+										data:[{
+											id:1 + row['priv_id'],
+											text:row['priv_name'],
+											
+										}]
+									});
+									$('#tt').tree('append',{
+										parent:$('#tt').tree('find', 51).target,
+										data:[{
+											id:51 + row['priv_id'],
+											text:row['priv_name'],
+											
+										}]
+									});
+			            			break;
+
+			            	}
+			            	if (i == rows.length - 1 && !adminFlag) {
+			            		var panel = $('#ea').accordion('getPanel','系统管理');
+								if (panel) {
+									$('#ea').accordion('remove','系统管理');
+								}
+			            	}
+			            }
+
+			            $.ajax({
+				            url:"ajax_php/items_array.php",
+				            type:"POST",
+				            success:function(data){
+				            	$.each($.parseJSON(data), function(idx,item){
+				            		// alert(data);
+
+				            		if (item.item_state == 'PROCESSING') {
+				            			
+										var manageNode = $('#tt').tree('find', '1' + item.item_type_id);	   
+										$('#tt').tree('append',{
+											parent:manageNode.target,
+											data:[{
+												id:item.item_id,
+												text:item.item_name,
+												attributes:{
+													url:'display_item.php'
+												}
+											}]
+										});
+				            		}else if (item.item_state == 'FINISH') {
+										var manageNode = $('#tt').tree('find', '51' + item.item_type_id);	   
+										$('#tt').tree('append',{
+											parent:manageNode.target,
+											data:[{
+												id:item.item_id,
+												text:item.item_name,
+												attributes:{
+													url:'display_item.php'
+												}
+											}]
+										});
+				            		}
+				            		
+				            	});
+
+				            }
+				        });
+						
+					}else{
+						if (node){
+							
+							$('#tt').tree('append',{
+								parent:node.target,
+								data:[{
+									id:90,
+									text:"无此权限",
+									
+								}]
+							});
+							var nn = $('#tt').tree('find', 93);
+							if (nn) {
+								$('#tt').tree('remove',nn.target);
+							}
+							nn = $('#tt').tree('find', 94);
+							if (nn) {
+								$('#tt').tree('remove',nn.target);
+							}
+							nn = $('#tt').tree('find', 92);
+							$('#tt').tree('append',{
+								parent:nn.target,
+								data:[{
+									id:93,
+									text:"无此权限",
+									
+								}]
+							});
+						}
+						var panel = $('#ea').accordion('getPanel','系统管理');
+						if (panel) {
+							$('#ea').accordion('remove','系统管理');
+						}
+						
+					}
+
+	                
+				}
+
+			});
+			// $.ajax({
+			// 	url:'ajax_php/get_user_privileges.php',
+			// 	type:'POST',
+			// 	data:{
+			// 		user_id:<?php echo $_SESSION['current_user_id'] ?>
+			// 	},
+			// 	success:function(json){
+			// 		// alert(json);
+			// 		var rows = [];
+	  //           	$.each($.parseJSON(json), function(idx,item){
+		 //                rows.push({
+		 //                	priv_id:item.priv_id,
+		 //                    priv_name:item.priv_name,
+		                    
+		 //                });
+
+		 //            });
+
+	  //           	var node = $('#tt').tree('find', 90);
+			// 		if (rows.length > 0) {
+						
+			// 			if (node){
+							
+			// 				$('#tt').tree('append',{
+			// 					parent:node.target,
+			// 					data:[{
+			// 						id:1,
+			// 						text:"未完成事务",
+									
+			// 					}]
+			// 				});
+
+			// 				$('#tt').tree('append',{
+			// 					parent:node.target,
+			// 					data:[{
+			// 						id:51,
+			// 						text:"已完成事务",
+									
+			// 					}]
+			// 				});
+							
+							
+			// 			}
+						
+			// 		}else{
+			// 			if (node){
+							
+			// 				$('#tt').tree('append',{
+			// 					parent:node.target,
+			// 					data:[{
+			// 						id:90,
+			// 						text:"无此权限",
+									
+			// 					}]
+			// 				});
+			// 			}
+			// 			$('#ea').accordion('remove','系统管理');
+			// 		}
+
+			// 		var adminFlag = false;
+
+		 //            for (var i = 0; i < rows.length; i++) {
+		            	
+		 //            	row = rows[i];
+		 //            	switch(row['priv_name'])
+		 //            	{
+		 //            		case '系统管理':
+		 //            			adminFlag = true;
+		 //            			break;
+		 //            		default:
+		 //            			$('#tt').tree('append',{
+			// 						parent:$('#tt').tree('find', 1).target,
+			// 						data:[{
+			// 							id:1 + row['priv_id'],
+			// 							text:row['priv_name'],
+										
+			// 						}]
+			// 					});
+			// 					$('#tt').tree('append',{
+			// 						parent:$('#tt').tree('find', 51).target,
+			// 						data:[{
+			// 							id:51 + row['priv_id'],
+			// 							text:row['priv_name'],
+										
+			// 						}]
+			// 					});
+		 //            			break;
+
+		 //            	}
+		 //            	if (i == rows.length - 1 && !adminFlag) {
+		 //            		$('#ea').accordion('remove','系统管理');
+		 //            	}
+		 //            }
+
+	  //               $.ajax({
+			//             url:"ajax_php/items_array.php",
+			//             type:"POST",
+			//             success:function(data){
+			//             	$.each($.parseJSON(data), function(idx,item){
+			//             		// alert(data);
+
+			//             		if (item.item_state == 'PROCESSING') {
+			            			
+			// 						var manageNode = $('#tt').tree('find', item.item_type_id);	   
+			// 						$('#tt').tree('append',{
+			// 							parent:manageNode.target,
+			// 							data:[{
+			// 								id:item.item_id,
+			// 								text:item.item_name,
+			// 								attributes:{
+			// 									url:'display_item.php'
+			// 								}
+			// 							}]
+			// 						});
+			//             		}else if (item.item_state == 'FINISH') {
+			// 						var manageNode = $('#tt').tree('find', '4' + item.item_type_id);	   
+			// 						$('#tt').tree('append',{
+			// 							parent:manageNode.target,
+			// 							data:[{
+			// 								id:item.item_id,
+			// 								text:item.item_name,
+			// 								attributes:{
+			// 									url:'display_item.php'
+			// 								}
+			// 							}]
+			// 						});
+			//             		}
+			            		
+			//             	});
+
+			//             }
+			//         });
+			// 	}
+
+			// });
+			
+            		 	
 		}
 	
 
