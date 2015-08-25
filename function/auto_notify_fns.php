@@ -42,9 +42,6 @@
 					'new_value' => $auto['user_id']
 					)
 				);
-				
-				// $conn->commit();
-				// $conn->autocommit(true);
 
 				// log the NEW setting 
 				log_item($change_field);

@@ -1,9 +1,13 @@
 <?php
 	//include('function\shadow_fns.php');
-	//session_start();
+	session_start();
 	require_once('function/shadow_fns.php');
+	$_SESSION['current_user_id'] = '4';
+
+	$item_type = get_item_types();
+	print_r($item_type);
 	
-	echo $_SERVER['DOCUMENT_ROOT'];
+	//echo $_SERVER['DOCUMENT_ROOT'];
 
 	// $change_field = array();
 	// array_push($change_field, array(
@@ -43,8 +47,8 @@
 	// import_items($filename);
 	// echo "import sucess";
 
-	$priv_array = array(2);
-	update_role('9', 'test', $priv_array);
+	// $priv_array = array(2);
+	// update_role('9', 'test', $priv_array);
 
 	// $conn = db_connect();
 	// $query = "select auto_id from auto_notify where item_id = '3' ";

@@ -38,7 +38,7 @@
         $query = "select * from roles where ";
 
         foreach ($condition as $row) {
-            $query .= $row['name']." like '%".$row['value']."%'";
+            $query .= $row['name']." like '%".trim($row['value'])."%'";
         }
 
         $result = $conn->query($query);
@@ -66,7 +66,7 @@
         $conn = db_connect();
         //$conn->autocommit(flase);
 
-        $query = "insert into roles values ('', '".$new_role_name."')";
+        $query = "insert into roles values ('', '".trim($new_role_name)."')";
         $result = $conn->query("set names utf8");
         $result = $conn->query($query);
         if (!$result) {
@@ -92,7 +92,7 @@
         //if (!check_admin()) return false;
         if (isset($role_id) && isset($role_name)) {
             // change the role_name
-            $result = $conn->query("update roles set role_name = '".$role_name."' where role_id = '".$role_id."'");
+            $result = $conn->query("update roles set role_name = '".trim($role_name)."' where role_id = '".$role_id."'");
             if (!$result) {
                 throw new Exception("Could not connect to the DB.");
             }
@@ -109,7 +109,7 @@
                 if (!in_array($key, $res_array)) {
                     // not exsit, then insert
                     $result = $conn->query("insert into role_priv values ('', '".$role_id."', '".$key."')");
-                    echo "sdfjksd1<br />";
+                    //echo "sdfjksd1<br />";
                 }
             }
 
@@ -118,7 +118,7 @@
                     // not exsit, then delete
                     $result = $conn->query("delete from role_priv where role_id = '".$role_id."' and 
                         priv_id = '".$key."'");
-                    echo "sdfjksd2<br />";
+                    //echo "sdfjksd2<br />";
                 }
             }
         }  
@@ -181,7 +181,7 @@
             //if the user_name is the search condition
             if ($row['name'] == "user_name") {
                 if ($flag) $query .= " and ";
-                $query .= "user_name like '%".$row['value']."%'";
+                $query .= "user_name like '%".trim($row['value'])."%'";
                 $flag =true;
             }
 
@@ -195,7 +195,7 @@
             //if the user_mail is the search condition
             if ($row['name'] == "user_mail") {
                 if ($flag) $query .= " and ";
-                $query .= "user_mail like '%".$row['value']."%'";
+                $query .= "user_mail like '%".trim($row['value'])."%'";
             }         
         }
         $result = $conn->query("set names utf8");
@@ -221,8 +221,8 @@
         }
 
         $conn = db_connect();
-        $query = "insert into users values ('', '".$new_user['user_name']."', sha1('".$new_user['user_passwd']."'), 
-                '".$new_user['role_id']."', '".$new_user['user_mail']."')";
+        $query = "insert into users values ('', '".trim($new_user['user_name'])."', sha1('".$new_user['user_passwd']."'), 
+                '".$new_user['role_id']."', '".trim($new_user['user_mail'])."')";
         $result = $conn->query("set names utf8");
         $result = $conn->query($query);
         if (!$result) {
@@ -252,12 +252,12 @@
                 $query .= ", ";
             }
 
-            $temp = $row['name']." = '".$row['new_value']."'";
+            $temp = $row['name']." = '".trim($row['new_value'])."'";
             $query .= $temp;
             $flag = true;
         }
         $query .= " where user_id = '".$user_id."'";    
-        echo $query;
+        //echo $query;
         $result = $conn->query("set names utf8");
         $result = $conn->query($query);
         if (!$result) {
@@ -326,7 +326,7 @@
     function new_privileges($new_priv_name) {
         $conn = db_connect();
         $result = $conn->query("set names utf8");
-        $result = $conn->query("insert into privileges value ('', '".$new_priv_name."')");
+        $result = $conn->query("insert into privileges value ('', '".trim($new_priv_name)."')");
         if (!$result) {
             throw new Exception("Could not connect to the DB.");
         }
