@@ -2,9 +2,15 @@ use shadow;
 
 set names utf8;
 
-INSERT INTO parameters VALUES ('', 'item_type', 'Item`s types');
+INSERT INTO parameters VALUES ('', '事项类型', '每个事项的类型');
 INSERT INTO para_values VALUES ('', '1', '日常事务');
 INSERT INTO para_values VALUES ('', '1', '生产问题');
+INSERT INTO parameters VALUES ('', '事项优先级', '每个事项的优先级');
+INSERT INTO para_values VALUES ('', '2', '最高级');
+INSERT INTO para_values VALUES ('', '2', '较高级');
+INSERT INTO para_values VALUES ('', '2', '正常');
+INSERT INTO para_values VALUES ('', '2', '较低级');
+INSERT INTO para_values VALUES ('', '2', '最低级');
 INSERT INTO roles VALUES('', 'default');
 INSERT INTO roles VALUES('', 'admin');
 INSERT INTO roles VALUES('', 'common_1');

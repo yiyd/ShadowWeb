@@ -2,6 +2,7 @@ echo off
 :loop
 echo 	***************************************************
 echo 	  		SHADOW-ASSISTENT	
+echo  		   Current Time : %Time:~0,10%
 echo 	 	   NOTICE: need root password!				
 echo 	  	1. Truncate all the tables				
 echo   		2. Insert default datas 		 	
@@ -34,7 +35,7 @@ if %ifo% == 3 (
 	goto loop
 )
 if %ifo% == 4 (
-	mysqldump -u root -p --routines --default-character-set=utf8 --databases shadow > shadow.sql
+	mysqldump -u root -p --routines --default-character-set=utf8 --databases shadow > shadow_%date:~0,10%.sql
 	echo   DONE!!!!!!
 	goto loop
 )
