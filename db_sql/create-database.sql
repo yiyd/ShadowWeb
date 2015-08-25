@@ -13,8 +13,10 @@ CREATE TABLE parameters
 CREATE TABLE para_values
 (
   para_value_id int unsigned not null auto_increment primary key,
-  para_id int unsigned not null REFERENCES parameters(para_id),
-  para_value_name char (32) not null
+  para_id int unsigned not null ,
+  para_value_name char (32) not null,
+  index (para_id),
+  CONSTRAINT FOREIGN KEY (para_id) REFERENCES parameters(para_id) ON DELETE CASCADE
 ) ENGINE = InnoDB CHARACTER SET utf8;
 
 create table items
@@ -26,40 +28,46 @@ create table items
   item_create_time datetime not null,
   item_description varchar(255),
   item_type_id int unsigned not null REFERENCES para_values(para_value_id),
-  item_state enum('PROCESSING', 'FINISH') not null DEFAULT 'PROCESSING'
+  item_state enum('PROCESSING', 'FINISH') not null DEFAULT 'PROCESSING',
+  item_priority_id int unsigned not null
 ) ENGINE = InnoDB CHARACTER SET utf8 auto_increment = 100;
 
 CREATE TABLE item_follow_marks
 ( 
   item_follow_mark_id int unsigned not null auto_increment primary key,
-  item_id int unsigned not null REFERENCES items(item_id),
+  item_id int unsigned not null,
   item_follow_mark VARCHAR(255) not null,
   mark_creator_id int unsigned not null REFERENCES users(user_id),
-  mark_create_time datetime not null
+  mark_create_time datetime not null,
+  index (item_id),
+  CONSTRAINT FOREIGN KEY (item_id) REFERENCES items(item_id) ON DELETE CASCADE
 ) ENGINE = InnoDB CHARACTER SET utf8;
 
 CREATE TABLE roles
 (
-  role_id int unsigned not null auto_increment PRIMARY KEY ,
+  role_id int unsigned not null auto_increment primary key,
   role_name CHAR (32) NOT NULL
 ) ENGINE = InnoDB CHARACTER SET utf8;
 
 CREATE TABLE privileges
 (
-  priv_id int unsigned not null auto_increment PRIMARY KEY,
+  priv_id int unsigned not null auto_increment primary key,
   priv_name char (32) not null
 ) ENGINE = InnoDB CHARACTER SET utf8;
 
 CREATE TABLE role_priv
 (
-  role_priv_id int unsigned not null auto_increment PRIMARY KEY,
-  role_id int unsigned not null REFERENCES roles(role_id),
-  priv_id int unsigned not null REFERENCES privileges(priv_id)
+  role_priv_id int unsigned not null auto_increment primary key,
+  role_id int unsigned not null,
+  priv_id int unsigned not null,
+  index (role_id, priv_id),
+  CONSTRAINT FOREIGN KEY (role_id) REFERENCES roles(role_id) ON DELETE CASCADE,
+  CONSTRAINT FOREIGN KEY (priv_id) REFERENCES privileges(priv_id) ON DELETE CASCADE
 ) ENGINE = InnoDB CHARACTER SET utf8;
 
 CREATE TABLE users
 (
-  user_id int unsigned NOT NULL auto_increment PRIMARY KEY,
+  user_id int unsigned NOT NULL auto_increment primary key,
   user_name CHAR (32) NOT NULL ,
   user_passwd CHAR (40) not NULL ,
   role_id int unsigned NOT NULL REFERENCES roles(role_id),
@@ -69,10 +77,12 @@ CREATE TABLE users
 CREATE TABLE auto_notify
 (
   auto_id int unsigned not null auto_increment primary key,
-  item_id int unsigned not null REFERENCES items(item_id),
+  item_id int unsigned not null,
   auto_date datetime not null,
   auto_type enum ('ONCE', 'DAILY', 'WEEKLY', 'MONTHLY', 'QUARTERLY', 'YEARLY') NOT NULL DEFAULT 'ONCE',
-  user_id int unsigned not null REFERENCES users(user_id)
+  user_id int unsigned not null REFERENCES users(user_id),
+  index (item_id),
+  CONSTRAINT FOREIGN KEY (item_id) REFERENCES items(item_id) ON DELETE CASCADE
 ) ENGINE = InnoDB CHARACTER SET utf8;
 
 create table logs

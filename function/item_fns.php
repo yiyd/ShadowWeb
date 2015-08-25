@@ -23,11 +23,11 @@
         if (isset($items['item_creator_id'])) {
             $query = "insert into items VALUES ('', '".trim($items['item_name'])."', '".$items['item_creator_id']."',
                 '".$items['item_follower_id']."','".$current_time."', '".addslashes($items['item_description'])."', 
-                '".$items['item_type_id']."', '".$items['item_state']."')";
+                '".$items['item_type_id']."', '".$items['item_state']."', '".$items['item_priority_id']."')";
         } else {
             $query = "insert into items VALUES ('', '".trim($items['item_name'])."', '".$_SESSION['current_user_id']."',
                 '".$items['item_follower_id']."','".$current_time."', '".addslashes($items['item_description'])."', 
-                '".$items['item_type_id']."', '".$items['item_state']."')";
+                '".$items['item_type_id']."', '".$items['item_state']."', '".$items['item_priority_id']."')";
         }
         
         $result = $conn->query("set names utf8");
@@ -92,6 +92,11 @@
                 'name' => '事项状态',
                 'old_value' => '空值',
                 'new_value' => $items['item_state'] 
+            ),
+            array(
+                'name' => '事项优先级',
+                'old_value' => '空值',
+                'new_value' => $items['item_priority_id'] 
             )
         );
 
@@ -164,6 +169,7 @@
                 if ($key['name'] == 'item_description') $key['name'] = '事项描述';
                 if ($key['name'] == 'item_type_id') $key['name'] = '事项类型';
                 if ($key['name'] == 'item_state') $key['name'] = '事项状态';
+                if ($key['name'] == 'item_priority_id') $key['name'] = '事项优先级';
             }
             // log the update information
             log_item($change_field);
@@ -364,6 +370,13 @@
             if ($row['name'] == "end_time") {
                 if ($flag) $query .= " and ";
                 $query .= "item_create_time < '".$row['value']."'";
+                $flag =true;
+                //$flag_end =  true;
+            }
+
+            if ($row['name'] == "item_priority_id") {
+                if ($flag) $query .= " and ";
+                $query .= "item_priority_id = '".$row['value']."'";
                 $flag =true;
                 //$flag_end =  true;
             }
