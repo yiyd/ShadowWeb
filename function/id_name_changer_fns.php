@@ -43,7 +43,7 @@
         }
         if ($result->num_rows == 0) {
             //throw new Exception("No such user!");
-            //return false;
+            // return false;
         }
 
         $row = $result->fetch_row();

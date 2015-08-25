@@ -65,7 +65,7 @@
 					<td>
 						<div align="left" style="padding-left:2px;">
 	
-							<input id="user_name" class="easyui-validatebox" data-options="required:true,validType:'length[1,32]'">
+							<input id="user_name" class="easyui-validatebox" data-options="required:true,validType:['length[1,32]','isDuplicate']">
 						</div>
 					</td>
 					
@@ -367,6 +367,22 @@
 			            return value.length <= param[0];    
 			        },    
 			        message: '请不要输入超过{0}个字符.'   
+			    },
+			    isDuplicate: {
+			    	validator: function(value, param){
+			    		
+			    		var response = $.ajax({
+			    			url:'ajax_php/get_user_id.php',
+			    			type:'POST',
+			    			data:{
+			    				user_name:value
+			    			},
+			    			async:false,
+			    		}).responseText;
+
+			    		return response == 0;
+			    	},
+			    	message: '此用户名已存在'
 			    }     
 			}); 
 

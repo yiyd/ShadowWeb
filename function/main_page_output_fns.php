@@ -5,7 +5,7 @@
  * Time: 17:20
  */
     // require_once('function/item_fns.php');
-    function display_main_page() {
+    function display_main_page($user_name) {
 ?>
 <!DOCTYPE html>
 <html>
@@ -19,10 +19,23 @@
         <script type="text/javascript" src="resources/jquery-easyui/jquery.min.js"></script>
         <script type="text/javascript" src="resources/jquery-easyui/jquery.easyui.min.js"></script>
         <script type="text/javascript" src="resources/common/js/tab.js"></script>
+        <script type="text/javascript" src="resources/jquery-easyui/locale/easyui-lang-zh_CN.js"></script>
+
     </head>
     <body class="easyui-layout">
+    	<form id="mainForm">
+		<div data-options="region:'north',border:false" style="height:auto;padding:10px">
+			<span style="float:right; padding-right:20px; padding-top: 6px;"> 
+				<a href="javascript:changePwd()">修改密码</a> 
+				<a href="javascript:logOut()">安全退出</a>
+			</span>
 
-		<div data-options="region:'north',border:false" style="height:40px;padding:10px">待完善</div>
+			<span style="padding-left:10px; font-size: 14px;"> 欢迎: </span>
+			<span style="padding-left:2px; padding-top: 10px; font-size: 20px;"> <?php echo $user_name ?> </span>
+			<span style="padding-left:2px; font-size: 14px;"> 使用事项跟踪工具 </span> 
+			<span style="padding-left:15px; font-size: 14px;"> </span>
+
+		</div>
 		<div data-options="region:'west',split:true,title:'系统菜单'" style="width:250px;">
 			<div id="ea" class="easyui-accordion" data-options="fit:true,border:false">
 				<div title="事项管理系统" style="padding:10px">
@@ -68,12 +81,106 @@
 				</div>
 			</div>
 		</div>
-
+		<div id="win" class="easyui-window" title="修改密码" style="width:300px;height:200px" data-options="modal:true,closed:true,collapsible:false,minimizable:false,maximizable:false">
+			<form>
+				<table width="100%" border="0" align="center" cellpadding="1" cellspacing="1" style="border-collapse: collapse;">
+					<tr>
+						<td width="45%" height="26">
+							<div align="right" style="padding-right: 4px;">原始密码:</div>
+						</td>
+						<td>
+							<div align="left" style="padding-left: 4px;">
+								<input id="oldpwd" type="password" class="easyui-validatebox" data-options="required:true,validType:'length[1,40]'">							</div>
+						</td>
+					</tr>
+					<tr>
+						<td width="45%" height="26">
+							<div align="right" style="padding-right: 4px;">新密码:</div>
+						</td>
+						<td>
+							<div align="left" style="padding-left: 4px;">
+								<input id="newpwd" type="password" class="easyui-validatebox" data-options="required:true,validType:'length[1,40]'">
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td width="45%" height="26">
+							<div align="right" style="padding-right: 4px;">重复新密码:</div>
+						</td>
+						<td>
+							<div align="left" style="padding-left: 4px;">
+								<input id="repeatnewpwd" type="password" class="easyui-validatebox" required=true validType="equals['#newpwd']">
+							</div>
+						</td>
+					</tr>
+					<tr>
+						<td width="45%" height="26"></td>
+						<td>
+							<div align="left" style="padding-left: 4px;">
+								<span id="msgTip" style="font-size:12px; color:red"></span>
+							</div>
+						</td>
+					</tr>
+				</table>
+				<div align="center" style="padding-top: 8px;">
+					<a href="#" id="saveBtn" name="rstBtn" class="easyui-linkbutton" data-options="iconCls:'icon-save'">保存</a> 
+					<a href="#" id="cancelBth" name="rstBtn" class="easyui-linkbutton" data-options="iconCls:'icon-redo'">返回</a>
+				</div>
+			</form>
+		</div>
+		</form>
 	</body>
 	<script>
-		
+
+		function changePwd(){
+			$('#win').window('open');
+			$('#oldpwd').val('');
+    		$('#oldpwd').validatebox('validate');
+    		$('#newpwd').val('');
+    		$('#newpwd').validatebox('validate');
+    		$('#repeatnewpwd').val('');
+    		$('#repeatnewpwd').validatebox('validate');
+		}		
+
+		function logOut() {
+			with (document.forms["mainForm"]) {
+				action = "logout.php";
+				submit();
+			}
+		}
+
+		$.extend($.fn.validatebox.defaults.rules, {    
+		    equals: {    
+		        validator: function(value, param){    
+		            return value == $(param[0]).val();    
+		        },    
+		        message: '两次输入的密码不相同'   
+		    }    
+		});
+
 
 		$(function(){
+			$("#saveBtn").click(function() {
+				
+				$.ajax({
+					url:'ajax_php/update_password.php',
+					type:'POST',
+					data:{
+						oldpwd:$('#oldpwd').val(),
+						newpwd:$('#newpwd').val()
+					},
+					success : function(data) {
+						alert(data);
+						// var d = eval("(" + data + ")");
+						$("#msgTip").html(d.msg);
+					}
+				});
+	
+			});
+		
+			$("#cancelBth").click(function() {
+				$('#win').window('close');
+			});
 
 			$('#tt').tree({
 				
@@ -282,141 +389,7 @@
 				}
 
 			});
-			// $.ajax({
-			// 	url:'ajax_php/get_user_privileges.php',
-			// 	type:'POST',
-			// 	data:{
-			// 		user_id:<?php echo $_SESSION['current_user_id'] ?>
-			// 	},
-			// 	success:function(json){
-			// 		// alert(json);
-			// 		var rows = [];
-	  //           	$.each($.parseJSON(json), function(idx,item){
-		 //                rows.push({
-		 //                	priv_id:item.priv_id,
-		 //                    priv_name:item.priv_name,
-		                    
-		 //                });
 
-		 //            });
-
-	  //           	var node = $('#tt').tree('find', 90);
-			// 		if (rows.length > 0) {
-						
-			// 			if (node){
-							
-			// 				$('#tt').tree('append',{
-			// 					parent:node.target,
-			// 					data:[{
-			// 						id:1,
-			// 						text:"未完成事务",
-									
-			// 					}]
-			// 				});
-
-			// 				$('#tt').tree('append',{
-			// 					parent:node.target,
-			// 					data:[{
-			// 						id:51,
-			// 						text:"已完成事务",
-									
-			// 					}]
-			// 				});
-							
-							
-			// 			}
-						
-			// 		}else{
-			// 			if (node){
-							
-			// 				$('#tt').tree('append',{
-			// 					parent:node.target,
-			// 					data:[{
-			// 						id:90,
-			// 						text:"无此权限",
-									
-			// 					}]
-			// 				});
-			// 			}
-			// 			$('#ea').accordion('remove','系统管理');
-			// 		}
-
-			// 		var adminFlag = false;
-
-		 //            for (var i = 0; i < rows.length; i++) {
-		            	
-		 //            	row = rows[i];
-		 //            	switch(row['priv_name'])
-		 //            	{
-		 //            		case '系统管理':
-		 //            			adminFlag = true;
-		 //            			break;
-		 //            		default:
-		 //            			$('#tt').tree('append',{
-			// 						parent:$('#tt').tree('find', 1).target,
-			// 						data:[{
-			// 							id:1 + row['priv_id'],
-			// 							text:row['priv_name'],
-										
-			// 						}]
-			// 					});
-			// 					$('#tt').tree('append',{
-			// 						parent:$('#tt').tree('find', 51).target,
-			// 						data:[{
-			// 							id:51 + row['priv_id'],
-			// 							text:row['priv_name'],
-										
-			// 						}]
-			// 					});
-		 //            			break;
-
-		 //            	}
-		 //            	if (i == rows.length - 1 && !adminFlag) {
-		 //            		$('#ea').accordion('remove','系统管理');
-		 //            	}
-		 //            }
-
-	  //               $.ajax({
-			//             url:"ajax_php/items_array.php",
-			//             type:"POST",
-			//             success:function(data){
-			//             	$.each($.parseJSON(data), function(idx,item){
-			//             		// alert(data);
-
-			//             		if (item.item_state == 'PROCESSING') {
-			            			
-			// 						var manageNode = $('#tt').tree('find', item.item_type_id);	   
-			// 						$('#tt').tree('append',{
-			// 							parent:manageNode.target,
-			// 							data:[{
-			// 								id:item.item_id,
-			// 								text:item.item_name,
-			// 								attributes:{
-			// 									url:'display_item.php'
-			// 								}
-			// 							}]
-			// 						});
-			//             		}else if (item.item_state == 'FINISH') {
-			// 						var manageNode = $('#tt').tree('find', '4' + item.item_type_id);	   
-			// 						$('#tt').tree('append',{
-			// 							parent:manageNode.target,
-			// 							data:[{
-			// 								id:item.item_id,
-			// 								text:item.item_name,
-			// 								attributes:{
-			// 									url:'display_item.php'
-			// 								}
-			// 							}]
-			// 						});
-			//             		}
-			            		
-			//             	});
-
-			//             }
-			//         });
-			// 	}
-
-			// });
 			
             		 	
 		}
