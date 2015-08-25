@@ -66,13 +66,10 @@
     }
 
     //change common users` password
-    function change_passwd($old_passwd, $new_passwd) {
-        if (!($conn = db_connect())) {
-            throw new Exception("Could not connect to the db!");
-        }
-
+    function change_passwd($old_passwd, $new_passwd) {     
+        $conn = db_connect();
         $result = $conn->query("select user_nmae from users where user_id = '"
-            .$_SESSION['current_user_id']."' and user_passwd = '".$old_passwd."'");
+            .$_SESSION['current_user_id']."' and user_passwd = sha1('".$old_passwd."')");
 
         if ($result->num_rows == 1) {
             $result = $conn->query("update users
