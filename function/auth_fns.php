@@ -68,13 +68,13 @@
     //change common users` password
     function change_passwd($old_passwd, $new_passwd) {     
         $conn = db_connect();
-        $result = $conn->query("select user_nmae from users where user_id = '"
+        $result = $conn->query("select user_name from users where user_id = '"
             .$_SESSION['current_user_id']."' and user_passwd = sha1('".$old_passwd."')");
 
         if ($result->num_rows == 1) {
             $result = $conn->query("update users
                                 set user_passwd = sha1('".$new_passwd."')
-                                where user_name = '".$username."'");
+                                where user_id = '".$_SESSION['current_user_id']."'");
             if (!$result) {
                 throw new Exception("The admin_passwd is not changed."); // not changed
             } else {
