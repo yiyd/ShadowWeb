@@ -3,7 +3,6 @@
 	require_once('../function/shadow_fns.php');	
 
 	$conn = db_connect();
-	$conn->autocommit(false);
 
 	$inputFileName = 'user.xlsx';
 
@@ -41,9 +40,6 @@
 			}
 		}
 	}
-
-	$conn->commit();
-	$conn->autocommit(true);
 
 	echo "import success";
 ?> 

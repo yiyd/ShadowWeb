@@ -1,6 +1,6 @@
 <?php
 	require_once('shadow_fns.php');
-	set_include_path('.'. PATH_SEPARATOR .$_SERVER['DOCUMENT_ROOT'].'\shadow-git\resources\PHPExcel' . PATH_SEPARATOR .get_include_path()); 
+	set_include_path('.'. PATH_SEPARATOR .$_SERVER['DOCUMENT_ROOT'].'\shadow\shadow-git\resources\PHPExcel' . PATH_SEPARATOR .get_include_path()); 
 	require_once('PHPExcel.php');
     require_once('PHPExcel\IOFactory.php');
     require_once('PHPExcel\Reader\Excel5.php');
@@ -40,6 +40,7 @@
 				// new one item 
 				new_one_item($items);
 
+				//echo "insert follow_marks.<br />";
 				// insert the item_follow_mark information
 		        $follow_mark = $data->sheets[0]['cells'][$i][7];
 		        $follow_mark_array = explode(";", $follow_mark);
@@ -54,6 +55,7 @@
 					}
 		        }
 
+		        //echo "insert auto_notify.<br />";
 		        // insert the notify into the auto_notify
 		        $auto_notify = $data->sheets[0]['cells'][$i][8];
 		        $auto_notify_array = explode(";", $auto_notify);
@@ -70,6 +72,8 @@
 		        // call the setting function
 		        set_notify($auto_notifies);
 			}
+
+			@unlink($filename);
 		} catch (Exception $e) {
 			echo $e.getMessage();
 		}
@@ -97,7 +101,7 @@
 				//$conn->autocommit(false);
 				$str = '';
 				
-				for ($j = 'A'; $j < $highestColumn; $j++) {
+				for ($j = 'A'; $j <= $highestColumn; $j++) {
 					// reader one row
 					$str .= iconv('utf-8', 'utf-8', $objPHPExcel->getActiveSheet()->getCell("$j$i")->getValue()).'&&';
 				}
@@ -189,11 +193,14 @@
 			        	));
 			        }
 
-			        //print_r($auto_notifies);
+			        //echo "insert the notify---------2<br />";
 			        // call the setting function
 			        set_notify($auto_notifies);
 			    }
 			}
+
+			// delete the upload file
+			@unlink($filename);
 		} catch (Exception $e) {
 			echo $e."<br />";
 		}

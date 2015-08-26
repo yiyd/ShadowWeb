@@ -44,7 +44,7 @@
                 if (@fopen("..\\..\\..\\tmp\\sess_".$old_session_id, 'r')) {
                     // //delete the session files
                     if (!@unlink("..\\..\\..\\tmp\\sess_".$old_session_id)) {  
-                        throw new Exception("Could not delete the session files! ".$old_session_id);
+                        throw new Exception("<h1>EXCEPTION: Could not delete the session files! ".$old_session_id."</h1><br /><br />请重启浏览器！");
                     }
                 }
                 
