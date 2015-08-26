@@ -470,7 +470,7 @@
     //------------------------------------------ITEM_PRIORITY------------------------------------------------
     //----------------------------------------------------------------------------------------------------
     // GET ALL THE PRIORITIES
-    function get_item_priorityies () {
+    function get_item_priorities () {
         $conn = db_connect();
         $result = $conn->query("set names utf8");
         $result = $conn->query("select para_value_id, para_value_name from para_values where para_id = '2'");

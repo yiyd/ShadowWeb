@@ -14,7 +14,7 @@
 	$items['item_follower_id'] = $_POST['item_follower'];
 	$items['item_description'] = $_POST['item_description'];
 	$items['item_type_id'] = $_POST['item_type'];
-
+	$items['item_priority_id'] = $_POST['item_priorities'];
 	$items['item_state'] = "PROCESSING";
 
 	$notify_number = $_POST['notify_number'];

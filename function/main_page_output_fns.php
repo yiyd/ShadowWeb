@@ -202,11 +202,14 @@
 					var id;
 					if (node.id) {
 						id = node.id;
-						$.ajax({
-							url:"ajax_php/change_current_item_id.php",
-							type:"POST",
-							data:{current_item_id:node.id},
-						});
+						if (node.id > 99) {
+							$.ajax({
+								url:"ajax_php/change_current_item_id.php",
+								type:"POST",
+								data:{current_item_id:node.id},
+							});
+						}
+						
 
 					}else {
 						id = 99;
@@ -322,7 +325,7 @@
 			            			$('#tt').tree('append',{
 										parent:$('#tt').tree('find', 1).target,
 										data:[{
-											id:1 + row['priv_id'],
+											id:1 + parseInt(row['priv_id']),
 											text:row['priv_name'],
 											
 										}]
@@ -330,7 +333,7 @@
 									$('#tt').tree('append',{
 										parent:$('#tt').tree('find', 51).target,
 										data:[{
-											id:51 + row['priv_id'],
+											id:51 + parseInt(row['priv_id']),
 											text:row['priv_name'],
 											
 										}]
@@ -355,24 +358,45 @@
 
 				            		if (item.item_state == 'PROCESSING') {
 				            			
-										var manageNode = $('#tt').tree('find', '1' + item.item_type_id);	   
+										var manageNode = $('#tt').tree('find', 1 + parseInt(item.item_type_id));	   
 										$('#tt').tree('append',{
 											parent:manageNode.target,
 											data:[{
 												id:item.item_id,
 												text:item.item_name,
+
 												attributes:{
 													url:'display_item.php'
 												}
 											}]
 										});
+										var newNode = $('#tt').tree('find', item.item_id);
+										switch(item.item_priority_name)
+										{
+											case '最高级':
+												newNode.target.style.color = 'red';
+												break;
+											case '较高级':
+												newNode.target.style.color = 'orange';
+												break;
+											case '正常':
+												newNode.target.style.color = 'yellow';
+												break;
+											case '最低级':
+												newNode.target.style.color = 'blue';
+												break;
+											case '较低级':
+												break;
+										}
 				            		}else if (item.item_state == 'FINISH') {
-										var manageNode = $('#tt').tree('find', '51' + item.item_type_id);	   
+										var manageNode = $('#tt').tree('find', 51 + parseInt(item.item_type_id));
+											   
 										$('#tt').tree('append',{
 											parent:manageNode.target,
 											data:[{
 												id:item.item_id,
 												text:item.item_name,
+
 												attributes:{
 													url:'display_item.php'
 												}

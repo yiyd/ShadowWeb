@@ -10,6 +10,7 @@
 	try {
 		$users_array = get_users();
 		$item_types_array = get_item_types();
+		$item_priorities_array = get_item_priorities();
 	}
 	catch(Exception $e) {
 		do_html_header('');
@@ -18,6 +19,6 @@
 		exit;
 	}
     
-	display_new_item_form($users_array, $item_types_array);
+	display_new_item_form($users_array, $item_types_array, $item_priorities_array);
 
 ?>

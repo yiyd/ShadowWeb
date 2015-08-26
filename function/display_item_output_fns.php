@@ -408,7 +408,19 @@
                             ?>
                         </div>
                     </td>
-                    <td colspan="4"></td>
+                    <td nowrap="nowrap" width="10%">
+                        <div align="right" style="padding-right=2px;">
+                            事项优先级：<font color="red">*</font>
+                        </div>
+                    </td>
+                    <td width="23%">
+                        <div align="left" style="padding-left:2px;">
+                            <?php
+                                echo $row['item_priority_name'];
+                            ?>
+                        </div>
+                    </td>
+                    <td colspan="2"></td>
                 </tr>
                 <tr>
                     <td height="26">

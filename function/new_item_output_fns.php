@@ -5,7 +5,7 @@
  * Time: 15:30
  */
     require_once('item_fns.php');
-	function display_new_item_form($users_array, $item_types_array) {
+	function display_new_item_form($users_array, $item_types_array, $item_priorities_array) {
 ?>
 <!DOCTYPE html>
 <html>
@@ -252,6 +252,22 @@
     					</td>
     				</tr>
                     <tr>
+                        <td nowrap="nowrap" width="10%">
+                            <div align="right" style="padding-right=2px;">
+                                事项优先级：<font color="red">*</font>
+                            </div>
+                        </td>
+                        <td width="23%">
+                            <div align="left" style="padding-left:2px;">
+                                <select name="item_priorities">
+                                    <?php
+                                        foreach ($item_priorities_array as $priority) {
+                                            echo "<option value=\"".$priority['para_value_id']."\" >".$priority['para_value_name']."</option>";
+                                        }
+                                    ?>
+                                </select>
+                            </div>
+                        </td>
                         <td height="26">
                             <div align="right" style="padding-right:2px;">事项描述：</div>
 
@@ -261,7 +277,7 @@
                                 <textarea id="item_description" name="item_description" rows="6" cols="40" wrap="virtual" maxlength="255"></textarea>
                             </div>
                         </td>
-                        <td colspan="3"></td>
+                        <td colspan="1"></td>
                     </tr>
     			</table>
     		</div>

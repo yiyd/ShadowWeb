@@ -26,6 +26,7 @@
 		$row['item_follower_name'] = get_user_name($row['item_follower_id']);
 		$row['item_creator_name'] = get_user_name($row['item_creator_id']);
 		$row['item_type_name'] = get_item_type($row['item_type_id']);
+		$row['item_priority_name'] = get_priority_name($row['item_priority_id']);
 	}	
 
 	if ($row['item_state'] == 'PROCESSING') {
