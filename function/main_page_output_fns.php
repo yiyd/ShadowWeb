@@ -73,7 +73,9 @@
 				</div>
 
 		</div>
-		<div data-options="region:'south',border:false" style="height:30px;padding:10px;">待完善</div>
+		<div data-options="region:'south',border:false" style="height:auto;padding:10px;">
+			<div class="footer">Copyright 2015 © 中国银行 版权所有 版本:V1.0</div>
+		</div>
 		<div data-options="region:'center'">
 			<div id="tabs" class="easyui-tabs" data-options="fit:true,border:false,plain:true">
 				<div title="欢迎使用" style="padding:10px">
@@ -114,9 +116,9 @@
 						</td>
 					</tr>
 					<tr>
-						<td width="45%" height="26"></td>
-						<td>
-							<div align="left" style="padding-left: 4px;">
+						
+						<td colspan="2">
+							<div  align="center" style="padding-left: 4px;">
 								<span id="msgTip" style="font-size:12px; color:red"></span>
 							</div>
 						</td>
@@ -140,6 +142,7 @@
     		$('#newpwd').validatebox('validate');
     		$('#repeatnewpwd').val('');
     		$('#repeatnewpwd').validatebox('validate');
+    		$("#msgTip").html('');
 		}		
 
 		function logOut() {
@@ -161,7 +164,9 @@
 
 		$(function(){
 			$("#saveBtn").click(function() {
-				
+				if(!validateData()){
+					return;
+				}
 				$.ajax({
 					url:'ajax_php/update_password.php',
 					type:'POST',
@@ -170,9 +175,18 @@
 						newpwd:$('#newpwd').val()
 					},
 					success : function(data) {
-						alert(data);
+						// alert(data);
 						// var d = eval("(" + data + ")");
-						$("#msgTip").html(d.msg);
+						var newdata = data.replace(/\s/g,'');
+						if (newdata == 'Youroldpasswdiswrong!') {
+							$("#msgTip").html('您输入的原始密码错误，请重试！');
+						}else{
+							with (document.forms["mainForm"]) {
+								action = "logout.php";
+								submit();
+							}
+						}
+						
 					}
 				});
 	
@@ -215,6 +229,28 @@
 			addListener();
 			reloadItems();
 		})
+
+		function validateData() {
+    		if (!$('#oldpwd').validatebox('isValid')) {
+    			$.messager.alert('提示信息', '原有密码长度为1到40位，其中一个汉字是2位');
+            	$('#oldpwd').focus();
+            	return false;
+    		}
+
+    		if (!$('#newpwd').validatebox('isValid')) {
+    			$.messager.alert('提示信息', '新密码长度为1到40位，其中一个汉字是2位');
+            	$('#newpwd').focus();
+            	return false;
+    		}
+
+    		if (!$('#repeatnewpwd').validatebox('isValid')) {
+    			$.messager.alert('提示信息', '两次输入的密码不相同');
+            	$('#repeatnewpwd').focus();
+            	return false;
+    		}
+
+    		return true;
+    	}
 
         function reloadItems()
 		{

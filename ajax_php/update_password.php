@@ -15,9 +15,9 @@
 		
 	}
 	catch(Exception $e) {
-		do_html_header('');
-		echo $e->getMessage();
-		do_html_footer();
+		// do_html_header('');
+		echo strval($e->getMessage());
+		// do_html_footer();
 		exit;
 	}
 ?>
