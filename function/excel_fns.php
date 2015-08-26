@@ -69,9 +69,6 @@
 
 		        // call the setting function
 		        set_notify($auto_notifies);
-
-		        // $conn->commit();
-		        // $conn->autocommit(true);
 			}
 		} catch (Exception $e) {
 			echo $e.getMessage();
