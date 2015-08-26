@@ -2,9 +2,9 @@
 	//include('function\shadow_fns.php');
 	session_start();
 	require_once('function/shadow_fns.php');
-	$_SESSION['current_user_id'] = '4';
+	//$_SESSION['current_user_id'] = '4';
 
-	change_passwd('123456', '112');
+	//change_passwd('123456', '112');
 	// $item_type = get_item_types();
 	// print_r($item_type);
 	
@@ -44,9 +44,9 @@
 	// 	}
 	// }
 
-	// $filename = "item_test_60.xlsx";
-	// import_items($filename);
-	// echo "import sucess";
+	$filename = "item_test_60.xlsx";
+	import_items($filename);
+	echo "import sucess";
 
 	// $priv_array = array(2);
 	// update_role('9', 'test', $priv_array);

@@ -270,7 +270,7 @@
     function get_related_items () {
         $conn = db_connect();
         $query = "select * from items where item_creator_id = '".$_SESSION['current_user_id']."'
-                    or item_follower_id = '".$_SESSION['current_user_id']."'";
+                    or item_follower_id = '".$_SESSION['current_user_id']."' order by item_priority_id";
         $result = $conn->query("set names utf8");
         $result = $conn->query($query);
         if (!$result) {
@@ -382,10 +382,7 @@
             }
         }
 
-        // //echo "Notice: ".$query."<br />";
-        // if ((flag_start) && (!flag_end) || ((!flag_start) && (flag_end))) {
-        //     throw new Exception("Time setting is not correct!");
-        // }
+        $query .= " order by item_priority_id";
         $result = $conn->query("set names utf8");
         $result = $conn->query($query);
         if (!$result) {

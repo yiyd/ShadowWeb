@@ -153,7 +153,7 @@
 
     function get_priority_id ($priority_name) {
         $conn = db_connect();
-        $query = "select para_id from para_values where para_value_name = '".trim($priority_name)."'";
+        $query = "select para_value_id from para_values where para_value_name = '".trim($priority_name)."'";
         $result = $conn->query("set names utf8");
         $result = $conn->query($query);
         if (!$result) {
