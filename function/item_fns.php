@@ -21,11 +21,11 @@
 
         // insert the new item into the DB
         if (isset($items['item_creator_id'])) {
-            $query = "insert into items VALUES ('', '".trim($items['item_name'])."', '".$items['item_creator_id']."',
+            $query = "insert into items VALUES ('', '".addslashes($items['item_name'])."', '".$items['item_creator_id']."',
                 '".$items['item_follower_id']."','".$current_time."', '".addslashes($items['item_description'])."', 
                 '".$items['item_type_id']."', '".$items['item_state']."', '".$items['item_priority_id']."')";
         } else {
-            $query = "insert into items VALUES ('', '".trim($items['item_name'])."', '".$_SESSION['current_user_id']."',
+            $query = "insert into items VALUES ('', '".addslashes($items['item_name'])."', '".$_SESSION['current_user_id']."',
                 '".$items['item_follower_id']."','".$current_time."', '".addslashes($items['item_description'])."', 
                 '".$items['item_type_id']."', '".$items['item_state']."', '".$items['item_priority_id']."')";
         }
@@ -467,4 +467,20 @@
         return $type_array;
     }
    
+    //------------------------------------------ITEM_PRIORITY------------------------------------------------
+    //----------------------------------------------------------------------------------------------------
+    // GET ALL THE PRIORITIES
+    function get_item_priorityies () {
+        $conn = db_connect();
+        $result = $conn->query("set names utf8");
+        $result = $conn->query("select para_value_id, para_value_name from para_values where para_id = '2'");
+
+        if (!$result) {  
+            throw new Exception("Could not connect to the db!");
+        }
+
+        $row = db_result_to_array($result);
+        return $row;
+    }
+
 ?>
