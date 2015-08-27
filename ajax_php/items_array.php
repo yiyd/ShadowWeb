@@ -10,7 +10,9 @@
 	try {
 		
 		$items_array = get_related_items();
-		
+		foreach ($items_array as &$item ) {
+			$item['item_priority_name'] = get_priority_name($item['item_priority_id']);
+		}
 	}
 	catch(Exception $e) {
 		do_html_header('');
