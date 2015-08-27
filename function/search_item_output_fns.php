@@ -96,6 +96,17 @@
             })
         })(jQuery);
 
+        function clearAll(){
+            $('#item_name').val('');
+            $('#item_creator').val('');
+            $('#item_follower').val('');
+            $('#item_type').val('');
+            $('#item_description').val('');
+            $('#item_state').val('');
+            $('#start_time').datetimebox('setValue','');
+            $('#end_time').datetimebox('setValue','');
+        }
+
         function searchItem()
         {
             var condition_array = [];
@@ -228,11 +239,16 @@
             });
             return rows;
         }
+
+        function enter(){
+            if (event.keyCode == 13)
+                searchItem();
+        }
     </script>
     </head>
     <body>
     
-    	<form id="search_form">
+    	<form onkeydown=enter() id="search_form">
     		<div class="easyui-panel" style="height:auto;" data-options="title:'查询事项信息'">
     			<table class="table_list" width="100%" border="0" align="center" cellpadding="0" cellspacing="1">
     				<tr height="26">
@@ -364,23 +380,24 @@
                 </div>
     		</div>
             
-            <table id="dg" class="easyui-datagrid" title="查询结果" data-options="rownumbers:true,singleSelect:true,pagination:true,pageSize:10,pageList:[5,10,15,20]">
-                <thead>
-                    <tr>
-                        <th field="item_id", hidden="true"></th>
-                        <th field="item_name" width="15%">事项名称</th>
-                        <th field="item_creator" width="10%">创建人</th>
-                        <th field="item_follower" width="10%">跟踪人</th>
-                        <th field="item_type" width="10%">事项类型</th>
-                        <th field="item_state" width="10%">事项状态</th>
-                        <th field="item_create_time" width="15%">创建时间</th>
-                        <th field="item_description" width="25%">事项描述</th>
-                    </tr>
-                </thead>
-            </table>
+            
 
 
     	</form>
+        <table id="dg" class="easyui-datagrid" title="查询结果" data-options="rownumbers:true,singleSelect:true,pagination:true,pageSize:10,pageList:[5,10,15,20]">
+            <thead>
+                <tr>
+                    <th field="item_id", hidden="true"></th>
+                    <th field="item_name" width="15%">事项名称</th>
+                    <th field="item_creator" width="10%">创建人</th>
+                    <th field="item_follower" width="10%">跟踪人</th>
+                    <th field="item_type" width="10%">事项类型</th>
+                    <th field="item_state" width="10%">事项状态</th>
+                    <th field="item_create_time" width="15%">创建时间</th>
+                    <th field="item_description" width="25%">事项描述</th>
+                </tr>
+            </thead>
+        </table>
     </body>
 
 </html>

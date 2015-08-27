@@ -374,7 +374,7 @@
 										switch(item.item_priority_name)
 										{
 											case '最高级':
-												newNode.target.style.color = 'red';
+												newNode.target.style.background = 'red';
 												break;
 											case '较高级':
 												newNode.target.style.color = 'orange';

@@ -340,13 +340,23 @@
             }
 
             var item_type = $('#item_type').val();
-
             var old_item_type = '<?php echo $row['item_type_id'] ?>';
             if (item_type != old_item_type) {
                 var change_field_row = [];
                 change_field_row[0] = 'item_type_id';
                 change_field_row[1] = item_type;
                 change_field_row[2] = old_item_type;
+                var length = change_field_array.length;
+                change_field_array[length] = change_field_row;
+            }
+
+            var item_priority = $('#item_priorities').val();
+            var old_item_priority = '<?php echo $row['item_priority_id'] ?>';
+            if (item_priority != old_item_priority) {
+                var change_field_row = [];
+                change_field_row[0] = 'item_priority_id';
+                change_field_row[1] = item_priority;
+                change_field_row[2] = old_item_priority;
                 var length = change_field_array.length;
                 change_field_array[length] = change_field_row;
             }
