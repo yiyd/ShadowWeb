@@ -61,7 +61,7 @@
             array(
                 'name' => '事项名称',
                 'old_value' => '空值',
-                'new_value' => $items['item_name']  
+                'new_value' => trim($items['item_name'])
             ),
             array(
                 'name' => '事项创建人',
@@ -81,7 +81,7 @@
             array(
                 'name' => '事项描述',
                 'old_value' => '空值',
-                'new_value' => $items['item_description']   
+                'new_value' => addslashes($items['item_description'])   
             ),
             array(
                 'name' => '事项类型',

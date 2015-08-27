@@ -1,6 +1,6 @@
 <?php
 	require_once('shadow_fns.php');
-	set_include_path('.'. PATH_SEPARATOR .$_SERVER['DOCUMENT_ROOT'].'\shadow-git\resources\PHPExcel' . PATH_SEPARATOR .get_include_path()); 
+	set_include_path('.'. PATH_SEPARATOR .$_SERVER['DOCUMENT_ROOT'].'\shadow\shadow-git\resources\PHPExcel' . PATH_SEPARATOR .get_include_path()); 
 	require_once('PHPExcel.php');
     require_once('PHPExcel\IOFactory.php');
     require_once('PHPExcel\Reader\Excel5.php');
@@ -28,7 +28,7 @@
 				$items['item_name'] = $data->sheets[0]['cells'][$i][1];
 				$items['item_creator_id'] = get_user_id($data->sheets[0]['cells'][$i][2]);
 				$items['item_follower_id'] = get_user_id($data->sheets[0]['cells'][$i][3]);
-				$items['item_description'] = $data->sheets[0]['cells'][$i][4];
+				$items['item_description'] = addslashes($data->sheets[0]['cells'][$i][4]);
 				$items['item_type_id'] = get_para_id($data->sheets[0]['cells'][$i][5]);
 
 				if ($data->sheets[0]['cells'][$i][6] == '进行中') {
@@ -113,7 +113,7 @@
 				$items['item_name'] = $strArray[0];
 				$items['item_creator_id'] = get_user_id($strArray[1]);
 				$items['item_follower_id'] = get_user_id($strArray[2]);
-				$items['item_description'] = $strArray[3];
+				$items['item_description'] = addslashes($strArray[3]);
 				//echo $strArray[4]."<br />";
 				$items['item_type_id'] = get_para_id($strArray[4]);
 
