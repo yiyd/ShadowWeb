@@ -42,7 +42,7 @@
                 if (is_array($change_field)) {
                     foreach ($change_field as $row) {
                         $query2 = "insert into log_fields VALUES ('".$current_log_id."', '".$row['name']."',
-                                    '".$row['old_value']."', '".$row['new_value']."')";
+                                    '".addslashes($row['old_value'])."', '".addslashes($row['new_value'])."')";
                         $result2 = $conn->query("set names utf8");
                         $result2 = $conn->query($query2);
                         if(!$result2) {
