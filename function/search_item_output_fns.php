@@ -360,7 +360,7 @@
     			</table>
                 <div style="padding-top:10px;text-align:center;height:40px">
                     <a href="javascript:void(0)" class="easyui-linkbutton" onclick="searchItem()" data-options="iconCls:'icon-search'">查询</a>
-
+                    <a href="javascript:void(0)" class="easyui-linkbutton" onclick="clearAll()" data-options="iconCls:'icon-redo'">清除</a>
                 </div>
     		</div>
             
