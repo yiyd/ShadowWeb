@@ -22,6 +22,7 @@
 					throw new Exception("Could not connect to the db!");
 				}
 
+				//echo "insert success auto_notify<br />";
 				// arrange the notify setting information into the array
 				$change_field = array();			
 				array_push($change_field, array(
