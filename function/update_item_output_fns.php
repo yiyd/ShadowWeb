@@ -6,7 +6,7 @@
  */
     require_once('item_fns.php');
 
-    function display_update_item($users_array, $item_types_array,$row, $auto_notify_result, $follow_mark_result) {
+    function display_update_item($users_array, $item_types_array,$row, $auto_notify_result, $follow_mark_result, $item_priorities_array) {
 ?>
 <!DOCTYPE html>
 <html>
@@ -143,6 +143,7 @@
             $('#item_name').val("<?php echo $row['item_name']; ?>");
             $("#item_follower option[value='<?php echo $row['item_follower_id'] ?>']").attr('selected', true);
             $("#item_type option[value='<?php echo $row['item_type_id'] ?>']").attr('selected', true);
+            $("#item_priorities option[value='<?php echo $row['item_priority_id'] ?>']").attr('selected', true);
             $('#item_description').val("<?php echo $row['item_description']; ?>");
 
             <?php
@@ -453,7 +454,23 @@
                                 ?>
                             </div>
                         </td>
-                        <td colspan="4"></td>
+                        <td nowrap="nowrap" width="10%">
+                            <div align="right" style="padding-right=2px;">
+                                事项优先级：<font color="red">*</font>
+                            </div>
+                        </td>
+                        <td width="23%">
+                            <div align="left" style="padding-left:2px;">
+                                <select id="item_priorities" name="item_priorities">
+                                    <?php
+                                        foreach ($item_priorities_array as $priority) {
+                                            echo "<option value=\"".$priority['para_value_id']."\" >".$priority['para_value_name']."</option>";
+                                        }
+                                    ?>
+                                </select>
+                            </div>
+                        </td>
+                        <td colspan="2"></td>
                     </tr>
                     <tr>
                         <td height="26"> 

@@ -196,7 +196,8 @@
                     }
                 ]
 
-            });   
+            });
+            $("#item_priorities option[value='<?php echo get_priority_id('正常') ?>']").attr('selected', true);   
         })
 
     </script>
@@ -259,7 +260,7 @@
                         </td>
                         <td width="23%">
                             <div align="left" style="padding-left:2px;">
-                                <select name="item_priorities">
+                                <select id="item_priorities" name="item_priorities">
                                     <?php
                                         foreach ($item_priorities_array as $priority) {
                                             echo "<option value=\"".$priority['para_value_id']."\" >".$priority['para_value_name']."</option>";

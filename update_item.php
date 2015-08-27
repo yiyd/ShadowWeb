@@ -14,6 +14,8 @@
 		$follow_mark_result = get_follow_mark();
 		$users_array = get_users();
 		$item_types_array = get_item_types();
+		$item_priorities_array = get_item_priorities();
+
 	}
 	catch(Exception $e) {
 		do_html_header('');
@@ -28,5 +30,5 @@
 		$row['item_creator_name'] = get_user_name($row['item_creator_id']);
 	}
 
-	display_update_item($users_array, $item_types_array, $row, $auto_notify_result, $follow_mark_result);
+	display_update_item($users_array, $item_types_array, $row, $auto_notify_result, $follow_mark_result, $item_priorities_array);
 ?>

@@ -380,12 +380,12 @@
 												newNode.target.style.color = 'orange';
 												break;
 											case '正常':
-												newNode.target.style.color = 'yellow';
-												break;
-											case '最低级':
-												newNode.target.style.color = 'blue';
+												newNode.target.style.color = 'green';
 												break;
 											case '较低级':
+												newNode.target.style.color = 'blue';
+												break;
+											case '最低级':
 												break;
 										}
 				            		}else if (item.item_state == 'FINISH') {
